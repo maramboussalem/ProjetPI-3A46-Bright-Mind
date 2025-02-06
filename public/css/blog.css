@@ -1,0 +1,180 @@
+/*
+Template Name: Online Courses
+File: Layout CSS
+Author: TemplatesOnWeb
+Author URI: https://www.templateonweb.com/
+Licence: <a href="https://www.templateonweb.com/license">Website Template Licence</a>
+*/
+/*********************blog****************/
+.blog_1l1il .form-select{
+width:40%;
+height:40px; 
+ }
+.blog_1l1ir .form-select{
+height:40px; 
+ }
+.blog_1l1ir .nav-tabs .nav-link{
+width:40px;
+height:40px;
+line-height:40px;
+padding:0;
+text-align:center;
+font-size:24px;
+background:#f4f4f4!important;
+color:#666;
+border:none;
+border-radius:3px;
+ }
+.blog_1l1ir .nav-tabs .nav-link:hover{
+background:#17d0cf!important;
+color:#fff;
+ }
+.blog_1l1ir .nav-tabs .nav-link.active {
+background:#17d0cf!important;
+color:#fff;
+}
+.blog_1r2 ul li a{
+padding: 5px 15px;
+margin-bottom: 8px;
+margin-right: 2px;
+border-radius: 4px;
+border:1px solid #d5eded;
+ }
+.blog_1r2 ul li a:hover{
+background:#17d0cf!important;
+color:#fff;
+ }
+ 
+.course_pg1in1{
+border-bottom:3px solid #17d0cf; 
+ }
+.course_2dt3il h1 {
+line-height: 0.8em;
+}
+/*********************blog_end****************/
+
+
+@media screen and (max-width : 767px){
+.blog_1l1ir {
+margin-top:15px; 
+ }
+.course_pgr1 h3{
+text-align:center;
+ }
+.blog_1r{
+margin-top:15px; 
+ }
+.course_pgr1 h6{
+text-align:center; 
+ }
+.about_pg1r1 h3{
+text-align:center; 
+ }
+.blog_1r2  h3{
+text-align:center;  
+ }
+.course_pg1in11{
+text-align:center; 
+ }
+.course_pg1in11{
+margin-top:5px;
+margin-bottom:5px; 
+ }
+.course_pg1in22{
+margin-top:10px;
+margin-bottom:10px; 
+text-align:center; 
+ }
+.course_pg1in23{
+margin-top:10px;
+margin-bottom:10px; 
+text-align:center; 
+ }
+.course_dt2i {
+text-align:center; 
+ }
+.course_dt3  h2{
+text-align:center; 
+ }
+.course_dt2i2{
+margin-top:10px;
+margin-bottom:10px; 
+ }
+.course_2dt3il{
+text-align:center;
+margin-bottom:15px;  
+ }
+.course_2dt3ir h6{
+text-align:center;
+ }
+.course_2dt3iri h6{
+text-align:left; 
+ }
+.blog_1dt2 h3{
+text-align:center; 
+ }
+.blog_1dt3{
+text-align:center; 
+ }
+.blog_1dt3il{
+margin-top:10px; 
+ }
+.blog_1l1ir {
+float:none!important; 
+ }
+.blog_1l2il2 {
+text-align:center;
+margin-bottom:15px; 
+ }
+.blog_1l2il2 p{
+text-align:left; 
+ }
+.blog_1l2inr  {
+ text-align:center;
+ padding:15px!important;
+ }
+.blog_1l2inr  p{
+ text-align:left;
+ }
+
+.blog_1dt1il {
+text-align:center!important;
+margin-bottom:10px; 
+}
+.blog_1dt1ir {
+text-align:center!important; 
+ }
+.blog_1dt1 h3{
+ text-align:center; 
+ }
+ }
+
+@media (min-width:576px) and (max-width:767px) {
+
+ }
+@media (min-width:768px) and (max-width:991px) {
+.blog_1l1ir .form-select{
+width:80px; 
+ }
+.course_2dt3il h1{
+font-size:40px!important;
+}
+.blog_1l2inr  {
+padding:10px!important; 
+ }
+.blog_1l2il1i img{
+min-height:270px!important; 
+ }
+ }
+
+@media (min-width:992px) and (max-width:1200px) {
+.blog_1l2inr  {
+padding:10px!important; 
+ }
+.blog_1l2il1i img{
+min-height:270px!important; 
+ }
+ }
+
+
+

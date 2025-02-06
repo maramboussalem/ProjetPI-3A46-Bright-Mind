@@ -1,0 +1,25 @@
+{{ form_start(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.motDePasse) }}
+    {{ form_row(form.sexe) }}
+    {{ form_row(form.adresse) }}
+    {{ form_row(form.telephone) }}
+    {% if form.role is defined %}
+        {{ form_row(form.role) }}
+    {% endif %}
+    {% if form.antecedentsMedicaux is defined %}
+        {{ form_row(form.antecedentsMedicaux) }}
+    {% endif %}
+    {% if form.specialite is defined %}
+        {{ form_row(form.specialite) }}
+    {% endif %}
+    {% if form.hopital is defined %}
+        {{ form_row(form.hopital) }}
+    {% endif %}
+    {% if form.disponibilite is defined %}
+        {{ form_row(form.disponibilite) }}
+    {% endif %}
+    <button type="submit">Save</button>
+{{ form_end(form) }}

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur index{% endblock %}
+
+{% block body %}
+    <h2>Patients</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Sexe</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Antécédents Médicaux</th> {# Attribut spécifique #}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for utilisateur in utilisateurs %}
+                {% if utilisateur.role == 'patient' %}
+                    <tr>
+                        <td>{{ utilisateur.nom }}</td>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td>{{ utilisateur.sexe }}</td> {# Sexe du patient #}
+                        <td>{{ utilisateur.adresse }}</td> {# Adresse du patient #}
+                        <td>{{ utilisateur.telephone }}</td> {# Téléphone du patient #}
+                        <td>{{ utilisateur.antecedentsMedicaux }}</td> {# Antécédents médicaux du patient #}
+                        <td>
+                            <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}">Voir</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Médecins</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Sexe</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Spécialité</th> {# Attribut spécifique #}
+                <th>Hôpital</th> {# Attribut spécifique #}
+                <th>Disponibilité</th> {# Attribut spécifique #}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for utilisateur in utilisateurs %}
+                {% if utilisateur.role == 'medecin' %}
+                    <tr>
+                        <td>{{ utilisateur.nom }}</td>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td>{{ utilisateur.sexe }}</td> {# Sexe du médecin #}
+                        <td>{{ utilisateur.adresse }}</td> {# Adresse du médecin #}
+                        <td>{{ utilisateur.telephone }}</td> {# Téléphone du médecin #}
+                        <td>{{ utilisateur.specialite }}</td> {# Spécialité du médecin #}
+                        <td>{{ utilisateur.hopital }}</td> {# Hôpital du médecin #}
+                        <td>{{ utilisateur.disponibilite }}</td> {# Disponibilité du médecin #}
+                        <td>
+                            <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}">Voir</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_utilisateur_new') }}">Create new</a>
+{% endblock %}
