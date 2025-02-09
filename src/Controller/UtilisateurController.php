@@ -23,26 +23,6 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
-    /*public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $utilisateur = new Utilisateur();
-        $form = $this->createForm(UtilisateurType::class, $utilisateur);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($utilisateur);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('utilisateur/new.html.twig', [
-            'utilisateur' => $utilisateur,
-            'form' => $form,
-        ]);
-    }*/
-    // In UtilisateurController.php
-// src/Controller/UtilisateurController.php
 
 public function new(Request $request, EntityManagerInterface $entityManager): Response
 {
@@ -58,6 +38,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
 
         // Si c'est un patient, on remplit les attributs de patient
         if ($role === 'patient') {
+            
             $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
         }
 
@@ -71,15 +52,13 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         $entityManager->persist($utilisateur);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_utilisateur_index');
+        return $this->redirectToRoute('app_home');
     }
 
     return $this->render('utilisateur/new.html.twig', [
         'form' => $form->createView(),
     ]);
 }
-
-
 
     #[Route('/{id}', name: 'app_utilisateur_show', methods: ['GET'])]
     public function show(Utilisateur $utilisateur): Response
@@ -98,7 +77,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('utilisateur/edit.html.twig', [
@@ -108,13 +87,16 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
     }
 
     #[Route('/{id}', name: 'app_utilisateur_delete', methods: ['POST'])]
-    public function delete(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$utilisateur->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($utilisateur);
-            $entityManager->flush();
-        }
+public function delete(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$utilisateur->getId(), $request->get('_token'))) {
 
-        return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
+        $entityManager->remove($utilisateur);
+        $entityManager->flush();
     }
+
+    return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
+}
+
+    
 }

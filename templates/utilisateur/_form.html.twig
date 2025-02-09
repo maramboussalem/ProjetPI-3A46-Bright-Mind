@@ -1,25 +1,76 @@
-{{ form_start(form) }}
-    {{ form_row(form.nom) }}
-    {{ form_row(form.prenom) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.motDePasse) }}
-    {{ form_row(form.sexe) }}
-    {{ form_row(form.adresse) }}
-    {{ form_row(form.telephone) }}
-    {% if form.role is defined %}
-        {{ form_row(form.role) }}
-    {% endif %}
-    {% if form.antecedentsMedicaux is defined %}
-        {{ form_row(form.antecedentsMedicaux) }}
-    {% endif %}
-    {% if form.specialite is defined %}
-        {{ form_row(form.specialite) }}
-    {% endif %}
-    {% if form.hopital is defined %}
-        {{ form_row(form.hopital) }}
-    {% endif %}
-    {% if form.disponibilite is defined %}
-        {{ form_row(form.disponibilite) }}
-    {% endif %}
-    <button type="submit">Save</button>
+{{ form_start(form, {'attr': {'id': 'utilisateurForm'}}) }}
+    <!-- Attributs en commun -->
+    <div class="form-group">
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.motDePasse) }}
+        {{ form_widget(form.motDePasse) }}
+    </div>
+
+    <!-- Nouveau champ : Sexe -->
+    <div class="form-group">
+        {{ form_label(form.sexe) }}
+        {{ form_widget(form.sexe) }}
+    </div>
+
+    <!-- Nouveau champ : Adresse -->
+    <div class="form-group">
+        {{ form_label(form.adresse) }}
+        {{ form_widget(form.adresse) }}
+    </div>
+
+    <!-- Nouveau champ : Téléphone -->
+    <div class="form-group">
+        {{ form_label(form.telephone) }}
+        {{ form_widget(form.telephone) }}
+    </div>
+
+    <!-- Sélection du rôle -->
+    <div class="form-group">
+        {{ form_label(form.role) }}
+        {{ form_widget(form.role, { 'attr': {'id': 'utilisateur_role'} }) }}
+    </div>
+
+    <!-- Champs spécifiques aux patients -->
+    <div id="patientFields" class="role-fields">
+        <h3>Informations Patient</h3>
+        <div class="form-group">
+            {{ form_label(form.antecedentsMedicaux) }}
+            {{ form_widget(form.antecedentsMedicaux) }}
+        </div>
+    </div>
+
+    <!-- Champs spécifiques aux médecins -->
+    <div id="medecinFields" class="role-fields">
+        <h3>Informations Médecin</h3>
+        <div class="form-group">
+            {{ form_label(form.specialite) }}
+            {{ form_widget(form.specialite) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.hopital) }}
+            {{ form_widget(form.hopital) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.disponibilite) }}
+            {{ form_widget(form.disponibilite) }}
+        </div>
+    </div>
+
+    
 {{ form_end(form) }}
+
+

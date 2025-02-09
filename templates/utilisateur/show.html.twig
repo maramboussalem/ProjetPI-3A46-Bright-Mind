@@ -1,70 +1,78 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_back.html.twig' %}
 
-{% block title %}Utilisateur{% endblock %}
+{% block title %}Détails de l'Utilisateur{% endblock %}
 
 {% block body %}
-    <h1>Utilisateur</h1>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-top: 20px;
+        }
+        .profile {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+            width: 30%;
+        }
+        .details {
+            width: 65%;
+        }
+        .details table {
+            width: 100%;
+        }
+        .details h1 {
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ utilisateur.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ utilisateur.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prénom</th>
-                <td>{{ utilisateur.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ utilisateur.email }}</td>
-            </tr>
-            <tr>
-                <th>Motdepasse</th>
-                <td>{{ utilisateur.motdepasse }}</td>
-            </tr>
-            <tr>
-                <th>Sexe</th>
-                <td>{{ utilisateur.sexe }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ utilisateur.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Telephone</th>
-                <td>{{ utilisateur.telephone }}</td>
-            </tr>
-            <tr>
-                <th>Role</th>
-                <td>{{ utilisateur.role }}</td>
-            </tr>
-            <tr>
-                <th>AntecedentsMedicaux</th>
-                <td>{{ utilisateur.antecedentsMedicaux }}</td>
-            </tr>
-            <tr>
-                <th>Spécialité</th>
-                <td>{{ utilisateur.specialite }}</td>
-            </tr>
-            <tr>
-                <th>Hopital</th>
-                <td>{{ utilisateur.hopital }}</td>
-            </tr>
-            <tr>
-                <th>Disponibilité</th>
-                <td>{{ utilisateur.disponibilite }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_utilisateur_index') }}">back to list</a>
-
-    <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}">edit</a>
-
-    {{ include('utilisateur/_delete_form.html.twig') }}
+    <div class="container">
+        <div class="profile">
+            <img src="{{ asset('img/2.jpg') }}" alt="Avatar" class="rounded-circle" width="250">
+            <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
+            <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
+        </div>
+        <div class="details">
+            <h1>Détails de l'Utilisateur</h1>
+            <table class="table table-bordered">
+                <tbody>
+                   
+                    <tr><th>ID</th><td>{{ utilisateur.id }}</td></tr>
+                    <tr><th>Email</th><td>{{ utilisateur.email }}</td></tr>
+                    <tr><th>Sexe</th><td>{{ utilisateur.sexe }}</td></tr>
+                    <tr><th>Adresse</th><td>{{ utilisateur.adresse }}</td></tr>
+                    <tr><th>Téléphone</th><td>{{ utilisateur.telephone }}</td></tr>
+                    
+                    {% if utilisateur.role == 'patient' %}
+                        <tr><th>Antécédents Médicaux</th><td>{{ utilisateur.antecedentsMedicaux }}</td></tr>
+                    {% endif %}
+                    
+                    {% if utilisateur.role == 'medecin' %}
+                        <tr><th>Spécialité</th><td>{{ utilisateur.specialite }}</td></tr>
+                        <tr><th>Hôpital</th><td>{{ utilisateur.hopital }}</td></tr>
+                        <tr><th>Disponibilité</th><td>{{ utilisateur.disponibilite }}</td></tr>
+                    {% endif %}
+                
+                </tbody>
+            </table>
+            
+            <div class="d-flex gap-2">
+               <a href="{{ path('app_utilisateur_index') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
+               <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}" class="btn btn-primary flex-fill">Modifier</a>
+   
+                <form method="post" action="{{ path('app_utilisateur_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="flex-fill">
+                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+                  <button type="submit" class="btn btn-danger w-100">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
