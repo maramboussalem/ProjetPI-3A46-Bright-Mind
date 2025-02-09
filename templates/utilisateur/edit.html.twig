@@ -4,7 +4,7 @@
 
 {% block body %}
     <style>
-        /* Style global */
+        /* Style général de la page */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f9f9f9;
@@ -67,13 +67,12 @@
         }
 
         form button:hover {
-            background: linear-gradient(135deg, #007bff,rgb(24, 114, 209);
+            background: linear-gradient(135deg, #007bff, rgb(24, 114, 209));
             transform: scale(1.02);
         }
 
         /* Sections dynamiques */
         #patientFields, #medecinFields {
-            display: none;
             margin-top: 20px;
             padding: 15px;
             background: #f0f9ff;
@@ -105,6 +104,61 @@
     </div>
 
     <a href="{{ path('app_utilisateur_index') }}" style="display:block; text-align:center; margin-top: 20px;">Back to list</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Détecter le rôle de l'utilisateur (rôle par défaut dans l'objet utilisateur)
+            const role = "{{ utilisateur.role }}"; // Récupérer le rôle de l'utilisateur depuis la variable Twig
+            const patientFields = document.getElementById("patientFields");
+            const medecinFields = document.getElementById("medecinFields");
+
+            // Fonction pour afficher les champs en fonction du rôle
+            function toggleFields() {
+                if (role === "patient") {
+                    showFields(patientFields); // Affiche les champs pour patient
+                    hideFields(medecinFields); // Cache les champs pour médecin
+                    enableFields(patientFields); // Active les champs pour patient
+                    disableFields(medecinFields); // Désactive les champs pour médecin
+                }
+                else if (role === "medecin") {
+                    showFields(medecinFields); // Affiche les champs pour médecin
+                    hideFields(patientFields); // Cache les champs pour patient
+                    enableFields(medecinFields); // Active les champs pour médecin
+                    disableFields(patientFields); // Désactive les champs pour patient
+                }
+                else {
+                    hideFields(patientFields); // Cache tous les champs
+                    hideFields(medecinFields); // Cache tous les champs
+                }
+            }
+
+            // Fonction pour afficher les champs
+            function showFields(container) {
+                container.style.display = "block";
+            }
+
+            // Fonction pour cacher les champs
+            function hideFields(container) {
+                container.style.display = "none";
+            }
+
+            // Fonction pour activer les champs
+            function enableFields(container) {
+                container.querySelectorAll("input, select, textarea").forEach(input => {
+                    input.disabled = false;
+                });
+            }
+
+            // Fonction pour désactiver les champs
+            function disableFields(container) {
+                container.querySelectorAll("input, select, textarea").forEach(input => {
+                    input.disabled = true;
+                });
+            }
+
+            toggleFields(); // Exécuter au chargement de la page en fonction du rôle
+        });
+    </script>
 
     {{ include('utilisateur/_delete_form.html.twig') }}
 {% endblock %}

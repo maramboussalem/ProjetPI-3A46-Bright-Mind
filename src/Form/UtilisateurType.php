@@ -48,8 +48,8 @@ class UtilisateurType extends AbstractType
                     'Patient' => 'patient',
                     'Médecin' => 'medecin',
                 ],
-                'mapped' => false,
-                'data' => 'patient', // Ajoutez une valeur par défaut ici
+                
+                
             ])
             // Champs spécifiques au rôle Patient
             ->add('antecedentsMedicaux', TextareaType::class, [
