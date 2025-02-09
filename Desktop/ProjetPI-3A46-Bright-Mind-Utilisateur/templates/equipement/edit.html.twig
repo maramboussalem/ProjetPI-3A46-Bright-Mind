@@ -1,0 +1,14 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Edit Equipement{% endblock %}
+
+{% block body %}
+    <h1>Edit Equipement</h1>
+
+    {{ include('equipement/_form.html.twig', {'button_label': 'Update'}) }}
+{{ include('equipement/_delete_form.html.twig') }}
+   <a href="{{ path('app_equipement_index') }}" class="back-link">⬅ Back</a>
+
+
+    
+{% endblock %}

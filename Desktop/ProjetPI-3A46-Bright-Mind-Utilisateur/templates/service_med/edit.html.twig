@@ -1,0 +1,28 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Edit ServiceMed{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Edit ServiceMed</h1>
+
+        <form>
+            <div class="form-group">
+                <label for="name">Nom service</label>
+                <input type="text" id="name" class="form-control" value="Cardiologie">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description med</label>
+                <textarea id="description" class="form-control">Service spécialisé en maladies...</textarea>
+            </div>
+<div class="btn-group">
+    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="button" class="btn btn-danger">Delete</button>
+</div>
+
+        </form>
+
+        <a href="{{ path('app_service_med_index') }}" class="btn-back">← Back to list</a>
+    </div>
+{% endblock %}
