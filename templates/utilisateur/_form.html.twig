@@ -1,4 +1,5 @@
 {{ form_start(form, {'attr': {'id': 'utilisateurForm'}}) }}
+<<<<<<< HEAD
 
 <!-- Attributs en commun -->
 <div class="form-group">
@@ -161,4 +162,80 @@
     </div>
 </div>
 
+=======
+    <!-- Attributs en commun -->
+    <div class="form-group">
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.motDePasse) }}
+        {{ form_widget(form.motDePasse) }}
+    </div>
+
+    <!-- Nouveau champ : Sexe -->
+    <div class="form-group">
+        {{ form_label(form.sexe) }}
+        {{ form_widget(form.sexe) }}
+    </div>
+
+    <!-- Nouveau champ : Adresse -->
+    <div class="form-group">
+        {{ form_label(form.adresse) }}
+        {{ form_widget(form.adresse) }}
+    </div>
+
+    <!-- Nouveau champ : Téléphone -->
+    <div class="form-group">
+        {{ form_label(form.telephone) }}
+        {{ form_widget(form.telephone) }}
+    </div>
+
+    <!-- Sélection du rôle -->
+    <div class="form-group">
+        {{ form_label(form.role) }}
+        {{ form_widget(form.role, { 'attr': {'id': 'utilisateur_role'} }) }}
+    </div>
+
+    <!-- Champs spécifiques aux patients -->
+    <div id="patientFields" class="role-fields">
+        <h3>Informations Patient</h3>
+        <div class="form-group">
+            {{ form_label(form.antecedentsMedicaux) }}
+            {{ form_widget(form.antecedentsMedicaux) }}
+        </div>
+    </div>
+
+    <!-- Champs spécifiques aux médecins -->
+    <div id="medecinFields" class="role-fields">
+        <h3>Informations Médecin</h3>
+        <div class="form-group">
+            {{ form_label(form.specialite) }}
+            {{ form_widget(form.specialite) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.hopital) }}
+            {{ form_widget(form.hopital) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.disponibilite) }}
+            {{ form_widget(form.disponibilite) }}
+        </div>
+    </div>
+
+    
+>>>>>>> 69a499111aca7300a4ead1b0e32048979a59bc68
 {{ form_end(form) }}
+
+
