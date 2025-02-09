@@ -212,7 +212,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -222,7 +222,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -232,7 +232,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
                 <i class="bi bi-question-circle"></i>
                 <span>Need Help?</span>
               </a>
@@ -277,7 +277,7 @@
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a href="components-alerts.html">
               <i class="bi bi-circle"></i><span>Patient</span>
             </a>
           </li>
@@ -297,12 +297,12 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a href="tables-general.html">
               <i class="bi bi-circle"></i><span>General Tables</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="tables-data.html">
               <i class="bi bi-circle"></i><span>Data Tables</span>
             </a>
           </li>
@@ -317,34 +317,18 @@
     </a>
     <ul id="stock-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
-            <a href='#'>
+            <a href="{{path('app_fournisseur_index')}}">
                 <i class="bi bi-truck"></i><span>Fournisseur</span>
             </a>
         </li>
         <li>
-            <a href='#'>
+            <a href="{{path('app_medicament_index')}}">
                 <i class="bi bi-capsule"></i><span>Médicament</span>
             </a>
         </li>
     </ul>
 </li>
-<li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#stock-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-box-seam"></i><span>Compagne</span><i class="bi bi-chevron-down ms-auto"></i>
-    </a>
-    <ul id="stock-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-        <li>
-            <a href="{{path('app_post_index')}}">
-                <i class="bi bi-truck"></i><span>Fournisseur</span>
-            </a>
-        </li>
-        <li>
-            <a href='#'>
-                <i class="bi bi-capsule"></i><span>Médicament</span>
-            </a>
-        </li>
-    </ul>
-</li>
+
       </li><!-- End Tables Nav -->
 
         
