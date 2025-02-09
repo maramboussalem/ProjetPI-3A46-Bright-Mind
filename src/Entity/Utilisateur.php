@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 class Utilisateur
@@ -27,30 +28,38 @@ class Utilisateur
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
+    #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
     private ?string $motdepasse = null;
 
     #[ORM\Column(length: 255)]
     private ?string $sexe = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'adresse est obligatoire.")]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le numéro de téléphone est obligatoire.")]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(min: 5, minMessage: "Les antécédents médicaux doivent comporter au moins {{ limit }} caractères.")]
     private ?string $antecedentsMedicaux = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(min: 5, minMessage: "La Specialite doit comporter au moins {{ limit }} caractères.")]
     private ?string $specialite = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(min: 5, minMessage: "Le nom de l'hôpital doit comporter au moins {{ limit }} caractères.")]
     private ?string $hopital = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(min: 5, minMessage: "La disponibilité doit comporter au moins {{ limit }} caractères.")]
     private ?string $disponibilite = null;
 
     public function getId(): ?int

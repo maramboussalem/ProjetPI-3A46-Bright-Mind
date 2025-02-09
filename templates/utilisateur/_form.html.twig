@@ -1,76 +1,164 @@
 {{ form_start(form, {'attr': {'id': 'utilisateurForm'}}) }}
-    <!-- Attributs en commun -->
-    <div class="form-group">
-        {{ form_label(form.nom) }}
-        {{ form_widget(form.nom) }}
-    </div>
 
-    <div class="form-group">
-        {{ form_label(form.prenom) }}
-        {{ form_widget(form.prenom) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.email) }}
-        {{ form_widget(form.email) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.motDePasse) }}
-        {{ form_widget(form.motDePasse) }}
-    </div>
-
-    <!-- Nouveau champ : Sexe -->
-    <div class="form-group">
-        {{ form_label(form.sexe) }}
-        {{ form_widget(form.sexe) }}
-    </div>
-
-    <!-- Nouveau champ : Adresse -->
-    <div class="form-group">
-        {{ form_label(form.adresse) }}
-        {{ form_widget(form.adresse) }}
-    </div>
-
-    <!-- Nouveau champ : Téléphone -->
-    <div class="form-group">
-        {{ form_label(form.telephone) }}
-        {{ form_widget(form.telephone) }}
-    </div>
-
-    <!-- Sélection du rôle -->
-    <div class="form-group">
-        {{ form_label(form.role) }}
-        {{ form_widget(form.role, { 'attr': {'id': 'utilisateur_role'} }) }}
-    </div>
-
-    <!-- Champs spécifiques aux patients -->
-    <div id="patientFields" class="role-fields">
-        <h3>Informations Patient</h3>
-        <div class="form-group">
-            {{ form_label(form.antecedentsMedicaux) }}
-            {{ form_widget(form.antecedentsMedicaux) }}
+<!-- Attributs en commun -->
+<div class="form-group">
+    {{ form_label(form.nom) }}
+    {{ form_widget(form.nom) }}
+    {% if form.nom.vars.errors %}
+        <div class="form-error">
+            {% for error in form.nom.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
         </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.prenom) }}
+    {{ form_widget(form.prenom) }}
+    {% if form.prenom.vars.errors %}
+        <div class="form-error">
+            {% for error in form.prenom.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    {% if form.email.vars.errors %}
+        <div class="form-error">
+            {% for error in form.email.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.motDePasse) }}
+    {{ form_widget(form.motDePasse) }}
+    {% if form.motDePasse.vars.errors %}
+        <div class="form-error">
+            {% for error in form.motDePasse.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Nouveau champ : Sexe -->
+<div class="form-group">
+    {{ form_label(form.sexe) }}
+    {{ form_widget(form.sexe) }}
+    {% if form.sexe.vars.errors %}
+        <div class="form-error">
+            {% for error in form.sexe.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Nouveau champ : Adresse -->
+<div class="form-group">
+    {{ form_label(form.adresse) }}
+    {{ form_widget(form.adresse) }}
+    {% if form.adresse.vars.errors %}
+        <div class="form-error">
+            {% for error in form.adresse.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Nouveau champ : Téléphone -->
+<div class="form-group">
+    {{ form_label(form.telephone) }}
+    {{ form_widget(form.telephone) }}
+    {% if form.telephone.vars.errors %}
+        <div class="form-error">
+            {% for error in form.telephone.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Sélection du rôle -->
+<div class="form-group">
+    {{ form_label(form.role) }}
+    {{ form_widget(form.role, { 'attr': {'id': 'utilisateur_role'} }) }}
+    {% if form.role.vars.errors %}
+        <div class="form-error">
+            {% for error in form.role.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Champs spécifiques aux patients -->
+<div id="patientFields" class="role-fields">
+    <h3>Informations Patient</h3>
+    <div class="form-group">
+        {{ form_label(form.antecedentsMedicaux) }}
+        {{ form_widget(form.antecedentsMedicaux) }}
+        {% if form.antecedentsMedicaux.vars.errors %}
+            <div class="form-error">
+                {% for error in form.antecedentsMedicaux.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Champs spécifiques aux médecins -->
+<div id="medecinFields" class="role-fields">
+    <h3>Informations Médecin</h3>
+
+    <!-- Spécialité -->
+    <div class="form-group">
+        {{ form_label(form.specialite) }}
+        {{ form_widget(form.specialite) }}
+        {% if form.specialite.vars.errors %}
+            <div class="form-error">
+                {% for error in form.specialite.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
-    <!-- Champs spécifiques aux médecins -->
-    <div id="medecinFields" class="role-fields">
-        <h3>Informations Médecin</h3>
-        <div class="form-group">
-            {{ form_label(form.specialite) }}
-            {{ form_widget(form.specialite) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.hopital) }}
-            {{ form_widget(form.hopital) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.disponibilite) }}
-            {{ form_widget(form.disponibilite) }}
-        </div>
+    <!-- Hôpital -->
+    <div class="form-group">
+        {{ form_label(form.hopital) }}
+        {{ form_widget(form.hopital) }}
+        {% if form.hopital.vars.errors %}
+            <div class="form-error">
+                {% for error in form.hopital.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
-    
+    <!-- Disponibilité -->
+    <div class="form-group">
+        {{ form_label(form.disponibilite) }}
+        {{ form_widget(form.disponibilite) }}
+        {% if form.disponibilite.vars.errors %}
+            <div class="form-error">
+                {% for error in form.disponibilite.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
 {{ form_end(form) }}
-
-

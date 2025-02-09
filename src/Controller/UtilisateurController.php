@@ -48,7 +48,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
             $utilisateur->setHopital($form->get('hopital')->getData());
             $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
         }
-
+        
         $entityManager->persist($utilisateur);
         $entityManager->flush();
 
