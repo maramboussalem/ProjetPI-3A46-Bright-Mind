@@ -4,97 +4,92 @@
 
 {% block body %}
     <style>
-        /* Style de la page */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
-            margin: 0;
-            padding: 0;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #e9f1f7; 
+            margin: 0; 
+            padding: 0; 
+            color: #333;
         }
 
-        /* Titre de la page */
-        h2 {
-            color: #2c3e50;
-            text-align: center;
-            margin-top: 20px;
+        h2 { 
+            color: #2c3e50; 
+            text-align: center; 
+            margin-top: 30px; 
+            font-size: 28px; 
         }
 
-        /* Conteneur de formulaire */
-        form {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        form { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); 
         }
 
-        /* Message d'erreur global */
-        .alert.alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
+        .alert.alert-danger { 
+            background-color: #f8d7da; 
+            color: #721c24; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            font-size: 14px;
         }
 
-        /* Groupes de champs du formulaire */
-        .form-group {
-            margin-bottom: 20px;
+        .form-group { 
+            margin-bottom: 25px; 
         }
 
-        /* Label des champs */
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-            color: #34495e;
+        label { 
+            font-weight: 600; 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #4b4f54; 
         }
 
-        /* Champs du formulaire */
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px 16px; 
+            margin: 8px 0; 
+            border: 2px solid #d1d8e0; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            transition: border-color 0.3s;
         }
 
-        /* Erreurs des champs */
-        .alert.alert-danger p {
-            margin: 0;
-            padding: 5px 0;
+        input:focus, select:focus, textarea:focus { 
+            border-color: #3498db; 
+            outline: none;
         }
 
-        /* Bouton de soumission */
-        button[type="submit"] {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
+        button[type="submit"] { 
+            background-color: #3498db; 
+            color: #ffffff; 
+            border: none; 
+            padding: 14px 30px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin-top: 20px; 
+            transition: background-color 0.3s;
         }
 
-        /* Bouton hover */
-        button[type="submit"]:hover {
-            background-color: #2980b9;
+        button[type="submit"]:hover { 
+            background-color: #2980b9; 
         }
 
-        /* Lien pour retourner à la liste */
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #3498db;
-            font-size: 16px;
+        a { 
+            display: inline-block; 
+            margin-top: 25px; 
+            text-decoration: none; 
+            color: #3498db; 
+            font-size: 16px; 
+            font-weight: 500; 
         }
 
-        a:hover {
-            text-decoration: underline;
+        a:hover { 
+            text-decoration: underline; 
         }
     </style>
 

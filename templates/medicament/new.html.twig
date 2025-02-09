@@ -103,6 +103,7 @@
     {% for child in form %}
         <div class="form-group">
             {{ form_label(child) }}
+            {{ form_widget(child) }}
             {% if child.vars.errors|length > 0 %}
                 <div class="alert alert-danger">
                     {% for error in child.vars.errors %}
