@@ -11,8 +11,8 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Content</th>
-                <th>ImageUrl</th>
-                <th>actions</th>
+                <th>Image</th> {# Changed column name #}
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,7 +21,13 @@
                 <td>{{ post.id }}</td>
                 <td>{{ post.title }}</td>
                 <td>{{ post.content }}</td>
-                <td>{{ post.imageUrl }}</td>
+                <td>
+                    {% if post.imageUrl %}
+                        <img src="{{ asset(post.imageUrl) }}" alt="Post Image" style="max-width: 100px; height: auto;">
+                    {% else %}
+                        No image
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
                     <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
