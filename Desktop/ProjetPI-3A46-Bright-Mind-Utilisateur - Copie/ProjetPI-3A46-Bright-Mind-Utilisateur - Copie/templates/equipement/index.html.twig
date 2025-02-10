@@ -1,0 +1,51 @@
+{% extends 'admin/base_back.html.twig' %}
+
+
+{% block title %}Equipement index{% endblock %}
+{% block content %}
+{% block body %}
+    <h1>Equipement</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomEquipement</th>
+                <th>Description</th>
+                <th>QuantiteStock</th>
+                <th>PrixUnitaire</th>
+                <th>DateAchat</th>
+                <th>EtatEquipement</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for equipement in equipements %}
+            <tr>
+                <td>{{ equipement.id }}</td>
+                <td>{{ equipement.nomEquipement }}</td>
+                <td>{{ equipement.description }}</td>
+                <td>{{ equipement.quantiteStock }}</td>
+                <td>{{ equipement.prixUnitaire }}</td>
+                <td>{{ equipement.dateAchat ? equipement.dateAchat|date('Y-m-d') : '' }}</td>
+                <td>{{ equipement.etatEquipement }}</td>
+                <td>
+
+                <a href="{{ path('app_equipement_edit', {'id': equipement.id}) }}" class="btn btn-primary">Edit</a>
+                     <a href="{{ path('app_equipement_delete', {'id': equipement.id}) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+<a href="{{ path('app_equipement_new') }}" class="btn btn-success">Create new</a>
+   
+{% endblock %}
+{% endblock %}
+
+

@@ -1,0 +1,254 @@
+/*
+Template Name: Online Courses
+File: Layout CSS
+Author: TemplatesOnWeb
+Author URI: https://www.templateonweb.com/
+Licence: <a href="https://www.templateonweb.com/license">Website Template Licence</a>
+*/
+/*********************center_home****************/
+.carousel-caption{
+background-color: rgba(0, 0, 0, 0.7);
+padding:250px 150px;
+bottom:0;
+left:0;
+width:100%;
+height:100%;
+color:#fff;
+ }
+.carousel-caption h5{
+letter-spacing:5px;
+ }
+.carousel-caption h1{
+font-size:80px;
+ }
+.carousel-caption .tags li{
+border-right:1px solid #8b8481;
+padding-left:10px;
+padding-right:10px;
+ }
+ 
+.center_home img{
+min-height:700px; 
+ }
+/*********************center_home_end****************/
+
+
+
+/*********************choose****************/
+.choose_2i1{
+border:1px solid #1f6aaf;
+ }
+.choose_2i1 .tags li{
+border-right:1px solid #1f6aaf;
+ }
+.choose_2i1 span{
+width:60px;
+height:60px;
+line-height:60px; 
+ }
+/*********************choose_end****************/
+
+/*********************event****************/
+.event_1lil h2{
+border:3px solid #17d0cf;
+line-height:0.8em; 
+ }
+.event_1ri2{
+background:#00000026;
+padding-top:25%; 
+ }
+/*********************event_end****************/
+
+/*********************team****************/
+.team_1iil ul li a{
+background:#12a5a4;
+width:40px;
+height:40px;
+line-height:40px; 
+color:#fff;
+ }
+.team_1iil ul li a:hover{
+background:#fff;
+color:#114d83;
+ }
+.team_1iir2{
+display:none; 
+ }
+.team_1i:hover .team_1iir2{
+display:block; 
+ }
+/*********************team_end****************/
+
+/*********************faq****************/
+.faq_1 .nav-tabs .nav-link {
+border: none;
+margin: 0px 10px 0px 10px;
+padding: 16px 20px;
+color:#333;
+font-size:18px;
+}
+.faq_1 .nav-tabs .nav-link:hover {
+font-weight:bold;
+border-bottom:3px solid  #17d0cf;
+}
+.faq_1 .nav-tabs .nav-link.active {
+font-weight:bold;
+border-bottom:3px solid  #17d0cf;
+}
+/*********************faq_end****************/
+
+
+@media screen and (max-width : 767px){
+.center_home img{
+min-height:350px; 
+ }
+ 
+.carousel-caption{
+padding:15px;
+ }
+.carousel-caption br{
+display:none;
+ }
+
+.carousel-caption h1{
+font-size:32px;
+ }
+.carousel-caption h5{
+font-size:14px;
+ }
+.carousel-caption .button{
+padding-left:10px;
+padding-right:10px;
+font-size:12px;
+ }
+
+.carousel-caption .input-group{
+width:100%!important;
+ }
+.carousel-caption .tags li{
+padding-left:3px;
+padding-right:3px;
+font-size:12px;
+ }
+#about_h{
+padding-top:30px;
+padding-bottom:20px; 
+ }
+.about_h1r h6{
+text-align:center; 
+ }
+.about_h1r br{
+display:none; 
+ }
+.about_h1r .button_1{
+padding-left:10px;
+padding-right:10px;
+font-size:12px;
+ }
+.choose_1i{
+margin-top:8px;
+margin-bottom:8px;
+text-align:center; 
+ }
+.choose_1ir p{
+text-align:left; 
+ }
+.choose_1ir{
+margin-top:10px;
+ }
+.choose_2i1{
+margin-top:8px;
+margin-bottom:8px;
+text-align:center; 
+ }
+.choose_2i1 p{
+text-align:left;
+ }
+#event h2{
+text-align:center;  
+ }
+.event_1m{
+margin-top:15px;
+margin-bottom:15px; 
+ }
+.event_1r{
+text-align:center; 
+ }
+.event_1r p{
+text-align:left; 
+ }
+.team_1i{
+margin-top:8px;
+margin-bottom:8px; 
+ }
+.faq_1 .nav-tabs .nav-link {
+margin: 0px 5px 0px 5px;
+padding: 16px 14px;
+font-size: 14px;
+}
+.faq_2il{
+margin-top:8px;
+margin-bottom:8px; 
+text-align:center; 
+ }
+.faq_2il p{
+text-align:left; 
+ }
+.faq_2{ 
+margin-top:20px!important; 
+ }
+
+ }
+
+@media (min-width:576px) and (max-width:767px) {
+.carousel-caption{
+padding:25px;
+ }
+
+.carousel-caption h1{
+font-size:42px;
+ }
+.carousel-caption h5{
+font-size:16px;
+ }
+.carousel-caption .button{
+padding-left:15px;
+padding-right:15px;
+font-size:14px;
+ }
+ }
+@media (min-width:768px) and (max-width:991px) {
+.carousel-caption br{
+display:none;
+ }
+.carousel-caption h1{
+font-size:48px;
+ }
+.about_h1r  br{
+display:none; 
+ }
+.about_h1r h1{
+font-size:38px; 
+ }
+.choose_1il span{
+font-size:24px!important; 
+ }
+.event_1lir ul li{
+margin-top:5px; 
+ }
+.event_1lil h2{
+padding:8px!important; 
+ }
+.team_1iir2  h6 a{
+font-size: 10px;
+padding-left:5px!important;
+padding-right:5px!important;
+ }
+ }
+
+@media (min-width:992px) and (max-width:1200px) {
+
+ }
+
+
+
