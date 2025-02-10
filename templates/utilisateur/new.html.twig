@@ -1,11 +1,17 @@
-{% extends 'base.html.twig' %}
+{% extends 'home/index.html.twig' %}
 
-{% block title %}New Utilisateur{% endblock %}
+{% block title %}New Reclamation{% endblock %}
 
 {% block body %}
-    <h1>Create new Utilisateur</h1>
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h2 class="text-center mb-4">Submit a New Reclamation</h2>
 
-    {{ include('utilisateur/_form.html.twig') }}
+            {{ include('reclamation/_form2.html.twig', { 'button_label': 'Submit' }) }}
 
-    <a href="{{ path('app_utilisateur_index') }}">back to list</a>
+            <div class="text-center mt-3">
+                <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

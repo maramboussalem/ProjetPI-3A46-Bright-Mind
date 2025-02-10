@@ -1,0 +1,46 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+<div class="mb-3">
+    {{ form_label(form.utilisateurId) }}
+    {{ form_widget(form.utilisateurId, {'attr': {'class': 'form-control', 'required': 'required', 'pattern': '[A-Za-z0-9]+'}}) }} 
+    {% if form.utilisateurId.vars.errors|length > 0 %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.utilisateurId) }}
+            
+        </div>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.sujet) }}
+    {{ form_widget(form.sujet, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+    {% if form.sujet.vars.errors|length > 0 %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.sujet) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.description) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4, 'required': 'required'}}) }}
+    {% if form.description.vars.errors|length > 0 %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.description) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    <label for="consultation">Date of Consultation</label>
+    {{ form_widget(form.consultation, {'attr': {'class': 'form-control', 'type': 'date', 'required': 'required'}}) }}
+    {% if form.consultation.vars.errors|length > 0 %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.consultation) }}
+        </div>
+    {% endif %}
+</div>
+
+<button type="submit" class="btn btn-primary w-100">{{ button_label|default('Submit') }}</button>
+
+{{ form_end(form) }}
