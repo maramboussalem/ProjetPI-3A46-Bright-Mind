@@ -1,4 +1,38 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Create New Post{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="{{ asset('back/compagne/adminCompagne.css') }}">
+{% endblock %}
+
+{% block body %}
+    
+
+    <form method="post" action="{{ path('app_post_new') }}" enctype="multipart/form-data">
+        {{ form_start(form,{ 'attr': {'class': 'custom-form'} }) }}
+
+        <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title, { 'attr': {'class': 'custom-file-input'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_widget(form.content, { 'attr': {'rows': '5','class': 'custom-file-input'} }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.imageUrl) }}
+            {{ form_widget(form.imageUrl,{ 'attr': {'class': 'custom-file-input'} }) }}
+
+        </div>
+        <div class="form-group">
+            {{ form_row(form.file) }}
+        </div>
+
+        <button type="submit">{{ button_label|default('Save') }}</button>
+
+        {{ form_end(form) }}
+    </form>
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Blog
+{% endblock %}
+
+{% block head %}
+    <head>
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
+        <title>Blog</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('front/compagne/compagne.css') }}">
+            
+        {% endblock %}
+     </head>
+{% endblock %}
+{% block body %}
+    <body>  
+          <div class="blog-card">
+  <div class="blog-image">
+    <img src="img/your-image.jpg" alt="Blog Image">
+  </div>
+  <div class="blog-content">
+    <h2 class="blog-title">Lorem ipsum dolor sit amet</h2>
+    <div class="blog-meta">
+      
+      <span class="blog-comments"><i class="icon-comments"></i> 15 Comments</span>
+    </div>
+    <p class="blog-excerpt">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu suscipit orci velit id libero
+    </p>
+    <a href="#" class="blog-read-more">Read More &raquo;</a>
+  </div>
+</div>
+
+        <!-- JavaScript Libraries -->
+         {% block js %}
+            
+         {% endblock %}
+    </body>
+{% endblock %}

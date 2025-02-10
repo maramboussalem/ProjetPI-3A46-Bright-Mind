@@ -6,6 +6,7 @@ use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class PostType extends AbstractType
 {
@@ -15,6 +16,11 @@ class PostType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('imageUrl')
+            ->add('file', FileType::class, [
+                'label' => 'Upload File',
+                'mapped' => false, // to prevent this field from being mapped to an entity
+                'required' => false,
+            ])
         ;
     }
 

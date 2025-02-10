@@ -324,18 +324,13 @@
     </ul>
 </li>
 <li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#stock-nav" data-bs-toggle="collapse" href="#">
+    <a class="nav-link collapsed" data-bs-target="#compagne-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-box-seam"></i><span>Compagne</span><i class="bi bi-chevron-down ms-auto"></i>
     </a>
-    <ul id="stock-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+    <ul id="compagne-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
             <a href="{{path('app_post_index')}}">
-                <i class="bi bi-truck"></i><span>Fournisseur</span>
-            </a>
-        </li>
-        <li>
-            <a href='#'>
-                <i class="bi bi-capsule"></i><span>Médicament</span>
+                <i class="bi bi-truck"></i><span>Postes</span>
             </a>
         </li>
     </ul>
@@ -375,15 +370,7 @@
 
   <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Dashboard</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+
 
 {% block body %}{% endblock %}
 
