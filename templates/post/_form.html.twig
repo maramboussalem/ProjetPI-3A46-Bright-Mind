@@ -8,12 +8,13 @@
 {% block body %}
     
 
-    <form method="post" action="{{ path('app_post_new') }}" enctype="multipart/form-data">
-        {{ form_start(form,{ 'attr': {'class': 'custom-form'} }) }}
+    <form method="post" action="{{ path('app_post_new') }}" enctype="multipart/form-data" novalidate="novalidate">
+        {{ form_start(form,{ 'attr': {'novalidate': 'novalidate' }}) }}
 
         <div class="form-group">
             {{ form_label(form.title) }}
             {{ form_widget(form.title, { 'attr': {'class': 'custom-file-input'} }) }}
+            {{form_errors(form.title)}}
         </div>
 
         <div class="form-group">
@@ -21,11 +22,6 @@
             {{ form_widget(form.content, { 'attr': {'rows': '5','class': 'custom-file-input'} }) }}
         </div>
 
-        <div class="form-group">
-            {{ form_label(form.imageUrl) }}
-            {{ form_widget(form.imageUrl,{ 'attr': {'class': 'custom-file-input'} }) }}
-
-        </div>
         <div class="form-group">
             {{ form_row(form.file) }}
         </div>

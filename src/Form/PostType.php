@@ -15,7 +15,6 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
-            ->add('imageUrl')
             ->add('file', FileType::class, [
                 'label' => 'Upload File',
                 'mapped' => false, // to prevent this field from being mapped to an entity

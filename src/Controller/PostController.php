@@ -46,7 +46,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
             );
 
             // Optionally, you can set the filename on your Post entity, for example:
-            $post->setFileName($fileName); // Assuming you have a `setFileName` method in your `Post` entity
+            $post->setImageUrl('front/compagne/img/' . $fileName); // Assuming you have a `setFileName` method in your `Post` entity
         }
 
         // Persist the post entity and flush to the database
