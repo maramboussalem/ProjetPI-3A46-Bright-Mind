@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Blog
-{% endblock %}
+{% block title %}Blog{% endblock %}
 
 {% block stylesheets %}
     
@@ -18,7 +16,7 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 10px 20px; /* Reduced margin */
+  margin-top: 80px; /* Reduced margin */
 }
 
 .blog-image img {
@@ -87,8 +85,7 @@
 }
 /* Alignement à gauche */
 .container {
-  margin: 0 auto;
-  max-width: 2000px;
+ padding-top: 100px;
 }
 
 /* Navbar */
@@ -122,46 +119,29 @@ body {
   margin: 0;
   padding: 0;
 }
-
 </style>
     <div class="container">
         <!-- Navbar -->
-        <nav class="navbar">
-            <!-- Removed the ACCUEIL button -->
-        </nav>
+        
 
         <!-- Blog Section -->
-        <div class="blog-card">
-            <div class="blog-image">
-                <img src="{{ asset('img/your-image.jpg') }}" alt="Blog Image">
-            </div>
-            <div class="blog-content">
-                <h2 class="blog-title">Lorem ipsum dolor sit amet</h2>
-                <div class="blog-meta">
-                    <span class="blog-comments"><i class="icon-comments"></i> 15 Comments</span>
-                </div>
-                <p class="blog-excerpt">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu suscipit orci velit id libero.
-                </p>
-                <a href="#" class="blog-read-more">Read More &raquo;</a>
-            </div>
+      {% for post in posts %}
+    <div class="blog-card">
+        <div class="blog-image">
+            <img src="{{ asset(post.imageUrl) }}" alt="{{ post.title }}">
         </div>
-        <div class="blog-card">
-            <div class="blog-image">
-                <img src="{{ asset('img/your-image.jpg') }}" alt="Blog Image">
+        <div class="blog-content">
+            <h2 class="blog-title">{{ post.title }}</h2>
+            <div class="blog-meta">
+                <span class="blog-comments"><i class="icon-comments"></i> {{ post.comments|length }} Comments</span>
             </div>
-            <div class="blog-content">
-                <h2 class="blog-title">Lorem ipsum dolor sit amet</h2>
-                <div class="blog-meta">
-                    <span class="blog-comments"><i class="icon-comments"></i> 15 Comments</span>
-                </div>
-                <p class="blog-excerpt">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu suscipit orci velit id libero.
-                </p>
-                <a href="#" class="blog-read-more">Read More &raquo;</a>
-            </div>
+            <p class="blog-excerpt">
+                {{ post.content }}
+            </p>
+            <a href="#" class="blog-read-more">Read More &raquo;</a>
         </div>
     </div>
+{% endfor %}
 
 
 {% endblock %}
