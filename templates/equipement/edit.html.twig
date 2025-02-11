@@ -1,0 +1,16 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Modifier un équipement{% endblock %}
+
+{% block body %}
+    <h1>Modifier un équipement</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success">Mettre à jour</button>
+    {{ form_end(form) }}
+
+    {{ include('equipement/_delete_form.html.twig') }}
+
+    <a href="{{ path('app_equipement_index') }}" class="btn btn-secondary">⬅ Retour</a>
+{% endblock %}

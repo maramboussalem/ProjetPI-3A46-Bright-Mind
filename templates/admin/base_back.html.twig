@@ -324,6 +324,23 @@
     </ul>
 </li>
 <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#service-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-box-seam"></i><span>Service Medicale</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="service-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+            <a href="{{path('app_equipement_index')}}">
+                <i class="bi bi-truck"></i><span>Equipement</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{path('app_service_med_index')}}">
+                <i class="bi bi-capsule"></i><span>Service</span>
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#compagne-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-box-seam"></i><span>Compagne</span><i class="bi bi-chevron-down ms-auto"></i>
     </a>
