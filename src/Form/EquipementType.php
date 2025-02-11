@@ -17,6 +17,7 @@ class EquipementType extends AbstractType
             ->add('quantiteStock')
             ->add('prixUnitaire')
             ->add('etatEquipement')
+            ->add('dateAchat')
         ;
     }
 

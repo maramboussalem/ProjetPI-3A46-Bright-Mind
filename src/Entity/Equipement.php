@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EquipementRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
@@ -27,6 +28,9 @@ class Equipement
 
     #[ORM\Column(length: 255)]
     private ?string $etatEquipement = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateAchat = null;
 
     public function getId(): ?int
     {
@@ -89,6 +93,18 @@ class Equipement
     public function setEtatEquipement(string $etatEquipement): static
     {
         $this->etatEquipement = $etatEquipement;
+
+        return $this;
+    }
+
+    public function getDateAchat(): ?\DateTimeInterface
+    {
+        return $this->dateAchat;
+    }
+
+    public function setDateAchat(\DateTimeInterface $dateAchat): static
+    {
+        $this->dateAchat = $dateAchat;
 
         return $this;
     }
