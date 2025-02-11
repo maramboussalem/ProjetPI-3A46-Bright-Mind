@@ -32,7 +32,6 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Assurez-vous que le rôle est bien défini
         $role = $form->get('role')->getData();
         $utilisateur->setRole($role);
 
