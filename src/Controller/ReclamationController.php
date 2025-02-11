@@ -24,29 +24,28 @@ final class ReclamationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $reclamation = new Reclamation();
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $reclamation = new Reclamation();
 
-        // Admin check for showing consultation field
-        $form = $this->createForm(ReclamationType::class, $reclamation, [
-            'is_admin' => $this->isGranted('ROLE_ADMIN') // Check if the user is an admin
-        ]);
+    // Just create the form without any admin check
+    $form = $this->createForm(ReclamationType::class, $reclamation);
 
-        $form->handleRequest($request);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reclamation);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($reclamation);
+        $entityManager->flush();
 
-            return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('reclamation/new.html.twig', [
-            'reclamation' => $reclamation,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->render('reclamation/new.html.twig', [
+        'reclamation' => $reclamation,
+        'form' => $form->createView(),
+    ]);
+}
+
     
     #[Route('/new2', name: 'app_reclamation_new2', methods: ['GET', 'POST'])]
     public function new2(Request $request, EntityManagerInterface $entityManager): Response
@@ -211,7 +210,13 @@ final class ReclamationController extends AbstractController
 
 
 
-
+    #[Route('/reclamation/index2', name: 'app_reclamation_index2', methods: ['GET'])]
+    public function index2(ReclamationRepository $reclamationRepository): Response
+    {
+        return $this->render('reclamation/index2.html.twig', [
+            'reclamations' => $reclamationRepository->findAll(),
+        ]);
+    }
 
 
 }

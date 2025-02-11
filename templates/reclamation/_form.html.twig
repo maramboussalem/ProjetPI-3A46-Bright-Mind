@@ -1,7 +1,23 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+{% for field in form %}
+    <div class="mb-3">
+        {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+
+        {% for error in field.vars.errors %}
+            <div class="text-danger mt-1">
+                <p>{{ error.message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<button type="submit" class="btn btn-primary">Submit</button>
+
 {{ form_end(form) }}
+
+
 <style>
 body {
     font-family: Arial, sans-serif;

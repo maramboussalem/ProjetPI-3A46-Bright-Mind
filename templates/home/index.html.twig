@@ -3,74 +3,191 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block body %}
+
 <div class="main clearfix position-relative">
-    <div class="main_1 clearfix position-absolute top-0 w-100">
-        <section id="header">
-            <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
-                <div class="container-xl">
-                    <a class="navbar-brand p-0 fw-bold text-white" href="{{ path('app_home') }}">
-                        <i class="fa fa-stethoscope me-1 col_blue"></i> BRIGHT <span class="fw-normal">Mind</span><br>
-                        <span class="font_14 fw-normal span_1">Médecine Familiale</span>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mb-0 ms-auto">
-                            <li class="nav-item"><a class="nav-link active" href="{{ path('app_home') }}">Accueil</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Services Médicaux</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Course</a></li>
-                                    <li><a class="dropdown-item" href="#">Course Detail</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-
-                            <!-- Add the Submit A Ticket Button in the Navbar -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_reclamation_new2') }}">
-                                    Submit A Ticket <i class="fa fa-ticket ms-2"></i>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link link_icon rounded-circle" href="#"><i class="fa fa-user"></i></a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle link_icon rounded-circle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown">
-                                    <i class="fa fa-search"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="input-group p-1">
-                                            <input type="text" class="form-control" placeholder="Search Here">
-                                            <button class="btn btn-primary">🔍</button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </section>
-    </div>
-
     <div class="main_2 clearfix">
         <section id="center" class="center_home">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="{{ asset('img/1.jpg') }}" class="d-block w-100" alt="...">
-
                     <div class="carousel-caption d-md-block">
+					<style>
+					   .carousel-caption h1 {
+                         color: white !important;
+                          }
+					</style>
                         <h1 class="mt-3"> Système Intelligent de Gestion Hospitalière</h1>
-                        <h6 class="mb-0 mt-4"><a class="button" href="#"> Se connecter <i class="fa fa-caret-right ms-1 col_blue"></i></a></h6>
-                    </div>
+                        <h6 class="mb-0 mt-4">
+                        <a class="button" href="{{ path('app_login') }}">
+                         Se connecter <i class="fa fa-caret-right ms-1 col_blue"></i> 
+                        </a>
+                        </h6>
+					</div>
                 </div>
             </div>
         </section>
     </div>
-
 </div>
+
+
+<section id="faq" class="p_3">
+ <div class="container-xl">
+    <div class="row skill_1 text-center mb-4">
+   <div class="col-md-12">
+    <h5 class="fw-normal space_5 dashline text-muted">SIGH</h5>
+	<h1 class="mt-3 font_50 mb-0"><span class="fw-normal">Questions  </span> Fréquemment Posées </h1>
+   </div>
+  </div>
+    <div class="faq_1 row">
+	 <div class="col-md-12">
+	   <ul class="nav nav-tabs mb-0 justify-content-center border-0">
+    <li class="nav-item d-inline-block me-2">
+        <a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+            <span class="d-md-block">GÉNÉRAL</span>
+        </a>
+    </li>
+    <li class="nav-item d-inline-block me-2">
+        <a href="#profile" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+            <span class="d-md-block">PERSONNEL MÉDICAL</span>
+        </a>
+    </li>
+	<li class="nav-item d-inline-block me-2">
+        <a href="#profile1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+            <span class="d-md-block">RENDEZ-VOUS & CONSULTATIONS</span>
+        </a>
+    </li>
+    <li class="nav-item d-inline-block me-2">
+        <a href="#profile2" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+            <span class="d-md-block">AUTRES</span>
+        </a>
+    </li>
+	
+	
+</ul>
+	 </div>
+	</div>
+	<div class="faq_2 row mt-5">
+	 <div class="tab-content">
+    <div class="tab-pane active" id="home">
+	   <div class="faq_2i row">
+	    <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>Qu'est-ce qu'un Système Intelligent de Gestion Hospitalière ?</h5>
+		  <p class="mt-3">Un Système Intelligent de Gestion Hospitalière est une plateforme numérique qui optimise la gestion des patients, du personnel médical, des rendez-vous et des ressources hospitalières à l’aide de technologies avancées comme l’intelligence artificielle et l’analyse des données.</p>
+		  <h5 class="mt-4">Les patients peuvent-ils accéder à leurs dossiers médicaux ?</h5>
+		  <p class="mt-3">Oui, selon les paramètres de sécurité, les patients peuvent consulter leur historique médical, leurs prescriptions et leurs résultats d’examens via un espace personnel sécurisé.</p>
+		  <h6 class="mb-0 mt-3 fw-bold"><a href="#">Make a Question <i class="fa fa-chevron-circle-right ms-1 col_blue"></i></a></h6>
+		 </div>
+		</div>
+		<div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>Comment ce système contribue-t-il à la digitalisation du secteur de la santé ?</h5>
+		  <p class="mt-3">Il remplace les dossiers papier par des dossiers médicaux électroniques, automatise les processus administratifs et facilite l’accès aux données en temps réel pour les professionnels de santé.</p>
+		  <h5 class="mt-4">Peut-on intégrer ce système à d’autres plateformes médicales ?</h5>
+		  <p class="mt-3 mb-0">Oui, le système peut être interconnecté avec des laboratoires, des pharmacies et d’autres établissements de santé pour un partage sécurisé des informations et une meilleure prise en charge des patients.</p>
+		 </div>
+		</div>
+	   </div>
+    </div>
+    <div class="tab-pane" id="profile">
+        <div class="faq_2i row">
+		 <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>Comment le système aide-t-il les médecins et le personnel soignant ?</h5>
+		  <p class="mt-3">Il centralise les informations des patients, automatise les tâches administratives et facilite la gestion des emplois du temps, permettant ainsi au personnel de se concentrer sur les soins.</p>
+		  <h5 class="mt-4">Le système permet-il un suivi des patients chroniques ?</h5>
+		  <p class="mt-3 mb-0">Oui, il intègre des fonctionnalités de suivi médical à distance, permettant aux médecins de surveiller l’évolution des patients atteints de maladies chroniques.</p>
+		 </div>
+		</div>
+	    <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>Comment le système gère-t-il les urgences ?</h5>
+		  <p class="mt-3">Il dispose d’un module de gestion des urgences qui priorise les cas critiques, optimise l’affectation des ressources et notifie le personnel médical en temps réel.</p>
+		  <h5 class="mt-4">Les patients pLeuvent-ils accéder à leurs dossiers médicaux ?</h5>
+		  <p class="mt-3">Oui, via un portail sécurisé, les patients peuvent consulter leurs antécédents médicaux, résultats d’analyses et prescriptions en ligne.</p>
+		  <h6 class="mb-0 mt-3 fw-bold"><a href="#">Make a Question <i class="fa fa-chevron-circle-right ms-1 col_blue"></i></a></h6>
+		 </div>
+		</div>
+		
+	   </div>
+    </div>
+	
+	<div class="tab-pane" id="profile1">
+          <div class="faq_2i row">
+	    <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>Comment ce système aide-t-il le personnel médical dans leur travail quotidien ?</h5>
+		  <p class="mt-3">Il permet une gestion optimisée des plannings, automatise les tâches administratives et facilite l’accès aux informations médicales des patients.</p>
+		  <h5 class="mt-4">Peut-on suivre les disponibilités des médecins en temps réel ?</h5>
+		  <p class="mt-3">Oui, le système affiche les disponibilités des médecins et permet d’attribuer rapidement des consultations ou interventions.</p>
+		  <h6 class="mb-0 mt-3 fw-bold"><a href="#">Make a Question <i class="fa fa-chevron-circle-right ms-1 col_blue"></i></a></h6>
+		 </div>
+		</div>
+		<div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>Le système prend-il en charge la gestion des formations médicales ?</h5>
+		  <p class="mt-3">Oui, il inclut un module permettant d’organiser et de suivre les formations continues du personnel médical.</p>
+		  <h5 class="mt-4">Le système prend-il en charge la gestion des gardes et des plannings ?</h5>
+		  <p class="mt-3 mb-0">Oui, il propose une planification intelligente des horaires pour optimiser la répartition du personnel et éviter la surcharge de travail.
+
+.</p>
+		 </div>
+		</div>
+	   </div>
+    </div>
+	
+	<div class="tab-pane" id="profile2">
+       <div class="faq_2i row">
+		 <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>How to Register or Make An Account in Genius?</h5>
+		  <p class="mt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		  <h5 class="mt-4">Comment le système facilite-t-il la gestion des patients ?</h5>
+		  <p class="mt-3 mb-0">Il centralise les dossiers médicaux, suit l’historique des consultations et permet aux patients de prendre rendez-vous en ligne, réduisant ainsi les temps d’attente.</p>
+		 </div>
+		</div>
+	    <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>What is Genius Courses?</h5>
+		  <p class="mt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		  <h5 class="mt-4">What Lorem Ipsum Dolor Sit Amet Consectuerer?</h5>
+		  <p class="mt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		  <h6 class="mb-0 mt-3 fw-bold"><a href="#">Make a Question <i class="fa fa-chevron-circle-right ms-1 col_blue"></i></a></h6>
+		 </div>
+		</div>
+		
+	   </div>
+    </div>
+	
+	<div class="tab-pane" id="profile3">
+       <div class="faq_2i row">
+	    <div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>What is Genius Courses?</h5>
+		  <p class="mt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		  <h5 class="mt-4">What Lorem Ipsum Dolor Sit Amet Consectuerer?</h5>
+		  <p class="mt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		  <h6 class="mb-0 mt-3 fw-bold"><a href="#">Make a Question <i class="fa fa-chevron-circle-right ms-1 col_blue"></i></a></h6>
+		 </div>
+		</div>
+		<div class="col-md-6">
+		 <div class="faq_2il">
+		  <h5>How to Register or Make An Account in Genius?</h5>
+		  <p class="mt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		  <h5 class="mt-4">Adipiscing Diamet Nonnumy Nibh Euismod?</h5>
+		  <p class="mt-3 mb-0">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam volutpat. Ut wisi enim ad minim veniam.</p>
+		 </div>
+		</div>
+	   </div>
+    </div>
+ </div>
+	</div>
+ </div>
+</section>
+
+
+
+
+
+  
 {% endblock %}
