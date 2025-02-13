@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/utilisateur')]
 final class UtilisateurController extends AbstractController
@@ -23,42 +24,42 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
-
-public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $utilisateur = new Utilisateur();
-    $form = $this->createForm(UtilisateurType::class, $utilisateur);
-
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $role = $form->get('role')->getData();
-        $utilisateur->setRole($role);
-
-        // Si c'est un patient, on remplit les attributs de patient
-        if ($role === 'patient') {
-            
-            $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $utilisateur = new Utilisateur();
+        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+          
+            $password = $form->get('motdepasse')->getData();
+    
+            $hashedPassword = $passwordHasher->hashPassword($utilisateur, $password);
+            $utilisateur->setPassword($hashedPassword);
+    
+            $role = $form->get('role')->getData();
+            $utilisateur->setRole($role);
+    
+            if ($role === 'patient') {
+                $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
+            } elseif ($role === 'medecin') {
+                $utilisateur->setSpecialite($form->get('specialite')->getData());
+                $utilisateur->setHopital($form->get('hopital')->getData());
+                $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
+            }
+    
+            $entityManager->persist($utilisateur);
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_home');
         }
-
-        // Si c'est un médecin, on remplit les attributs spécifiques
-        if ($role === 'medecin') {
-            $utilisateur->setSpecialite($form->get('specialite')->getData());
-            $utilisateur->setHopital($form->get('hopital')->getData());
-            $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
-        }
-        
-        $entityManager->persist($utilisateur);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_home');
+    
+        return $this->render('utilisateur/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    return $this->render('utilisateur/new.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
-
+    
     #[Route('/{id}', name: 'app_utilisateur_show', methods: ['GET'])]
     public function show(Utilisateur $utilisateur): Response
     {
