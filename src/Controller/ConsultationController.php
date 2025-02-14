@@ -9,15 +9,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/consultation')]
 final class ConsultationController extends AbstractController
 {
-    #[Route(name: 'app_consultation_index', methods: ['GET'])]
+    #[Route('/', name: 'app_consultation_index', methods: ['GET'])]
     public function index(ConsultationRepository $consultationRepository): Response
     {
-        return $this->render('consultation/index.html.twig', [
+        return $this->render('consultation/index.html.twig', [  // Standard consultations list
+            'consultations' => $consultationRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/index2', name: 'app_consultation_index2', methods: ['GET'])]
+    public function index2(ConsultationRepository $consultationRepository): Response
+    {
+        return $this->render('consultation/index2.html.twig', [  // Custom consultations list
             'consultations' => $consultationRepository->findAll(),
         ]);
     }
@@ -33,7 +41,8 @@ final class ConsultationController extends AbstractController
             $entityManager->persist($consultation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
+            // Redirect to the appropriate consultations list page after submission
+            return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);  // Redirect to index or index2 based on your choice
         }
 
         return $this->render('consultation/new.html.twig', [
@@ -59,7 +68,8 @@ final class ConsultationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
+            // Redirect to the appropriate consultations list page after editing
+            return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);  // Redirect to index or index2 based on your choice
         }
 
         return $this->render('consultation/edit.html.twig', [
@@ -71,11 +81,12 @@ final class ConsultationController extends AbstractController
     #[Route('/{id}', name: 'app_consultation_delete', methods: ['POST'])]
     public function delete(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$consultation->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $consultation->getId(), $request->request->get('_token'))) {
             $entityManager->remove($consultation);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
+        // Redirect to the appropriate consultations list page after deletion
+        return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);  // Redirect to index or index2 based on your choice
     }
 }

@@ -12,7 +12,7 @@
                 <th>NomPatient</th>
                 <th>DateConsultation</th>
                 <th>Diagnostic</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -23,17 +23,21 @@
                 <td>{{ consultation.dateConsultation ? consultation.dateConsultation|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ consultation.diagnostic }}</td>
                 <td>
-                    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}">show</a>
-                    <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}">edit</a>
-                </td>
+    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}">show</a>
+    <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}">edit</a>
+    <a href="{{ path('app_reclamation_new2', {'consultationId': consultation.id}) }}" class="btn btn-warning btn-sm">
+        Make Reclamation
+    </a>
+</td>
+
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_consultation_new') }}">Create new</a>
+    <a href="{{ path('app_consultation_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}

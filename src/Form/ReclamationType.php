@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length; 
 use Symfony\Component\Validator\Constraints\NotNull; 
+
 class ReclamationType extends AbstractType
 {
     private $entityManager;
@@ -27,19 +28,14 @@ class ReclamationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $consultations = $this->entityManager
-            ->getRepository(Consultation::class)
-            ->findAll();
-
-        $consultationChoices = [];
-        foreach ($consultations as $consultation) {
-            $consultationChoices[$consultation->getNomPatient()] = $consultation->getId();
-        }
-
+        // Add common fields.
         $builder
             ->add('utilisateurId', TextType::class, [
-                'constraints' => [new NotBlank(['message' => 'Utilisateur ID is required.'])],
+                'constraints' => [
+                    // new NotBlank(['message' => 'Utilisateur ID is required.'])
+                ],
             ])
+            
             ->add('sujet', ChoiceType::class, [
                 'choices' => [
                     'Problème avec la consultation en ligne' => 'Problème avec la consultation en ligne',
@@ -48,22 +44,39 @@ class ReclamationType extends AbstractType
                     'Médicament non adapté' => 'Médicament non adapté',
                     'Autres' => 'Autres',
                 ],
-                'constraints' => [new NotBlank(['message' => 'Sujet is required.'])],
+                'placeholder' => 'Choisir votre sujet', // Placeholder text when no choice is selected
+                'constraints' => [
+                    // new NotBlank(['message' => 'Sujet is required.'])
+                ],
+                'required' => false,  // Make this field optional initially
             ])
             ->add('description', TextareaType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Description is required.']),
+                    // new NotBlank(['message' => 'Description is required.']),
                     new Length(['max' => 1000, 'maxMessage' => 'Description cannot exceed 1000 characters.']),
                 ],
-            ])
-            ->add('consultation', EntityType::class, [
-                'class' => Consultation::class,
-                'choice_label' => function ($consultation) {
-                    return $consultation->getDateConsultation()->format('Y-m-d');
-                },
-                'constraints' => [new NotNull(['message' => 'Consultation is required.'])],
             ]);
 
+        // Always add the consultation field.
+        // In "new2" mode, it will be disabled (shown but not editable).
+        $consultationOptions = [
+            'class' => Consultation::class,
+            'choice_label' => function (Consultation $consultation) {
+                return $consultation->getDateConsultation()->format('Y-m-d');
+            },
+            'constraints' => [
+                new NotNull(['message' => 'Consultation is required.'])
+            ],
+        ];
+
+        if ($options['is_new2']) {
+            // Disable the field so the user cannot modify it.
+            $consultationOptions['disabled'] = true;
+        }
+
+        $builder->add('consultation', EntityType::class, $consultationOptions);
+
+        // Add admin-only field if applicable.
         if ($options['is_admin']) {
             $builder->add('reponse', TextareaType::class, [
                 'required' => false,
@@ -71,6 +84,7 @@ class ReclamationType extends AbstractType
             ]);
         }
 
+        // Only add the statut field when not in new2 mode.
         if (!$options['is_new2']) {
             $builder->add('statut', ChoiceType::class, [
                 'choices' => [
@@ -91,7 +105,3 @@ class ReclamationType extends AbstractType
         ]);
     }
 }
-
-
-
-

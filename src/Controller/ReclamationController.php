@@ -46,17 +46,21 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
     ]);
 }
 
-    
-    #[Route('/new2', name: 'app_reclamation_new2', methods: ['GET', 'POST'])]
-    public function new2(Request $request, EntityManagerInterface $entityManager): Response
+#[Route('/reclamation/new2/{consultationId}', name: 'app_reclamation_new2', methods: ['GET', 'POST'])]
+public function new2(Request $request, EntityManagerInterface $entityManager, int $consultationId): Response
 {
-    $reclamation = new Reclamation();
-    $reclamation->setStatut('en cours'); // Force default statut
+    $consultation = $entityManager->getRepository(Consultation::class)->find($consultationId);
 
-    // Set 'is_new2' to true for 'new2' to hide the 'statut' field
+    if (!$consultation) {
+        throw $this->createNotFoundException('Consultation not found');
+    }
+
+    $reclamation = new Reclamation();
+    $reclamation->setStatut('en cours');
+    $reclamation->setConsultation($consultation);
+
     $form = $this->createForm(ReclamationType::class, $reclamation, [
-        'is_admin' => $this->isGranted('ROLE_ADMIN'),
-        'is_new2' => true,  // Pass this option to remove statut field
+        'is_new2' => true,
     ]);
 
     $form->handleRequest($request);
@@ -65,14 +69,21 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         $entityManager->persist($reclamation);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_reclamation_index2', [
+            'consultationId' => $consultationId // Ensure consultationId is passed
+        ]);
     }
 
     return $this->render('reclamation/new2.html.twig', [
         'reclamation' => $reclamation,
         'form' => $form->createView(),
+        'consultation' => $consultation, // Pass consultation to the template
     ]);
 }
+
+
+
+
 
     
 
@@ -93,6 +104,30 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
 
         return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
     }
+    
+
+
+
+
+    #[Route('/delete2/{id}', name: 'app_reclamation_delete2', methods: ['POST'])]
+
+    public function delete2(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete2' . $reclamation->getId(), $request->get('_token'))) {
+            $entityManager->remove($reclamation);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Reclamation deleted successfully!');
+        } else {
+            $this->addFlash('error', 'Invalid CSRF token!');
+        }
+
+        return $this->redirectToRoute('app_reclamation_index2', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+
+
 
     #[Route('/{id}', name: 'app_reclamation_show', methods: ['GET', 'POST'])]
     public function show(Reclamation $reclamation, Request $request, EntityManagerInterface $entityManager): Response

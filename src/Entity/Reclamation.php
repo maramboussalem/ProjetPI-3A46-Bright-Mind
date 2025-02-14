@@ -16,7 +16,7 @@ class Reclamation
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "L'identifiant de l'utilisateur ne peut pas être vide.")]
+    #[Assert\NotBlank(message: "l'Adresse mail ne peut pas être vide.")]
     #[Assert\Length(min: 3, max: 255, minMessage: "L'identifiant doit comporter au moins {{ limit }} caractères.", maxMessage: "L'identifiant ne peut pas dépasser {{ limit }} caractères.")]
     private string $utilisateurId;
 
@@ -28,6 +28,7 @@ class Reclamation
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
     #[Assert\Length(min: 10, minMessage: "La description doit comporter au moins {{ limit }} caractères.")]
+   
     private string $description;
 
     #[ORM\Column(type: 'string')]

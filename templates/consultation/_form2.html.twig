@@ -1,21 +1,8 @@
 {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
 <div class="mb-3">
-    {{ form_label(form.utilisateurId, 'Adresse mail ', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.utilisateurId, {
-        'attr': {
-            'class': 'form-control ' ~ (form.utilisateurId.vars.errors|length > 0 ? 'is-invalid' : ''),
-            'required': 'required', 
-            'pattern': '[A-Za-z0-9]+'
-        }
-    }) }}
-    {% for error in form.utilisateurId.vars.errors %}
-        <div class="invalid-feedback">{{ error.message }}</div>
-    {% endfor %}
-</div>
-<div class="mb-3">
     <label class="form-label">Patient Name</label>
-    <input type="text" class="form-control" value="{{ reclamation.consultation.nomPatient }}" disabled>
+    <input type="text" class="form-control" value="{{ consultation.patientName }}" disabled>
 </div>
 
 <div class="mb-3">

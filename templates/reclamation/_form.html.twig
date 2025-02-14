@@ -1,21 +1,37 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
 {% for field in form %}
-    <div class="mb-3">
-        {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
-
-        {% for error in field.vars.errors %}
-            <div class="text-danger mt-1">
-                <p>{{ error.message }}</p>
-            </div>
-        {% endfor %}
-    </div>
+    {% if field.vars.name == 'utilisateurId' %}
+        <div class="mb-3">
+            {{ form_label(field, 'Adresse mail ', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(field, {
+                'attr': {
+                    'class': 'form-control ' ~ (field.vars.errors|length > 0 ? 'is-invalid' : ''),
+                    'required': 'required', 
+                    
+                }
+            }) }}
+            {% for error in field.vars.errors %}
+                <div class="invalid-feedback">{{ error.message }}</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="mb-3">
+            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+            {% for error in field.vars.errors %}
+                <div class="text-danger mt-1">
+                    <p>{{ error.message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endfor %}
 
 <button type="submit" class="btn btn-primary">Submit</button>
 
 {{ form_end(form) }}
+
 
 
 <style>
