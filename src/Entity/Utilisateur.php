@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -61,6 +63,10 @@ class Utilisateur
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 5, minMessage: "La disponibilité doit comporter au moins {{ limit }} caractères.")]
     private ?string $disponibilite = null;
+
+    #[Assert\NotBlank(groups: ['registration'])]
+    #[Assert\Length(min: 6, groups: ['registration'])]
+    private ?string $motdepasse_confirmation = null;
 
     public function getId(): ?int
     {
@@ -210,4 +216,51 @@ class Utilisateur
 
         return $this;
     }
+    // Implementing the PasswordAuthenticatedUserInterface
+    public function setPassword(string $password): self
+    {
+        $this->motdepasse = $password;
+        return $this;
+    }
+    
+    public function getPassword(): ?string
+    {
+        return $this->motdepasse;
+    }
+
+
+    public function getSalt(): ?string
+    {
+        // Return null if you don't use a custom salt for password encoding
+        return null;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Clear any temporary data (e.g., sensitive fields)
+    }
+
+    public function getMotdepasseConfirmation(): ?string
+    {
+        return $this->motdepasse_confirmation;
+    }
+
+    public function setMotdepasseConfirmation(string $motdepasse_confirmation): static
+    {
+        $this->motdepasse_confirmation = $motdepasse_confirmation;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+       return ['ROLE_USER'];
+    }
+
+    public function getUserIdentifier(): string
+    {
+      return $this->email;
+    }
+
+
 }
