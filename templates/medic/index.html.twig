@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Général */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #4e4e4e;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* En-tête */
+h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin-top: 50px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Cartes */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-header {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-body {
+    padding: 15px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.card-footer {
+    background-color: #ecf0f1;
+    text-align: center;
+    padding: 10px;
+}
+
+.card-footer .price {
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.card-footer .type {
+    font-style: italic;
+    color: #95a5a6;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <br><br><br><br><br><br>
+    <center>  <h1>Les Médicaments</h1>  </center>
+    <div class="card-container">
+        {% for medicament in medicaments %}
+            <div class="card">
+                <div class="card-header">
+                    {{ medicament.NomMedicament }}
+                </div>
+                <div class="card-body">
+                    <p><strong>Description:</strong> {{ medicament.Description }}</p>
+                    <p><strong>Quantité:</strong> {{ medicament.Quantite }}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="price">Prix: {{ medicament.Prix }} €</p>
+                    <p class="type">Type: {{ medicament.Type }}</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-body">
+                    <p style="text-align:center; color: #95a5a6; font-style: italic; font-size: 16px;">
+                        Aucune donnée disponible
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Ajoute ici tes scripts JavaScript supplémentaires -->
+{% endblock %}

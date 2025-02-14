@@ -1,0 +1,43 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Diagnostic index{% endblock %}
+
+{% block body %}
+    <h1>Diagnostic index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>DateDiagnostic</th>
+                <th>PatientID</th>
+                <th>MedecinID</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for diagnostic in diagnostics %}
+            <tr>
+                <td>{{ diagnostic.id }}</td>
+                <td>{{ diagnostic.name }}</td>
+                <td>{{ diagnostic.description }}</td>
+                <td>{{ diagnostic.dateDiagnostic ? diagnostic.dateDiagnostic|date('Y-m-d') : '' }}</td>
+                <td>{{ diagnostic.patientID }}</td>
+                <td>{{ diagnostic.medecinID }}</td>
+                <td>
+                    <a href="{{ path('app_diagnostic_show', {'id': diagnostic.id}) }}">show</a>
+                    <a href="{{ path('app_diagnostic_edit', {'id': diagnostic.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_diagnostic_new') }}">Create new</a>
+{% endblock %}

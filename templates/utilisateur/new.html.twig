@@ -1,9 +1,6 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Créer un nouvel utilisateur{% endblock %}
-
-{% block body %}
-    <style>
+{% block title %} <title> Créer un nouvel utilisateur </title> {% endblock %}
+{% block css %}
+<style>
         /* Style global */
         body {
             font-family: 'Arial', sans-serif;
@@ -97,7 +94,17 @@
                 transform: translateY(0);
             }
         }
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
     </style>
+{% endblock %}
+{% block body %}
 
     <h1>Créer un Compte</h1>
 

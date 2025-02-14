@@ -1,0 +1,125 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}New Fournisseur{% endblock %}
+
+{% block body %}
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #e9f1f7; 
+            margin: 0; 
+            padding: 0; 
+            color: #333;
+        }
+
+        h2 { 
+            color: #2c3e50; 
+            text-align: center; 
+            margin-top: 30px; 
+            font-size: 28px; 
+        }
+
+        form { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); 
+        }
+
+        .alert.alert-danger { 
+            background-color: #f8d7da; 
+            color: #721c24; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            font-size: 14px;
+        }
+
+        .form-group { 
+            margin-bottom: 25px; 
+        }
+
+        label { 
+            font-weight: 600; 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #4b4f54; 
+        }
+
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px 16px; 
+            margin: 8px 0; 
+            border: 2px solid #d1d8e0; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus { 
+            border-color: #3498db; 
+            outline: none;
+        }
+
+        button[type="submit"] { 
+            background-color: #3498db; 
+            color: #ffffff; 
+            border: none; 
+            padding: 14px 30px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin-top: 20px; 
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover { 
+            background-color: #2980b9; 
+        }
+
+        a { 
+            display: inline-block; 
+            margin-top: 25px; 
+            text-decoration: none; 
+            color: #3498db; 
+            font-size: 16px; 
+            font-weight: 500; 
+        }
+
+        a:hover { 
+            text-decoration: underline; 
+        }
+    </style>
+
+    <h2>Ajouter un fournisseur</h2>
+
+    {# Messages d'erreur pour le formulaire #}
+    {% for flash_error in app.flashes('error') %}
+        <div class="alert alert-danger">{{ flash_error }}</div>
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    {# Afficher les erreurs spécifiques de chaque champ #}
+    {% for child in form %}
+        <div class="form-group">
+            {{ form_label(child) }}
+            {{ form_widget(child) }}
+            {# Afficher les erreurs de chaque champ #}
+            {% if child.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    {% for error in child.vars.errors %}
+                        <p>{{ error.message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_fournisseur_index') }}">back to list</a>
+{% endblock %}

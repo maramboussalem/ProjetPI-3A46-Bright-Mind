@@ -1,0 +1,51 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}ParametresViteaux index{% endblock %}
+
+{% block body %}
+    <h1>ParametresViteaux index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Fc</th>
+                <th>Fr</th>
+                <th>Ecg</th>
+                <th>TAS</th>
+                <th>TAD</th>
+                <th>Age</th>
+                <th>Spo2</th>
+                <th>Gsc</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for parametres_viteaux in parametres_viteauxes %}
+            <tr>
+                <td>{{ parametres_viteaux.id }}</td>
+                <td>{{ parametres_viteaux.name }}</td>
+                <td>{{ parametres_viteaux.fc }}</td>
+                <td>{{ parametres_viteaux.fr }}</td>
+                <td>{{ parametres_viteaux.ecg }}</td>
+                <td>{{ parametres_viteaux.TAS }}</td>
+                <td>{{ parametres_viteaux.TAD }}</td>
+                <td>{{ parametres_viteaux.age }}</td>
+                <td>{{ parametres_viteaux.spo2 }}</td>
+                <td>{{ parametres_viteaux.gsc }}</td>
+                <td>
+                    <a href="{{ path('app_parametres_viteaux_show', {'id': parametres_viteaux.id}) }}">show</a>
+                    <a href="{{ path('app_parametres_viteaux_edit', {'id': parametres_viteaux.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_parametres_viteaux_new') }}">Create new</a>
+{% endblock %}

@@ -212,7 +212,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -222,7 +222,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -232,7 +232,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
                 <i class="bi bi-question-circle"></i>
                 <span>Need Help?</span>
               </a>
@@ -285,40 +285,70 @@
     </ul>
 </li>
 
-      
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Diagnostic</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>General Tables</span>
+    <a class="nav-link collapsed" data-bs-target="#diag-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-box-seam"></i><span>Diagnostic</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="diag-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+            <a href="{{path('app_diagnostic_index')}}">
+                <i class="bi bi-truck"></i><span>Diagnostic</span>
             </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Data Tables</span>
+        </li>
+        <li>
+            <a href="{{path('app_parametres_viteaux_index')}}">
+                <i class="bi bi-capsule"></i><span>Parametres viteaux</span>
             </a>
-          </li>
-        </ul>
-
-      </li><!-- End Tables Nav -->
-
-
+        </li>
+    </ul>
+</li>
    <li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#stock-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-box-seam"></i><span>Stock</span><i class="bi bi-chevron-down ms-auto"></i>
     </a>
     <ul id="stock-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
-            <a href='#'>
+            <a href="{{path('app_fournisseur_index')}}">
                 <i class="bi bi-truck"></i><span>Fournisseur</span>
             </a>
         </li>
         <li>
-            <a href='#'>
+            <a href="{{path('app_medicament_index')}}">
                 <i class="bi bi-capsule"></i><span>Médicament</span>
+            </a>
+        </li>
+    </ul>
+</li>
+
+   <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#recla-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-box-seam"></i><span>Reclamation</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="recla-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+            <a href="{{path('app_reclamation_index')}}">
+                <i class="bi bi-truck"></i><span>reclamation</span>
+            </a>
+            <a href="{{path('app_consultation_index')}}">
+                <i class="bi bi-truck"></i><span>consultation</span>
+            </a>
+        </li>
+        
+    </ul>
+</li>
+<li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#service-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-box-seam"></i><span>Service Medicale</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="service-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+            <a href="{{path('app_equipement_index')}}">
+                <i class="bi bi-truck"></i><span>Equipement</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{path('app_service_med_index')}}">
+                <i class="bi bi-capsule"></i><span>Service</span>
             </a>
         </li>
     </ul>

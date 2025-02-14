@@ -1,0 +1,13 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Edit ParametresViteaux{% endblock %}
+
+{% block body %}
+    <h1>Edit ParametresViteaux</h1>
+
+    {{ include('parametres_viteaux/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_parametres_viteaux_index') }}">back to list</a>
+
+    {{ include('parametres_viteaux/_delete_form.html.twig') }}
+{% endblock %}

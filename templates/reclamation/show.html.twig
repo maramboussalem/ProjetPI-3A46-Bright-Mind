@@ -1,0 +1,59 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Reclamation Details{% endblock %}
+
+{% block body %}
+    <h1>Reclamation Details</h1>
+
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <td>{{ reclamation.id }}</td>
+        </tr>
+        <tr>
+            <th>Utilisateur Id</th>
+            <td>{{ reclamation.utilisateurId }}</td>
+        </tr>
+        <tr>
+            <th>Sujet</th>
+            <td>{{ reclamation.sujet }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ reclamation.description }}</td>
+        </tr>
+        <tr>
+            <th>Statut</th>
+            <td>{{ reclamation.Statut}}</td>
+        </tr>
+        <tr>
+            <th>Date Creation</th>
+            <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Réponse</th>
+            <td>
+                {% if reclamation.reponse %}
+                    {{ reclamation.reponse }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% if not app.user or not app.user.hasRole('ROLE_ADMIN') %}
+        <h3>User Response</h3>
+        {# Button to show the response form #}
+        <button class="btn btn-primary" data-toggle="collapse" data-target="#responseForm">Répondre</button>
+
+        <div id="responseForm" class="collapse mt-3">
+            {{ form_start(form) }}
+                {{ form_row(form.reponse) }}
+                <button class="btn btn-success" type="submit">Submit Response</button>
+            {{ form_end(form) }}
+        </div>
+    {% endif %}
+
+    <a href="{{ path('app_reclamation_index') }}">Back to list</a>
+{% endblock %}

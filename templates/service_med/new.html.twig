@@ -1,0 +1,12 @@
+{% extends 'admin/base_back.html.twig' %}
+
+
+{% block title %}New ServiceMed{% endblock %}
+
+{% block body %}
+    <h1>Create new ServiceMed</h1>
+
+    {{ include('service_med/_form.html.twig') }}
+
+    <a href="{{ path('app_service_med_index') }}">back to list</a>
+{% endblock %}

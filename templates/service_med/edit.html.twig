@@ -1,0 +1,16 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Modifier un Service Médical{% endblock %}
+
+{% block body %}
+    <h1>Modifier un Service Médical</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success">Mettre à jour</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_service_med_index') }}" class="btn btn-secondary">← Retour à la liste</a>
+
+    {{ include('service_med/_delete_form.html.twig') }}
+{% endblock %}
