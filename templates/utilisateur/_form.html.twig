@@ -1,6 +1,5 @@
-{{ form_start(form, {'attr': {'id': 'utilisateurForm'}}) }}
+{{ form_start(form, {'attr': {'id': 'utilisateurForm', 'novalidate': 'novalidate'}}) }}
 
-<!-- Attributs en commun -->
 <div class="form-group">
     {{ form_label(form.nom) }}
     {{ form_widget(form.nom) }}
@@ -49,7 +48,19 @@
     {% endif %}
 </div>
 
-<!-- Nouveau champ : Sexe -->
+<div class="form-group">
+    {{ form_label(form.motdepasse_confirmation) }}
+    {{ form_widget(form.motdepasse_confirmation) }}
+    {% if form.motdepasse_confirmation.vars.errors %}
+        <div class="form-error">
+            {% for error in form.motdepasse_confirmation.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+
 <div class="form-group">
     {{ form_label(form.sexe) }}
     {{ form_widget(form.sexe) }}
@@ -62,7 +73,6 @@
     {% endif %}
 </div>
 
-<!-- Nouveau champ : Adresse -->
 <div class="form-group">
     {{ form_label(form.adresse) }}
     {{ form_widget(form.adresse) }}
@@ -75,7 +85,6 @@
     {% endif %}
 </div>
 
-<!-- Nouveau champ : Téléphone -->
 <div class="form-group">
     {{ form_label(form.telephone) }}
     {{ form_widget(form.telephone) }}
@@ -88,7 +97,6 @@
     {% endif %}
 </div>
 
-<!-- Sélection du rôle -->
 <div class="form-group">
     {{ form_label(form.role) }}
     {{ form_widget(form.role, { 'attr': {'id': 'utilisateur_role'} }) }}
@@ -101,7 +109,6 @@
     {% endif %}
 </div>
 
-<!-- Champs spécifiques aux patients -->
 <div id="patientFields" class="role-fields">
     <h3>Informations Patient</h3>
     <div class="form-group">
@@ -117,11 +124,9 @@
     </div>
 </div>
 
-<!-- Champs spécifiques aux médecins -->
 <div id="medecinFields" class="role-fields">
     <h3>Informations Médecin</h3>
 
-    <!-- Spécialité -->
     <div class="form-group">
         {{ form_label(form.specialite) }}
         {{ form_widget(form.specialite) }}
@@ -134,7 +139,6 @@
         {% endif %}
     </div>
 
-    <!-- Hôpital -->
     <div class="form-group">
         {{ form_label(form.hopital) }}
         {{ form_widget(form.hopital) }}
@@ -147,7 +151,6 @@
         {% endif %}
     </div>
 
-    <!-- Disponibilité -->
     <div class="form-group">
         {{ form_label(form.disponibilite) }}
         {{ form_widget(form.disponibilite) }}
