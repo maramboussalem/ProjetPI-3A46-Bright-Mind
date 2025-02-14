@@ -1,4 +1,4 @@
-{% block title %} <title> Créer un nouvel utilisateur </title> {% endblock %}
+{% block title %} <title> Créer un Compte </title> {% endblock %}
 {% block css %}
 <style>
         /* Style global */
@@ -102,14 +102,34 @@
             margin-bottom: 20px;
             font-size: 16px;
         }
+         /* Centrer l'image dans la section header */
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
     </style>
 {% endblock %}
 {% block body %}
 
-    <h1>Créer un Compte</h1>
-
+   
     <div class="form-container">
-        {{ include('utilisateur/_form.html.twig') }}
+        <div class="header">
+          
+         <img src="{{ asset('img/4.jpg') }}" alt="Your Logo" class="img-fluid mb-3">  
+        <h1>Veuillez saisir vos informations pour créer un compte</h1>
+
+        </div>
+            {{ include('utilisateur/_form.html.twig') }}
     </div>
 
     <script>

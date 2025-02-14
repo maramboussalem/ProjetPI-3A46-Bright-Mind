@@ -3,55 +3,110 @@
 <div class="form-group">
     {{ form_label(form.nom) }}
     {{ form_widget(form.nom) }}
-    <div class="error-message">{{ form_errors(form.nom) }}</div>
+    {% if form.nom.vars.errors %}
+        <div class="form-error">
+            {% for error in form.nom.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
     {{ form_label(form.prenom) }}
     {{ form_widget(form.prenom) }}
-    <div class="error-message">{{ form_errors(form.prenom) }}</div>
+    {% if form.prenom.vars.errors %}
+        <div class="form-error">
+            {% for error in form.prenom.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
     {{ form_label(form.email) }}
     {{ form_widget(form.email) }}
-    <div class="error-message">{{ form_errors(form.email) }}</div>
+    {% if form.email.vars.errors %}
+        <div class="form-error">
+            {% for error in form.email.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
-    {{ form_label(form.motdepasse) }}
-    {{ form_widget(form.motdepasse) }}
-    <div class="error-message">{{ form_errors(form.motdepasse) }}</div>
+    {{ form_label(form.motDePasse) }}
+    {{ form_widget(form.motDePasse) }}
+    {% if form.motDePasse.vars.errors %}
+        <div class="form-error">
+            {% for error in form.motDePasse.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
     {{ form_label(form.motdepasse_confirmation) }}
     {{ form_widget(form.motdepasse_confirmation) }}
-    <div class="error-message">{{ form_errors(form.motdepasse_confirmation) }}</div>
+    {% if form.motdepasse_confirmation.vars.errors %}
+        <div class="form-error">
+            {% for error in form.motdepasse_confirmation.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
+
 
 <div class="form-group">
     {{ form_label(form.sexe) }}
     {{ form_widget(form.sexe) }}
-    <div class="error-message">{{ form_errors(form.sexe) }}</div>
+    {% if form.sexe.vars.errors %}
+        <div class="form-error">
+            {% for error in form.sexe.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
     {{ form_label(form.adresse) }}
     {{ form_widget(form.adresse) }}
-    <div class="error-message">{{ form_errors(form.adresse) }}</div>
+    {% if form.adresse.vars.errors %}
+        <div class="form-error">
+            {% for error in form.adresse.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
     {{ form_label(form.telephone) }}
     {{ form_widget(form.telephone) }}
-    <div class="error-message">{{ form_errors(form.telephone) }}</div>
+    {% if form.telephone.vars.errors %}
+        <div class="form-error">
+            {% for error in form.telephone.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div class="form-group">
     {{ form_label(form.role) }}
     {{ form_widget(form.role, { 'attr': {'id': 'utilisateur_role'} }) }}
-    <div class="error-message">{{ form_errors(form.role) }}</div>
+    {% if form.role.vars.errors %}
+        <div class="form-error">
+            {% for error in form.role.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <div id="patientFields" class="role-fields">
@@ -59,7 +114,13 @@
     <div class="form-group">
         {{ form_label(form.antecedentsMedicaux) }}
         {{ form_widget(form.antecedentsMedicaux) }}
-        <div class="error-message">{{ form_errors(form.antecedentsMedicaux) }}</div>
+        {% if form.antecedentsMedicaux.vars.errors %}
+            <div class="form-error">
+                {% for error in form.antecedentsMedicaux.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
 
@@ -69,32 +130,38 @@
     <div class="form-group">
         {{ form_label(form.specialite) }}
         {{ form_widget(form.specialite) }}
-        <div class="error-message">{{ form_errors(form.specialite) }}</div>
+        {% if form.specialite.vars.errors %}
+            <div class="form-error">
+                {% for error in form.specialite.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div class="form-group">
         {{ form_label(form.hopital) }}
         {{ form_widget(form.hopital) }}
-        <div class="error-message">{{ form_errors(form.hopital) }}</div>
+        {% if form.hopital.vars.errors %}
+            <div class="form-error">
+                {% for error in form.hopital.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div class="form-group">
         {{ form_label(form.disponibilite) }}
         {{ form_widget(form.disponibilite) }}
-        <div class="error-message">{{ form_errors(form.disponibilite) }}</div>
+        {% if form.disponibilite.vars.errors %}
+            <div class="form-error">
+                {% for error in form.disponibilite.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
 
 {{ form_end(form) }}
-
-<style>
-.error-message {
-    color:rgb(229, 0, 0); /* Rouge foncé pour les erreurs */
-    font-size: 17px;
-    margin-top: 5px;
-    display: block;
-    background: #ffe6e6; /* Fond rouge clair pour mieux encadrer l'erreur */
-    padding: 0px;
-    border-radius: 15px;
-}
-</style>

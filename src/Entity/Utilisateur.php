@@ -6,10 +6,10 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur implements PasswordAuthenticatedUserInterface
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,12 +18,10 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom est obligatoire.")]
-    #[Assert\Length(min: 2, max: 50, minMessage: "Le nom doit comporter au moins {{ limit }} caractères.", maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le prénom est obligatoire.")]
-    #[Assert\Length(min: 2, max: 50, minMessage: "Le prénom doit comporter au moins {{ limit }} caractères.", maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
@@ -33,31 +31,18 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
-    #[Assert\Length(min: 8, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
-    #[Assert\Regex(
-        pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/",
-        message: "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial."
-    )]
+    #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
     private ?string $motdepasse = null;
-
-    #[Assert\NotBlank(message: "Veuillez confirmer le mot de passe.")]
-    #[Assert\EqualTo(propertyPath: "motdepasse", message: "Les mots de passe ne correspondent pas.")]
-    private ?string $motdepasse_confirmation = null;
 
     #[ORM\Column(length: 255)]
     private ?string $sexe = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'adresse est obligatoire.")]
-    #[Assert\Length(min: 5, max: 255, minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.")]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le numéro de téléphone est obligatoire.")]
-    #[Assert\Regex(
-        pattern: "/^\d{8}$/",
-        message: "Le numéro de téléphone doit contenir exactement 8 chiffres."
-    )]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
@@ -79,7 +64,10 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 5, minMessage: "La disponibilité doit comporter au moins {{ limit }} caractères.")]
     private ?string $disponibilite = null;
 
-    
+    #[Assert\NotBlank(groups: ['registration'])]
+    #[Assert\Length(min: 6, groups: ['registration'])]
+    private ?string $motdepasse_confirmation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -263,4 +251,16 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getRoles(): array
+    {
+       return ['ROLE_USER'];
+    }
+
+    public function getUserIdentifier(): string
+    {
+      return $this->email;
+    }
+
+
 }

@@ -29,16 +29,19 @@ class UtilisateurType extends AbstractType
         $builder
         ->add('nom', TextType::class)
         ->add('prenom', TextType::class)
-        ->add('email', TextType::class)
-        ->add('motdepasse', PasswordType::class)
-        ->add('motdepasse_confirmation', PasswordType::class)
+        ->add('email', EmailType::class)
+        ->add('motDePasse', PasswordType::class)
+        ->add('motdepasse_confirmation', PasswordType::class,[
+            'label' => 'Confirmer le mot de passe',
+            'mapped' => false, // Ce champ ne sera PAS sauvegardé en base
+        ])
         ->add('sexe', ChoiceType::class, [
                 'choices' => [
                     'Homme' => 'Homme',
                     'Femme' => 'Femme',
                 ],
             ])
-            ->add('adresse', TextType::class)
+            ->add('adresse', TextareaType::class)
             ->add('telephone', TextType::class)
             ->add('role', ChoiceType::class, [
                 'choices' => [

@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
 #[Route('/utilisateur')]
 final class UtilisateurController extends AbstractController
 {
@@ -24,40 +23,54 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-    {
-        $utilisateur = new Utilisateur();
-        $form = $this->createForm(UtilisateurType::class, $utilisateur);
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-          
-            $password = $form->get('motdepasse')->getData();
-    
-            $hashedPassword = $passwordHasher->hashPassword($utilisateur, $password);
-            $utilisateur->setPassword($hashedPassword);
-    
-            $role = $form->get('role')->getData();
-            $utilisateur->setRole($role);
-    
-            if ($role === 'patient') {
-                $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
-            } elseif ($role === 'medecin') {
-                $utilisateur->setSpecialite($form->get('specialite')->getData());
-                $utilisateur->setHopital($form->get('hopital')->getData());
-                $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
-            }
-    
-            $entityManager->persist($utilisateur);
-            $entityManager->flush();
-    
-            return $this->redirectToRoute('app_home');
+
+ public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+{
+    $utilisateur = new Utilisateur();
+    $form = $this->createForm(UtilisateurType::class, $utilisateur);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer le mot de passe et la confirmation
+        $password = $form->get('motDePasse')->getData();
+        $passwordConfirmation = $form->get('motdepasse_confirmation')->getData();
+
+        // Vérifier si les mots de passe correspondent
+        if ($password !== $passwordConfirmation) {
+            $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+            return $this->render('utilisateur/new.html.twig', [
+                'form' => $form->createView(),
+            ]);
         }
-    
-        return $this->render('utilisateur/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+
+        // Hacher le mot de passe avant de l'enregistrer
+        $hashedPassword = $passwordHasher->hashPassword($utilisateur, $password);
+        $utilisateur->setPassword($hashedPassword);
+
+        
+        // Vérifier le rôle et assigner les attributs spécifiques
+        $role = $form->get('role')->getData();
+        $utilisateur->setRole($role);
+
+        if ($role === 'patient') {
+            $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
+        } elseif ($role === 'medecin') {
+            $utilisateur->setSpecialite($form->get('specialite')->getData());
+            $utilisateur->setHopital($form->get('hopital')->getData());
+            $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
+        }
+
+        // Persister en base de données
+        $entityManager->persist($utilisateur);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home');
     }
+
+    return $this->render('utilisateur/new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
     
     #[Route('/{id}', name: 'app_utilisateur_show', methods: ['GET'])]
