@@ -66,7 +66,6 @@
             
             <div class="d-flex gap-2">
                <a href="{{ path('app_utilisateur_index') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
-               <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}" class="btn btn-primary flex-fill">Modifier</a>
    
                 <form method="post" action="{{ path('app_utilisateur_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="flex-fill">
                   <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">

@@ -3,82 +3,8 @@
 {% block title %}Utilisateur index{% endblock %}
 
 {% block body %}
-<style>
-    /* Style général de la page */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 20px;
-}
-
-h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* Style de la table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background-color: #fff;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ccc;
-}
-
-th {
-    background-color: #007bff;
-    color: white;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Style des liens */
-a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-a:hover {
-    color: #0056b3;
-}
-
-/* Bouton de création */
-.create-btn {
-    display: block;
-    width: fit-content;
-    margin: 20px auto;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-}
-
-.create-btn:hover {
-    background-color: #0056b3;
-}
-
-    
-</style>
-
     <h2>Liste des Patients</h2>
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -103,8 +29,7 @@ a:hover {
                         <td>{{ utilisateur.telephone }}</td>
                         <td>{{ utilisateur.antecedentsMedicaux }}</td>
                         <td>
-                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}">show</a>
-                          <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}">edit</a>
+                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"class="btn btn-warning">show</a>
                         </td>
                     </tr>
                 {% endif %}
@@ -113,7 +38,7 @@ a:hover {
     </table>
 
     <h2>Liste des Médecins</h2>
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -142,8 +67,7 @@ a:hover {
                         <td>{{ utilisateur.hopital }}</td>
                         <td>{{ utilisateur.disponibilite }}</td>
                         <td>
-                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}">show</a>
-                          <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}">edit</a>
+                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"class="btn btn-warning">show</a>
                         </td>
                     </tr>
                 {% endif %}
@@ -151,5 +75,5 @@ a:hover {
         </tbody>
     </table>
 
-    <a href="{{ path('app_utilisateur_new') }}">Create new</a>
+    
 {% endblock %}

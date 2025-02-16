@@ -30,11 +30,8 @@ class UtilisateurType extends AbstractType
         ->add('nom', TextType::class)
         ->add('prenom', TextType::class)
         ->add('email', EmailType::class)
-        ->add('motDePasse', PasswordType::class)
-        ->add('motdepasse_confirmation', PasswordType::class,[
-            'label' => 'Confirmer le mot de passe',
-            'mapped' => false, // Ce champ ne sera PAS sauvegardé en base
-        ])
+        ->add('motdepasse', PasswordType::class)
+        ->add('motdepasse_confirmation', PasswordType::class)
         ->add('sexe', ChoiceType::class, [
                 'choices' => [
                     'Homme' => 'Homme',
@@ -49,16 +46,11 @@ class UtilisateurType extends AbstractType
                     'Médecin' => 'medecin',
                 ],
             ])
-
-            ->add('antecedentsMedicaux', TextType::class)
-
+            ->add('antecedentsMedicaux', TextareaType::class)
             ->add('specialite', TextType::class)
             ->add('hopital', TextType::class)
             ->add('disponibilite', TextType::class)
-     
-            ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer',
-            ]);
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

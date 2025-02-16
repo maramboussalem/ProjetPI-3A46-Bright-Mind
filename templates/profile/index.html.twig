@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+{# templates/profile/index.html.twig #}
+{% block title %}Profile{% endblock %}
+{% block body %}
+    
+   <style>
+     .container {
+         padding-top: 120px;
+     }
+     
+   </style>
+    <div class="container">
+        <div class="profile">
+            <img src="{{ asset('img/2.jpg') }}" alt="Avatar" class="rounded-circle" width="250">
+            <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
+            <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
+        </div>
+        <div class="details">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr><th>Email</th><td>{{ utilisateur.email }}</td></tr>
+                    <tr><th>Sexe</th><td>{{ utilisateur.sexe }}</td></tr>
+                    <tr><th>Adresse</th><td>{{ utilisateur.adresse }}</td></tr>
+                    <tr><th>Téléphone</th><td>{{ utilisateur.telephone }}</td></tr>
+                    
+                    {% if utilisateur.role == 'patient' %}
+                        <tr><th>Antécédents Médicaux</th><td>{{ utilisateur.antecedentsMedicaux }}</td></tr>
+                    {% endif %}
+                    
+                    {% if utilisateur.role == 'medecin' %}
+                        <tr><th>Spécialité</th><td>{{ utilisateur.specialite }}</td></tr>
+                        <tr><th>Hôpital</th><td>{{ utilisateur.hopital }}</td></tr>
+                        <tr><th>Disponibilité</th><td>{{ utilisateur.disponibilite }}</td></tr>
+                    {% endif %}
+                
+                </tbody>
+            </table>
+            
+            <div class="d-flex gap-2">
+    <form method="post" action="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}" class="flex-fill">
+        <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ utilisateur.id) }}">
+        <button type="submit" class="btn btn-primary w-100">Modifier</button>
+    </form>
+
+    <form method="post" action="{{ path('app_utilisateur_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="flex-fill">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+        <button type="submit" class="btn btn-danger w-100">Supprimer</button>
+    </form>
+</div>
+
+        </div>
+    </div>
+{% endblock %}
