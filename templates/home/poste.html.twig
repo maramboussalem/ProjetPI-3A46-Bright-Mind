@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-6">
+        <div class="card shadow-lg">
+            <img src="{{ asset(post.imageUrl) }}" class="card-img-top" style="object-fit: cover;" alt="{{ post.title }}">
+            <div class="card-body">
+                <h1 class="card-title text-primary">{{ post.title }}</h1>
+                <p class="text-muted">{{ post.comments|length }} Comments</p>
+                <p class="card-text">{{ post.content }}</p>
+                <a href="{{ path('compagne_public') }}" class="btn btn-secondary mt-3">Back to Posts</a>
+            </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="mt-5">
+            <h3>Comments ({{ post.comments|length }})</h3>
+            <div class="list-group mt-3">
+                {% for comment in post.comments %}
+    <div class="list-group-item" id="comment-{{ comment.id }}">
+        <p><strong>{{ comment.user.prenom }} {{ comment.user.nom }}</strong></p>
+
+        <div id="comment-content-{{ comment.id }}">
+            <p>{{ comment.content }}</p>
+        </div>
+
+        {% if comment.user == app.user %}
+            <div class="d-flex gap-2">
+                <!-- Edit Button Form -->
+                <form action="#" method="get" class="d-inline">
+                    <button type="button" class="btn btn-sm btn-primary d-flex align-items-center edit-btn" data-id="{{ comment.id }}">
+                        Edit <i class="ms-2 fas fa-edit"></i>
+                    </button>
+                </form>
+
+                <!-- Delete Form -->
+                <form action="{{ path('delete_comment', {'id': comment.id}) }}" method="post" class="d-inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_comment' ~ comment.id) }}">
+                    <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center">
+                        Delete <i class="ms-2 fas fa-trash-alt"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Hidden Edit Form -->
+            <div id="edit-form-{{ comment.id }}" class="d-none mt-2">
+                <form action="{{ path('edit_comment', {'id': comment.id}) }}" method="post">
+                    {{ form_start(editForms[comment.id]) }}
+                    {{ form_row(editForms[comment.id].content) }}
+                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                    <button type="button" class="btn btn-sm btn-secondary cancel-btn" data-id="{{ comment.id }}">Cancel</button>
+                    {{ form_end(editForms[comment.id]) }}
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% else %}
+    <p>No comments yet. Be the first to comment!</p>
+{% endfor %}
+
+        </div>
+        </div>
+
+        <!-- Add Comment Form -->
+        {% if app.user %}
+            {{ form_start(commentForm) }}
+                <div class="form-group mt-3">
+                    {{ form_widget(commentForm.content, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Post Comment</button>
+            {{ form_end(commentForm) }}
+        {% else  %}
+            <a href="{{ path('app_login') }}">Se connecter</a>
+        {% endif %}
+    </div>
+
+
+{% block javascripts %}
+<script>
+document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent form submission
+        let commentId = this.getAttribute('data-id');
+        console.log("Edit button clicked for comment ID:", commentId); // Debugging
+
+        let commentContent = document.getElementById(`comment-content-${commentId}`);
+        let editForm = document.getElementById(`edit-form-${commentId}`);
+
+        if (commentContent && editForm) {
+            commentContent.classList.add('d-none');
+            editForm.classList.remove('d-none');
+        } else {
+            console.error("Elements not found for comment ID:", commentId);
+        }
+    });
+});
+
+document.querySelectorAll('.cancel-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        let commentId = this.getAttribute('data-id');
+        console.log("Cancel button clicked for comment ID:", commentId); // Debugging
+
+        let commentContent = document.getElementById(`comment-content-${commentId}`);
+        let editForm = document.getElementById(`edit-form-${commentId}`);
+
+        if (commentContent && editForm) {
+            commentContent.classList.remove('d-none');
+            editForm.classList.add('d-none');
+        } else {
+            console.error("Elements not found for comment ID:", commentId);
+        }
+    });
+});
+</script>
+
+
+
+{% endblock %}
+{% endblock %}
+

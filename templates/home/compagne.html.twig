@@ -138,7 +138,7 @@ body {
             <p class="blog-excerpt">
                 {{ post.content }}
             </p>
-            <a href="#" class="blog-read-more">Read More &raquo;</a>
+            <a  href="{{ path('post_detail', { 'id': post.id }) }}" class="blog-read-more">Read More &raquo;</a>
         </div>
     </div>
 {% endfor %}
