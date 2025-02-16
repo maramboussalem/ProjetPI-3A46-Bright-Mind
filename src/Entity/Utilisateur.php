@@ -7,8 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
+#[UniqueEntity(fields: ['email'], message: "Cet email est déjà utilisé.")]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,11 +32,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
-    #[Assert\Length(min: 6, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
-    private ?string $motdepasse = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $sexe = null;
 
     #[ORM\Column(length: 255)]
@@ -43,10 +40,14 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le numéro de téléphone est obligatoire.")]
+    #[Assert\Regex(pattern: "/^[0-9]{8}$/",message: "Le numéro de téléphone doit contenir exactement 8 chiffres.")]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
     private ?string $role = null;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 5, minMessage: "Les antécédents médicaux doivent comporter au moins {{ limit }} caractères.")]
@@ -63,9 +64,15 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 5, minMessage: "La disponibilité doit comporter au moins {{ limit }} caractères.")]
     private ?string $disponibilite = null;
-
-    #[Assert\NotBlank(groups: ['registration'])]
-    #[Assert\Length(min: 6, groups: ['registration'])]
+    
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
+    #[Assert\Length(min: 8,max: 20,minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.",maxMessage: "Le mot de passe ne peut pas dépasser {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/",message: "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.")]
+    private ?string $motdepasse = null;
+   
+    #[Assert\NotBlank(message: "La confirmation du mot de passe est obligatoire.")]
+    #[Assert\EqualTo(propertyPath: "motdepasse", message: "Les mots de passe ne correspondent pas.")]
     private ?string $motdepasse_confirmation = null;
 
     public function getId(): ?int
@@ -117,6 +124,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMotdepasse(string $motdepasse): static
     {
         $this->motdepasse = $motdepasse;
+
+        return $this;
+    }
+    public function getMotdepasseConfirmation(): ?string
+    {
+        return $this->motdepasse_confirmation;
+    }
+
+    public function setMotdepasseConfirmation(string $motdepasse_confirmation): static
+    {
+        $this->motdepasse_confirmation = $motdepasse_confirmation;
 
         return $this;
     }
@@ -174,7 +192,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->antecedentsMedicaux;
     }
 
-    public function setAntecedentsMedicaux(string $antecedentsMedicaux): static
+    public function setAntecedentsMedicaux(?string $antecedentsMedicaux): static
     {
         $this->antecedentsMedicaux = $antecedentsMedicaux;
 
@@ -186,7 +204,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->specialite;
     }
 
-    public function setSpecialite(string $specialite): static
+    public function setSpecialite(?string $specialite): static
     {
         $this->specialite = $specialite;
 
@@ -198,7 +216,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->hopital;
     }
 
-    public function setHopital(string $hopital): static
+    public function setHopital(?string $hopital): static
     {
         $this->hopital = $hopital;
 
@@ -210,16 +228,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->disponibilite;
     }
 
-    public function setDisponibilite(string $disponibilite): static
+    public function setDisponibilite(?string $disponibilite): static
     {
         $this->disponibilite = $disponibilite;
 
-        return $this;
-    }
-    // Implementing the PasswordAuthenticatedUserInterface
-    public function setPassword(string $password): self
-    {
-        $this->motdepasse = $password;
         return $this;
     }
     
@@ -227,8 +239,14 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->motdepasse;
     }
-
-
+    
+    public function setPassword(string $password): self
+    {
+        $this->motdepasse = $password;
+        
+        return $this;
+    }
+   
     public function getSalt(): ?string
     {
         // Return null if you don't use a custom salt for password encoding
@@ -240,23 +258,23 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         // Clear any temporary data (e.g., sensitive fields)
     }
 
-    public function getMotdepasseConfirmation(): ?string
-    {
-        return $this->motdepasse_confirmation;
-    }
-
-    public function setMotdepasseConfirmation(string $motdepasse_confirmation): static
-    {
-        $this->motdepasse_confirmation = $motdepasse_confirmation;
-
-        return $this;
-    }
-
     public function getRoles(): array
     {
-       return ['ROLE_USER'];
+         $roles = $this->roles;
+         
+        if (empty($roles)) {
+      
+            $roles[] = 'ROLE_USER'; // Ajouter un rôle par défaut si nécessaire
+        }
+         return ['ROLE_USER', 'ROLE_' . strtoupper($this->role)];  // e.g., ROLE_PATIENT or ROLE_MEDECIN
     }
-
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        
+        return $this;
+    }
+  
     public function getUserIdentifier(): string
     {
       return $this->email;

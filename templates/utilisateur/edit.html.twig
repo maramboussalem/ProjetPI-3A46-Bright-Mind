@@ -1,164 +1,91 @@
-{% extends 'admin/base_back.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Edit Utilisateur{% endblock %}
 
 {% block body %}
-    <style>
-        /* Style général de la page */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
 
-        h1 {
-            text-align: center;
-            color: #007bff;
-            font-size: 28px;
-            margin-top: 20px;
-        }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 70px auto 0;
+        padding: 90px 40px 40px;
+    }
 
-        /* Conteneur du formulaire */
-        .form-container {
-            max-width: 500px;
-            background: white;
-            margin: 30px auto;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 123, 153, 0.2);
-            border: 1px solid #f9f9f9;
-        }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Champs du formulaire */
-        form input,
-        form select,
-        form textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: all 0.3s ease-in-out;
-        }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 0px;
+    }
 
-        form input:focus,
-        form select:focus,
-        form textarea:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgb(24, 114, 209);
-            outline: none;
-        }
+   
+</style>
 
-        /* Bouton d'inscription */
-        form button {
-            width: 100%;
-            background: linear-gradient(135deg, #007bff, rgb(24, 114, 209));
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            margin-top: 20px;
-        }
+<div style="height: 120px;"></div> {# Espacement entre la navbar et le formulaire #}
+<div class="container">
+    <h1>Veuillez mettre à jour vos coordonnées</h1>
 
-        form button:hover {
-            background: linear-gradient(135deg, #007bff, rgb(24, 114, 209));
-            transform: scale(1.02);
-        }
+    {{ include('utilisateur/_form.html.twig', {'button_label': 'Update'}) }}
 
-        /* Sections dynamiques */
-        #patientFields, #medecinFields {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f0f9ff;
-            border-radius: 5px;
-            border-left: 4px solid #007bff;
-        }
 
-        /* Animation d'apparition */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-
-    <h1>Edit Utilisateur</h1>
-
-    <div class="form-container">
-        {{ include('utilisateur/_form.html.twig', {'button_label': 'Update'}) }}
-    </div>
-
-    <a href="{{ path('app_utilisateur_index') }}" style="display:block; text-align:center; margin-top: 20px;">Back to list</a>
-
-    <script>
+    {{ include('utilisateur/_delete_form.html.twig') }}
+</div>
+ <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Détecter le rôle de l'utilisateur (rôle par défaut dans l'objet utilisateur)
-            const role = "{{ utilisateur.role }}"; // Récupérer le rôle de l'utilisateur depuis la variable Twig
+            const roleSelect = document.getElementById("utilisateur_role");
             const patientFields = document.getElementById("patientFields");
             const medecinFields = document.getElementById("medecinFields");
 
-            // Fonction pour afficher les champs en fonction du rôle
             function toggleFields() {
+                const role = roleSelect.value;
+
                 if (role === "patient") {
-                    showFields(patientFields); // Affiche les champs pour patient
-                    hideFields(medecinFields); // Cache les champs pour médecin
-                    enableFields(patientFields); // Active les champs pour patient
-                    disableFields(medecinFields); // Désactive les champs pour médecin
-                }
-                else if (role === "medecin") {
-                    showFields(medecinFields); // Affiche les champs pour médecin
-                    hideFields(patientFields); // Cache les champs pour patient
-                    enableFields(medecinFields); // Active les champs pour médecin
-                    disableFields(patientFields); // Désactive les champs pour patient
-                }
-                else {
-                    hideFields(patientFields); // Cache tous les champs
-                    hideFields(medecinFields); // Cache tous les champs
+                    patientFields.classList.add("fade-in");
+                    medecinFields.style.display = "none";
+                    patientFields.style.display = "block";
+                    disableAndClearFields(medecinFields);
+                    enableFields(patientFields);
+                } else if (role === "medecin") {
+                    medecinFields.classList.add("fade-in");
+                    patientFields.style.display = "none";
+                    medecinFields.style.display = "block";
+                    disableAndClearFields(patientFields);
+                    enableFields(medecinFields);
+                } else {
+                    patientFields.style.display = "none";
+                    medecinFields.style.display = "none";
+                    disableAndClearFields(patientFields);
+                    disableAndClearFields(medecinFields);
                 }
             }
 
-            // Fonction pour afficher les champs
-            function showFields(container) {
-                container.style.display = "block";
+            function disableAndClearFields(container) {
+                container.querySelectorAll("input, select, textarea").forEach(input => {
+                    input.disabled = true;
+                    input.value = "";
+                });
             }
 
-            // Fonction pour cacher les champs
-            function hideFields(container) {
-                container.style.display = "none";
-            }
-
-            // Fonction pour activer les champs
             function enableFields(container) {
                 container.querySelectorAll("input, select, textarea").forEach(input => {
                     input.disabled = false;
                 });
             }
 
-            // Fonction pour désactiver les champs
-            function disableFields(container) {
-                container.querySelectorAll("input, select, textarea").forEach(input => {
-                    input.disabled = true;
-                });
-            }
-
-            toggleFields(); // Exécuter au chargement de la page en fonction du rôle
+            roleSelect.addEventListener("change", toggleFields);
+            toggleFields(); // Exécuter au chargement de la page
         });
     </script>
 
-    {{ include('utilisateur/_delete_form.html.twig') }}
+
 {% endblock %}

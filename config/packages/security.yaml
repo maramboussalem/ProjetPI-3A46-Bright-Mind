@@ -14,12 +14,13 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: login
-                check_path: login
+                login_path: app_login
+                check_path: app_login
                 default_target_path: /home
+                always_use_default_target_path: true
             logout:
                 path: app_logout
-                target: /
+                target: /home
             custom_authenticator: App\Security\LoginFormAuthenticator
             entry_point: App\Security\LoginFormAuthenticator  # Ajoute cette ligne pour définir le point d'entrée
 
@@ -31,3 +32,7 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profile, roles: ROLE_PATIEN }
+        - { path: ^/profile, roles: ROLE_MEDECIN }
+
+

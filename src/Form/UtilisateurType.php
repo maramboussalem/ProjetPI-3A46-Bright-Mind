@@ -30,11 +30,8 @@ class UtilisateurType extends AbstractType
         ->add('nom', TextType::class)
         ->add('prenom', TextType::class)
         ->add('email', EmailType::class)
-        ->add('motDePasse', PasswordType::class)
-        ->add('motdepasse_confirmation', PasswordType::class,[
-            'label' => 'Confirmer le mot de passe',
-            'mapped' => false, // Ce champ ne sera PAS sauvegardé en base
-        ])
+        ->add('motdepasse', PasswordType::class)
+        ->add('motdepasse_confirmation', PasswordType::class)
         ->add('sexe', ChoiceType::class, [
                 'choices' => [
                     'Homme' => 'Homme',
@@ -44,39 +41,16 @@ class UtilisateurType extends AbstractType
             ->add('adresse', TextareaType::class)
             ->add('telephone', TextType::class)
             ->add('role', ChoiceType::class, [
-                'label' => 'Rôle',
                 'choices' => [
                     'Patient' => 'patient',
                     'Médecin' => 'medecin',
                 ],
             ])
-            // Champs spécifiques au rôle Patient
-            ->add('antecedentsMedicaux', TextareaType::class, [
-                'label' => 'Antécédents médicaux',
-                'required' => false,
-                'attr' => ['class' => 'patient-fields'],
-            ])
-            // Champs spécifiques au rôle Médecin
-            ->add('specialite', TextType::class, [
-                'label' => 'Spécialité',
-                'required' => false,
-                'attr' => ['class' => 'doctor-fields'],
-                
-            ])
-            ->add('hopital', TextType::class, [
-                'label' => 'Hôpital',
-                'required' => false,
-                'attr' => ['class' => 'doctor-fields'],
-            ])
-            ->add('disponibilite', TextType::class, [
-                'label' => 'Disponibilité',
-                'required' => false,
-                'attr' => ['class' => 'doctor-fields'],
-            ])
-            // Bouton de soumission
-            ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer',
-            ]);
+            ->add('antecedentsMedicaux', TextareaType::class)
+            ->add('specialite', TextType::class)
+            ->add('hopital', TextType::class)
+            ->add('disponibilite', TextType::class)
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
