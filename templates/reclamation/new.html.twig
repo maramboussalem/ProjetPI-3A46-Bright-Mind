@@ -1,0 +1,28 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}New Reclamation{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h2 class="text-center mb-4">Create a New Reclamation</h2>
+
+            {% if form.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    <strong>There are some errors in your form:</strong>
+                    <ul>
+                        {% for error in form.vars.errors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {{ include('reclamation/_form.html.twig') }}
+
+            <div class="text-center mt-3">
+                <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

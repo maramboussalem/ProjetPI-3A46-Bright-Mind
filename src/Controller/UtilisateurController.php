@@ -66,7 +66,6 @@ final class UtilisateurController extends AbstractController
         ]);
     }
 
-
     #[Route('/{id}/edit', name: 'app_utilisateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -82,8 +81,8 @@ final class UtilisateurController extends AbstractController
             }
     
             $role = $form->get('role')->getData();
-            $utilisateur->setRole($role);
-    
+            $utilisateur->setRoles([$role]);
+
             if ($role === 'patient') {
                 $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
 
