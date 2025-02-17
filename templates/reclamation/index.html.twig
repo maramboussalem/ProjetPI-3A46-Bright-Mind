@@ -1,0 +1,65 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Reclamation index{% endblock %}
+
+{% block body %}
+    <h1>Reclamation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Adresse mail</th>
+                <th>Sujet</th>
+                <th>Description</th>
+                <th>Statut</th>
+                <th>Date_creation</th>
+                <th>Reponse</th>
+                <th>Nom de Patient</th>  {# New column for Patient Name #}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reclamation in reclamations %}
+            <tr>
+                <td>{{ reclamation.id }}</td>
+                <td>{{ reclamation.utilisateurId }}</td>
+                <td>{{ reclamation.sujet }}</td>
+                <td>{{ reclamation.description }}</td>
+                <td>{{ reclamation.statut }}</td> {# Display enum as string #}
+                <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {{ reclamation.reponse is not null ? reclamation.reponse : 'No response' }}
+                </td>
+                <td>
+                    {% if reclamation.consultation %}
+                        {{ reclamation.consultation.nomPatient }} {# Assuming 'nomPatient' is the field you want to display #}
+                    {% else %}
+                        No consultation
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}">show</a>
+                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}">edit</a>
+                    <a href="{{ path('app_reclamation_respond', {'id': reclamation.id}) }}">reponse</a>
+
+                    {# Delete button (only for admins) #}
+                    
+                        <form method="post" action="{{ path('app_reclamation_delete', {'id': reclamation.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.id) }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">No records found</td> {# Adjusted colspan #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reclamation_new') }}">Create new</a>
+{% endblock %}
