@@ -50,7 +50,7 @@ class UtilisateurType extends AbstractType
             ->add('specialite', TextType::class)
             ->add('hopital', TextType::class)
             ->add('disponibilite', TextType::class)
-            ->add('save', SubmitType::class);
+            ->add('Enregistrer', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

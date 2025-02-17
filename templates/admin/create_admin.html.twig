@@ -12,7 +12,6 @@
     </div>
 {% endif %}
 
-{# Masquer les champs indésirables avec une classe CSS #}
 <div style="display: none;">
     {{ form_widget(form.antecedentsMedicaux) }}
     {{ form_widget(form.specialite) }}
@@ -117,8 +116,6 @@
         </div>
     {% endif %}
 </div>
-
-<button type="submit" class="btn btn-primary">Créer l'administrateur</button>
 
 {{ form_end(form) }}
 {% endblock %}

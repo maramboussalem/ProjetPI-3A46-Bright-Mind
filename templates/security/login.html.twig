@@ -140,13 +140,22 @@
 .remember-label:hover {
     color: #007b99;
 }
+.alert-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 15px;
+}
 
     </style>
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data" novalidate="novalidate">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -179,7 +188,6 @@
            
             <a href="#" class="link">Mot de passe oublié ?</a>
             <a href="{{ path('app_utilisateur_new') }}" class="link">S'inscrire</a>
-
         </form>
         
         <div class="divider">Ou</div>

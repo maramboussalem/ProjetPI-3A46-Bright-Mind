@@ -19,4 +19,16 @@ final class ProfileController extends AbstractController
             'nom' => $utilisateur->getNom(),
         ]);
     }
+
+    #[Route('/profileAdmin', name: 'app_profile_admin')]
+    public function index_admin(): Response
+    {
+
+        $utilisateur = $this->getUser();
+        return $this->render('profile/index_admin.html.twig', [
+            'utilisateur' => $utilisateur,
+            'prenom' => $utilisateur->getPrenom(),
+            'nom' => $utilisateur->getNom(),
+        ]);
+    }
 }

@@ -1,0 +1,52 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Liste des Administrateurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des Administrateurs</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Sexe</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set found_admin = false %}
+            {% for utilisateur in utilisateurs %}
+                {% if utilisateur.role == 'admin' %}
+                    {% set found_admin = true %}
+                    <tr>
+                        <td>{{ utilisateur.nom }}</td>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td>{{ utilisateur.sexe }}</td>
+                        <td>{{ utilisateur.adresse }}</td>
+                        <td>{{ utilisateur.telephone }}</td>
+                        <td>
+                            <form method="post" action="{{ path('admin_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                           <div class="d-flex gap-2">
+                          </div> 
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+            {% if not found_admin %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucun administrateur trouvé.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <a href="{{ path('create_admin') }}">Ajouter un Administrateur</a>
+    
+{% endblock %}

@@ -116,6 +116,25 @@
             height: auto;
             margin-bottom: 15px;
         }
+
+        a.btn-secondary {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, #007b99, #00c0c7);
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 20px;
+}
+
+a.btn-secondary:hover {
+    background: linear-gradient(135deg, #005f73, #009ca6);
+    transform: scale(1.02);
+}
+
     </style>
 <div class="form-group">
     {{ form_label(form.nom) }}

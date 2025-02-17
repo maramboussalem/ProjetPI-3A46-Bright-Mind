@@ -1,0 +1,115 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Modifier l'Administrateur{% endblock %}
+
+{% block body %}
+    <h1>Veuillez modifier vos coordonnées</h1>
+{{ form_start(form, {'attr': {'id': 'utilisateurForm', 'novalidate': 'novalidate'}}) }}
+
+{{ form_start(form) }}
+
+<div style="display: none;">
+    {{ form_widget(form.antecedentsMedicaux) }}
+    {{ form_widget(form.specialite) }}
+    {{ form_widget(form.hopital) }}
+    {{ form_widget(form.disponibilite) }}
+    {{ form_widget(form.role) }}
+</div>
+    <div class="form-group">
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+        {% if form.nom.vars.errors %}
+            <div class="form-error">
+                {% for error in form.nom.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+        {% if form.prenom.vars.errors %}
+            <div class="form-error">
+                {% for error in form.prenom.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        {% if form.email.vars.errors %}
+            <div class="form-error">
+                {% for error in form.email.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+    {{ form_label(form.motdepasse) }}
+    {{ form_widget(form.motdepasse, {'attr': {'class': 'form-control'}}) }}
+    {% if form.motdepasse.vars.errors %}
+        <div class="form-error">
+            {% for error in form.motdepasse.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.motdepasse_confirmation) }}
+    {{ form_widget(form.motdepasse_confirmation, {'attr': {'class': 'form-control'}}) }}
+    {% if form.motdepasse_confirmation.vars.errors %}
+        <div class="form-error">
+            {% for error in form.motdepasse_confirmation.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.sexe) }}
+    {{ form_widget(form.sexe, {'attr': {'class': 'form-control'}}) }}
+    {% if form.sexe.vars.errors %}
+        <div class="form-error">
+            {% for error in form.sexe.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.adresse) }}
+    {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+    {% if form.adresse.vars.errors %}
+        <div class="form-error">
+            {% for error in form.adresse.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+    <div class="form-group">
+        {{ form_label(form.telephone) }}
+        {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+        {% if form.telephone.vars.errors %}
+            <div class="form-error">
+                {% for error in form.telephone.vars.errors %}
+                    <p style="color: red;">{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    {{ form_end(form) }}
+   <a href="{{ path('app_profile_admin') }}" class="btn btn-secondary w-100">Annuler</a>
+{% endblock %}

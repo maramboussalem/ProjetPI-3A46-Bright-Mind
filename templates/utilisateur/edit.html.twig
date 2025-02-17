@@ -32,7 +32,7 @@
 
 <div style="height: 120px;"></div> {# Espacement entre la navbar et le formulaire #}
 <div class="container">
-    <h1>Veuillez mettre à jour vos coordonnées</h1>
+    <h1>Veuillez modifier vos coordonnées</h1>
 
     {{ include('utilisateur/_form.html.twig', {'button_label': 'Update'}) }}
 
@@ -86,6 +86,6 @@
             toggleFields(); // Exécuter au chargement de la page
         });
     </script>
-
+    <a href="{{ path('app_profile') }}" class="btn btn-secondary w-100">Annuler</a>
 
 {% endblock %}
