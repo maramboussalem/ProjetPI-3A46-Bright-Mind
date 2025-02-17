@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
+
 {# templates/profile/index.html.twig #}
-{% block title %}Profile{% endblock %}
+
+{% block title %} Profile {% endblock %}
+
 {% block body %}
     
    <style>
@@ -10,11 +13,13 @@
      
    </style>
     <div class="container">
+       
         <div class="profile">
             <img src="{{ asset('img/2.jpg') }}" alt="Avatar" class="rounded-circle" width="250">
             <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
             <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
         </div>
+        
         <div class="details">
             <table class="table table-bordered">
                 <tbody>
@@ -37,19 +42,17 @@
             </table>
             
             <div class="d-flex gap-2">
-    <form method="post" action="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}" class="flex-fill">
-        <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ utilisateur.id) }}">
-        <button type="submit" class="btn btn-primary w-100">Modifier</button>
-    </form>
+               <form method="post" action="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}" class="flex-fill">
+                 <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ utilisateur.id) }}">
+                 <button type="submit" class="btn btn-primary w-100">Modifier</button>
+               </form>
 
-    <form method="post" action="{{ path('app_utilisateur_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="flex-fill">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
-        <button type="submit" class="btn btn-danger w-100">Supprimer</button>
-    </form>
-
-   
-</div>
-
+               <form method="post" action="{{ path('app_utilisateur_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="flex-fill">
+                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
+                  <button type="submit" class="btn btn-danger w-100">Supprimer</button>
+               </form>
+             </div>
+             
         </div>
     </div>
 {% endblock %}
