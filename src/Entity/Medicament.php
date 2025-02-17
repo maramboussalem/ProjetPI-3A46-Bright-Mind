@@ -5,6 +5,7 @@
 namespace App\Entity;
 
 use App\Repository\MedicamentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -41,6 +42,12 @@ class Medicament
 
     #[ORM\ManyToOne(inversedBy: 'fournisseur')]
     private ?Fournisseur $fournisseur = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $expireat = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     // Getters et setters...
 
@@ -113,5 +120,29 @@ class Medicament
 {
     return $this->id;
 }
+
+    public function getExpireat(): ?\DateTimeInterface
+    {
+        return $this->expireat;
+    }
+
+    public function setExpireat(\DateTimeInterface $expireat): static
+    {
+        $this->expireat = $expireat;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
 
 }

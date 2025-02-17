@@ -7,6 +7,7 @@ use App\Form\MedicamentType;
 use App\Repository\MedicamentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,6 +56,33 @@ final class MedicamentController extends AbstractController
                     'errors' => $errors,
                 ]);
             }
+
+
+
+            $imageFile = $form->get('image')->getData();
+           
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '.' . $imageFile->guessExtension();
+    
+                try {
+                    $imageFile->move(
+                        $this->getParameter('medicament_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image.');
+                    return $this->redirectToRoute('app_student_group_index_administrateur');
+                }
+    
+                $medicament->setImage($newFilename);
+            } else {
+                $medicament->setImage("default.jpg");
+
+            }
+           
+
+
 
             $entityManager->persist($medicament);
             $entityManager->flush();

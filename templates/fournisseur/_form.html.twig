@@ -67,7 +67,7 @@ button.btn:hover {
     margin-bottom: 20px;
 }
 </style>
-{{ form_start(form) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     <div class="form-group">
         {{ form_widget(form) }}
     </div>

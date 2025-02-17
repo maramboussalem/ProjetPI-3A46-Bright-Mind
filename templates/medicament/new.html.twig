@@ -100,21 +100,8 @@
     {% endfor %}
 
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-    {% for child in form %}
-        <div class="form-group">
-            {{ form_label(child) }}
-            {{ form_widget(child) }}
-            {% if child.vars.errors|length > 0 %}
-                <div class="alert alert-danger">
-                    {% for error in child.vars.errors %}
-                        <p>{{ error.message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-    {% endfor %}
+        {{ form_widget(form) }}
     <button type="submit">Ajouter</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_medicament_index') }}">Retour à la liste</a>
-{% endblock %}
+ {% endblock %}

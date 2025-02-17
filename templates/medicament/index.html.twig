@@ -1,43 +1,52 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block title %}Medicament index{% endblock %}
+{% block title %}Medicament Index{% endblock %}
 
 {% block body %}
-    <h1>Medicament index</h1>
+<h1 class="text-center card p-3">List des medicaments </h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>NomMedicament</th>
-                <th>Description</th>
-                <th>Quantite</th>
-                <th>Prix</th>
-                <th>Type</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for medicament in medicaments %}
-            <tr>
-                 <td>{{ medicament.getId() }}</td>
-                 <td>{{ medicament.NomMedicament }}</td>
-                <td>{{ medicament.Description }}</td>
-                <td>{{ medicament.Quantite }}</td>
-                <td>{{ medicament.Prix }}</td>
-                <td>{{ medicament.Type }}</td>
-                <td>
-                    <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}">show</a>
-                    <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row">
+            {% for medicament in medicaments %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-0 h-100 hover-card">
+                        <img src="{{ asset('Medicament/' ~ medicament.image) }}" class="card-img-top img-fluid" style="max-height: 200px;" alt="{{ medicament.NomMedicament }}">
+                        <div class="card-body">
+                           
+                             <li class="list-group-item">NomMedicament: <strong>{{medicament.NomMedicament  }}</strong></li>
+                                <li class="list-group-item">Description: <strong>{{ medicament.Description }} TND</strong></li>
+                                <li class="list-group-item">Quantité: <strong>{{ medicament.Quantite }}</strong></li>
+                                <li class="list-group-item">Prix: <strong>{{ medicament.Prix }} TND</strong></li>
+                                <li class="list-group-item">Type: <strong>{{ medicament.Type }}</strong></li>
+                                <li class="list-group-item">Expiration: <strong>{{ medicament.expireat|date('d/m/Y') }}</strong></li>
+                            </ul>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}" class="btn btn-outline-primary">Voir</a>
+                            <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-outline-warning">Modifier</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">Aucun médicament trouvé.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
-    <a href="{{ path('app_medicament_new') }}">Create new</a>
+    <div class="text-center mt-4">
+        <a href="{{ path('app_medicament_new') }}" class="btn btn-success">Créer un nouveau médicament</a>
+    </div>
+
+    <style>
+        .hover-card:hover {
+            transform: scale(1.05);
+            transition: 0.3s;
+        }
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    </style>
 {% endblock %}

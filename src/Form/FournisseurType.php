@@ -19,47 +19,26 @@ class FournisseurType extends AbstractType
         $builder
             ->add('NomFournisseur', TextType::class, [
                 'label' => 'Nom du Fournisseur',
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le nom du fournisseur est obligatoire.']),
-                    new Assert\Length([
-                        'max' => 50,
-                        'maxMessage' => 'Le nom ne doit pas dépasser {{ limit }} caractères.',
-                    ]),
-                ],
+                "empty_data" =>"",
                 'attr' => ['placeholder' => 'Entrez le nom du fournisseur'],
+
             ])
             ->add('Adresse', TextType::class, [
                 'label' => 'Adresse',
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'L\'adresse est obligatoire.']),
-                    new Assert\Length([
-                        'max' => 255,
-                        'maxMessage' => 'L\'adresse ne doit pas dépasser {{ limit }} caractères.',
-                    ]),
-                ],
+                "empty_data" =>"",
+
                 'attr' => ['placeholder' => 'Entrez l\'adresse'],
             ])
             ->add('Telephone', TelType::class, [
                 'label' => 'Téléphone',
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le numéro de téléphone est obligatoire.']),
-                    new Assert\Regex([
-                        'pattern' => "/^\d{8}$/",
-                        'message' => 'Le numéro de téléphone doit contenir exactement 8 chiffres.',
-                    ]),
-                ],
+                "empty_data" =>"",
+
                 'attr' => ['placeholder' => 'Entrez le numéro de téléphone'],
             ])
             ->add('Email', EmailType::class, [
                 'label' => 'Email',
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'L\'email est obligatoire.']),
-                    new Assert\Email(['message' => 'Veuillez entrer une adresse email valide.']),
-                    new Assert\Length([
-                        'max' => 180,
-                        'maxMessage' => 'L\'email ne doit pas dépasser {{ limit }} caractères.',
-                    ]),
-                ],
+                "empty_data" =>"",
+
                 'attr' => ['placeholder' => 'Entrez l\'adresse email'],
             ]);
     }

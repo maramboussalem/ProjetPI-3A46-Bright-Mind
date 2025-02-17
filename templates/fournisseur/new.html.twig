@@ -95,31 +95,15 @@
 
     <h2>Ajouter un fournisseur</h2>
 
-    {# Messages d'erreur pour le formulaire #}
-    {% for flash_error in app.flashes('error') %}
+     {% for flash_error in app.flashes('error') %}
         <div class="alert alert-danger">{{ flash_error }}</div>
     {% endfor %}
 
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-    {# Afficher les erreurs spécifiques de chaque champ #}
-    {% for child in form %}
-        <div class="form-group">
-            {{ form_label(child) }}
-            {{ form_widget(child) }}
-            {# Afficher les erreurs de chaque champ #}
-            {% if child.vars.errors|length > 0 %}
-                <div class="alert alert-danger">
-                    {% for error in child.vars.errors %}
-                        <p>{{ error.message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-    {% endfor %}
+      {{ form_widget(form) }}
 
     <button type="submit" class="btn btn-primary">Ajouter</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_fournisseur_index') }}">back to list</a>
-{% endblock %}
+ {% endblock %}
