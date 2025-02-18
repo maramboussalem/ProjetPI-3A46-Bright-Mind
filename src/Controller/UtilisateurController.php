@@ -23,7 +23,6 @@ final class UtilisateurController extends AbstractController
         ]);
     }
 
-
     #[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -79,7 +78,6 @@ final class UtilisateurController extends AbstractController
                 $hashedPassword = $passwordHasher->hashPassword($utilisateur, $newPassword);
                 $utilisateur->setPassword($hashedPassword);
             }
-    
             $role = $form->get('role')->getData();
             $utilisateur->setRoles([$role]);
 

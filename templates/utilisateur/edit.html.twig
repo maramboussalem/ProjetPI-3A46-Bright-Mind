@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+ {% extends 'base.html.twig' %}
 
 {% block title %}Edit Utilisateur{% endblock %}
 
@@ -11,6 +11,7 @@
         margin: 70px auto 0;
         padding: 90px 40px 40px;
     }
+
     .container {
         max-width: 600px;
         margin: 0 auto;
@@ -19,18 +20,21 @@
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     h1 {
         text-align: center;
         color: #333;
         margin-bottom: 0px;
     }
+
+   
 </style>
 
 <div style="height: 120px;"></div> {# Espacement entre la navbar et le formulaire #}
 <div class="container">
-    <h1>Veuillez modifier vos coordonnées</h1>
-
+    <h1>Veuillez mettre à jour vos coordonnées</h1>
     {{ include('utilisateur/_form.html.twig', {'button_label': 'Update'}) }}
+
     {{ include('utilisateur/_delete_form.html.twig') }}
 </div>
  <script>
