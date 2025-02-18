@@ -42,7 +42,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le numéro de téléphone est obligatoire.")]
-    #[Assert\Regex(pattern: "/^[0-9]{8}$/",message: "Le numéro de téléphone doit contenir exactement 8 chiffres.")]
+    #[Assert\Regex(pattern: "/^[0-9]{8}$/", message: "Le numéro de téléphone doit contenir exactement 8 chiffres.")]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
@@ -56,7 +56,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $antecedentsMedicaux = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(min: 5, minMessage: "La Specialite doit comporter au moins {{ limit }} caractères.")]
+    #[Assert\Length(min: 5, minMessage: "La Spécialité doit comporter au moins {{ limit }} caractères.")]
     private ?string $specialite = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -66,40 +66,26 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 5, minMessage: "La disponibilité doit comporter au moins {{ limit }} caractères.")]
     private ?string $disponibilite = null;
-    
+
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
-    #[Assert\Length(min: 8,max: 20,minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.",maxMessage: "Le mot de passe ne peut pas dépasser {{ limit }} caractères.")]
-    #[Assert\Regex(pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/",message: "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.")]
+    #[Assert\Length(min: 8, max: 20, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.", maxMessage: "Le mot de passe ne peut pas dépasser {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/", message: "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.")]
     private ?string $motdepasse = null;
-   
+
     #[Assert\NotBlank(message: "La confirmation du mot de passe est obligatoire.")]
     #[Assert\EqualTo(propertyPath: "motdepasse", message: "Les mots de passe ne correspondent pas.")]
     private ?string $motdepasse_confirmation = null;
 
     /**
-<<<<<<< HEAD
-     * @var Collection<int, ParametresViteaux>
-     */
-    #[ORM\OneToMany(targetEntity: ParametresViteaux::class, mappedBy: 'user')]
-    private Collection $parametresViteauxes;
-
-    public function __construct()
-    {
-        $this->parametresViteauxes = new ArrayCollection();
-=======
      * @var Collection<int, Consultation>
      */
     #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'user')]
     private Collection $consultations;
 
-  
-    
-
     public function __construct()
     {
         $this->consultations = new ArrayCollection();
->>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
     }
 
     public function getId(): ?int
@@ -154,6 +140,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
     public function getMotdepasseConfirmation(): ?string
     {
         return $this->motdepasse_confirmation;
@@ -261,22 +248,21 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+
     public function getPassword(): ?string
     {
         return $this->motdepasse;
     }
-    
+
     public function setPassword(string $password): self
     {
         $this->motdepasse = $password;
-        
+
         return $this;
     }
-   
+
     public function getSalt(): ?string
     {
-        // Return null if you don't use a custom salt for password encoding
         return null;
     }
 
@@ -287,41 +273,27 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-         $roles = $this->roles;
-         
+        $roles = $this->roles;
+
         if (empty($roles)) {
-      
-            $roles[] = 'ROLE_USER'; // Ajouter un rôle par défaut si nécessaire
+            $roles[] = 'ROLE_USER'; // Default role if needed
         }
-         return ['ROLE_USER', 'ROLE_' . strtoupper($this->role)];  // e.g., ROLE_PATIENT or ROLE_MEDECIN
+        return ['ROLE_USER', 'ROLE_' . strtoupper($this->role)];
     }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-        
+
         return $this;
     }
-  
+
     public function getUserIdentifier(): string
     {
-      return $this->email;
+        return $this->email;
     }
 
     /**
-<<<<<<< HEAD
-     * @return Collection<int, ParametresViteaux>
-     */
-    public function getParametresViteauxes(): Collection
-    {
-        return $this->parametresViteauxes;
-    }
-
-    public function addParametresViteaux(ParametresViteaux $parametresViteaux): static
-    {
-        if (!$this->parametresViteauxes->contains($parametresViteaux)) {
-            $this->parametresViteauxes->add($parametresViteaux);
-            $parametresViteaux->setUser($this);
-=======
      * @return Collection<int, Consultation>
      */
     public function getConsultations(): Collection
@@ -334,37 +306,19 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->consultations->contains($consultation)) {
             $this->consultations->add($consultation);
             $consultation->setUser($this);
->>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
         }
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function removeParametresViteaux(ParametresViteaux $parametresViteaux): static
-    {
-        if ($this->parametresViteauxes->removeElement($parametresViteaux)) {
-            // set the owning side to null (unless already changed)
-            if ($parametresViteaux->getUser() === $this) {
-                $parametresViteaux->setUser(null);
-=======
     public function removeConsultation(Consultation $consultation): static
     {
         if ($this->consultations->removeElement($consultation)) {
-            // set the owning side to null (unless already changed)
             if ($consultation->getUser() === $this) {
                 $consultation->setUser(null);
->>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
             }
         }
 
         return $this;
     }
-
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
-
 }
