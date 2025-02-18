@@ -23,8 +23,16 @@
                 <td>{{ consultation.dateConsultation ? consultation.dateConsultation|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ consultation.diagnostic }}</td>
                 <td>
-    <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}">show</a>
+     <a href="{{ path('app_consultation_show', {'id': consultation.id}) }}">show</a> 
     <a href="{{ path('app_consultation_edit', {'id': consultation.id}) }}">edit</a>
+
+      <form method="post" action="{{ path('app_consultation_delete', { 'id': consultation.id }) }}" onsubmit="return confirm('Are you sure?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation.id) }}">
+              <button class="btn btn-danger btn-sm">
+                 <i class="fa fa-trash"></i> Delete
+             </button>
+      </form>
+
     <a href="{{ path('app_reclamation_new2', {'consultationId': consultation.id}) }}" class="btn btn-warning btn-sm">
         Make Reclamation
     </a>

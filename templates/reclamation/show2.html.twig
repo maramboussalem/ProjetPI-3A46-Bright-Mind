@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reclamation Details{% endblock %}
+
+{% block body %}
+    <style>
+        .main_2 {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('{{ asset('img/1.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(90%);
+        }
+
+        .main_2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.81);
+            border-radius: 15px;
+            padding: 40px 30px;
+            margin-top: 30px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .table tbody tr {
+            background-color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #005bb5;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+    </style>
+
+    <div class="main_2 clearfix position-relative">
+        <div class="container mt-5 position-absolute top-50 start-50 translate-middle w-75">
+            <div class="card shadow-lg p-4 animate__animated animate__fadeIn">
+                <h2 class="text-center mb-4">Reclamation Details</h2>
+
+                <table class="table">
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ reclamation.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Utilisateur Id</th>
+                        <td>{{ reclamation.utilisateurId }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sujet</th>
+                        <td>{{ reclamation.sujet }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ reclamation.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Statut</th>
+                        <td>{{ reclamation.Statut }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Creation</th>
+                        <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Réponse</th>
+                        <td>
+                            {% if reclamation.reponse %}
+                                {{ reclamation.reponse }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+                {# <h3 class="text-center mt-4">User Response</h3>
+                <button class="btn btn-primary" data-toggle="collapse" data-target="#responseForm">Répondre</button>
+
+                <div id="responseForm" class="collapse mt-3">
+                    {{ form_start(form) }}
+                        {{ form_row(form.reponse) }}
+                        <button class="btn btn-success" type="submit">Submit Response</button>
+                    {{ form_end(form) }}
+                </div> #}
+
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_reclamation_index2') }}" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> retour to list
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -158,6 +158,51 @@ public function new2(Request $request, EntityManagerInterface $entityManager, in
         ]);
     }
 
+
+
+
+
+
+    #[Route('/{id}/show2', name: 'app_reclamation_show2', methods: ['GET', 'POST'])]
+    public function show2(Reclamation $reclamation, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = null;
+    
+        // If user is not an admin, show the form to respond to the reclamation
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $form = $this->createFormBuilder($reclamation)
+                ->add('reponse', TextareaType::class, [
+                    'label' => 'Your Response',
+                    'required' => true,
+                ])
+                ->getForm();
+    
+            $form->handleRequest($request);
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
+    
+                return $this->redirectToRoute('app_reclamation_show2', ['id' => $reclamation->getId()]);
+            }
+        }
+    
+        return $this->render('reclamation/show2.html.twig', [
+            'reclamation' => $reclamation,
+            'form' => $form ? $form->createView() : null, // Only pass form if it exists
+        ]);
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
     #[Route('/{id}/edit', name: 'app_reclamation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
     {
@@ -252,6 +297,29 @@ public function new2(Request $request, EntityManagerInterface $entityManager, in
             'reclamations' => $reclamationRepository->findAll(),
         ]);
     }
+
+
+
+
+    // -----------------rout show me the reclamation of this user onlyyyyyyyy------------------------
+  
+    // #[Route('/reclamation/index2', name: 'app_reclamation_index2', methods: ['GET'])]
+    // public function index2(ReclamationRepository $reclamationRepository): Response
+    // {
+    //     // Get the currently logged-in user
+    //     $user = $this->getUser();
+    
+    //     // Fetch reclamations for the logged-in user
+    //     $reclamations = $reclamationRepository->findBy(['utilisateurId' => $user->getId()]);
+    
+    //     return $this->render('reclamation/index2.html.twig', [
+    //         'reclamations' => $reclamations,
+    //     ]);
+
+
+
+
+
 
 
 }

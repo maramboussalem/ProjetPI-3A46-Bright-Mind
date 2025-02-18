@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Consultation Details{% endblock %}
+
+{% block body %}
+    <style>
+        .main_2 {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('{{ asset('img/1.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(90%);
+        }
+
+        .main_2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.81);
+            border-radius: 15px;
+            padding: 30px 20px;
+            margin-top: 30px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .details {
+            margin-top: 20px;
+        }
+
+        .details p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .details p span {
+            font-weight: bold;
+        }
+
+        .btn-back {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #005bb5;
+        }
+    </style>
+
+    <div class="main_2 clearfix position-relative">
+        <div class="container mt-5 position-absolute top-50 start-50 translate-middle w-75">
+            <div class="card shadow-lg p-4 animate__animated animate__fadeIn">
+                <h2>Consultation Details</h2>
+                <div class="details">
+                    <p><span>Patient Name:</span> {{ consultation.nomPatient }}</p>
+                    <p><span>Date:</span> {{ consultation.dateConsultation ? consultation.dateConsultation|date('Y-m-d') : 'N/A' }}</p>
+                    <p><span>Diagnostic:</span> {{ consultation.diagnostic }}</p>
+                </div>
+
+                <a href="{{ path('app_consultation_index2') }}" class="btn-back">
+                    <i class="fa fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

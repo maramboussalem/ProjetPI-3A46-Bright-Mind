@@ -168,7 +168,7 @@
                                         {#} <td>{{ reclamation.consultation.id ?? 'N/A' }}</td> {# Ensure consultation exists #}
                                         <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d') : '' }}</td>
                                         <td>
-                                            <a href="{{ path('app_reclamation_show', { 'id': reclamation.id }) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ path('app_reclamation_show2', { 'id': reclamation.id }) }}" class="btn btn-primary btn-sm">
                                                 <i class="fa fa-eye"></i> View
                                             </a>
                                             
