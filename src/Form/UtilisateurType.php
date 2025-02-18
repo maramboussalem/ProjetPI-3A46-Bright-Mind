@@ -1,7 +1,5 @@
 <?php
 
-// src/Form/UtilisateurType.php
-
 namespace App\Form;
 
 use App\Entity\Utilisateur;

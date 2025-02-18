@@ -23,40 +23,39 @@ final class UtilisateurController extends AbstractController
         ]);
     }
 
-
-#[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
- public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-{
-    $utilisateur = new Utilisateur();
-    $form = $this->createForm(UtilisateurType::class, $utilisateur);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-
-        $hashedPassword = $passwordHasher->hashPassword($utilisateur, $utilisateur->getMotdepasse());
-        $utilisateur->setPassword($hashedPassword);
-
-        $role = $form->get('role')->getData();
-        $utilisateur->setRoles([$role]);
-
-        if ($role === 'patient') {
-            $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
-            
-        } elseif ($role === 'medecin') {
-            $utilisateur->setSpecialite($form->get('specialite')->getData());
-            $utilisateur->setHopital($form->get('hopital')->getData());
-            $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
-        } 
-        $entityManager->persist($utilisateur);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_login');
+    #[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $utilisateur = new Utilisateur();
+        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+    
+            $hashedPassword = $passwordHasher->hashPassword($utilisateur, $utilisateur->getMotdepasse());
+            $utilisateur->setPassword($hashedPassword);
+    
+            $role = $form->get('role')->getData();
+            $utilisateur->setRoles([$role]);
+    
+            if ($role === 'patient') {
+                $utilisateur->setAntecedentsMedicaux($form->get('antecedentsMedicaux')->getData());
+                
+            } elseif ($role === 'medecin') {
+                $utilisateur->setSpecialite($form->get('specialite')->getData());
+                $utilisateur->setHopital($form->get('hopital')->getData());
+                $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
+            } 
+            $entityManager->persist($utilisateur);
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_login');
+        }
+    
+        return $this->render('utilisateur/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-
-    return $this->render('utilisateur/new.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
 
     #[Route('/{id}', name: 'app_utilisateur_show', methods: ['GET'])]
     public function show(Utilisateur $utilisateur): Response
@@ -71,7 +70,7 @@ final class UtilisateurController extends AbstractController
     {
         $form = $this->createForm(UtilisateurType::class, $utilisateur);
         $form->handleRequest($request);
-    
+        
         if ($form->isSubmitted() && $form->isValid()) {
     
             $newPassword = $form->get('motdepasse')->getData();
@@ -79,7 +78,6 @@ final class UtilisateurController extends AbstractController
                 $hashedPassword = $passwordHasher->hashPassword($utilisateur, $newPassword);
                 $utilisateur->setPassword($hashedPassword);
             }
-    
             $role = $form->get('role')->getData();
             $utilisateur->setRoles([$role]);
 

@@ -30,6 +30,13 @@ class Consultation
      */
     #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'consultation')]
     private Collection $reclamations;
+
+    #[ORM\ManyToOne(inversedBy: 'consultations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $user = null;
+
+    
+   
     
 
     public function __construct()
@@ -107,4 +114,19 @@ class Consultation
 
         return $this;
     }
+
+    public function getUser(): ?Utilisateur
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Utilisateur $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
+
 }

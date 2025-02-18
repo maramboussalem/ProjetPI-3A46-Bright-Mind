@@ -78,6 +78,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $motdepasse_confirmation = null;
 
     /**
+<<<<<<< HEAD
      * @var Collection<int, ParametresViteaux>
      */
     #[ORM\OneToMany(targetEntity: ParametresViteaux::class, mappedBy: 'user')]
@@ -86,6 +87,19 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->parametresViteauxes = new ArrayCollection();
+=======
+     * @var Collection<int, Consultation>
+     */
+    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'user')]
+    private Collection $consultations;
+
+  
+    
+
+    public function __construct()
+    {
+        $this->consultations = new ArrayCollection();
+>>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
     }
 
     public function getId(): ?int
@@ -294,6 +308,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+<<<<<<< HEAD
      * @return Collection<int, ParametresViteaux>
      */
     public function getParametresViteauxes(): Collection
@@ -306,22 +321,50 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->parametresViteauxes->contains($parametresViteaux)) {
             $this->parametresViteauxes->add($parametresViteaux);
             $parametresViteaux->setUser($this);
+=======
+     * @return Collection<int, Consultation>
+     */
+    public function getConsultations(): Collection
+    {
+        return $this->consultations;
+    }
+
+    public function addConsultation(Consultation $consultation): static
+    {
+        if (!$this->consultations->contains($consultation)) {
+            $this->consultations->add($consultation);
+            $consultation->setUser($this);
+>>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
         }
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function removeParametresViteaux(ParametresViteaux $parametresViteaux): static
     {
         if ($this->parametresViteauxes->removeElement($parametresViteaux)) {
             // set the owning side to null (unless already changed)
             if ($parametresViteaux->getUser() === $this) {
                 $parametresViteaux->setUser(null);
+=======
+    public function removeConsultation(Consultation $consultation): static
+    {
+        if ($this->consultations->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getUser() === $this) {
+                $consultation->setUser(null);
+>>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
             }
         }
 
         return $this;
     }
 
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> ab4f39fdfcc8cda2c1b69b6ee919c350092c5009
 
 }

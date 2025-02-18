@@ -151,6 +151,7 @@
                             <tr>
                                 {# <th>ID</th> #}
                                 <th>Patient Name</th>
+                                <th>Diagnostic</th>
                                 <th>Date</th>
                                 <th>Actions</th>
                             </tr>
@@ -158,16 +159,16 @@
                         <tbody>
                             {% for consultation in consultations %}
                                 <tr>
-                                    {# <td>{{ consultation.id }}</td> #}
+                                    {# <td>{{ consultation.id }}</td>  #}
                                     <td>{{ consultation.nomPatient}}</td>
+                                    <td>{{ consultation.diagnostic|length > 15 ? consultation.diagnostic|slice(0, 15) ~ '...' : consultation.diagnostic }}</td>
+
                                     <td>{{ consultation.dateConsultation ? consultation.dateConsultation|date('Y-m-d') : '' }}</td>
                                     <td>
-                                        <a href="{{ path('app_consultation_show', { 'id': consultation.id }) }}" class="btn btn-primary btn-sm">
+                                         <a href="{{ path('app_consultation_show2', { 'id': consultation.id }) }}" class="btn btn-primary btn-sm">
                                             <i class="fa fa-eye"></i> View
-                                        </a>
-                                        <a href="{{ path('app_reclamation_new2', {'consultationId': consultation.id}) }}" class="btn btn-warning btn-sm">
-        Make Reclamation
-    </a>
+                                        </a>  
+                                        <a href="{{ path('app_reclamation_new2', {'consultationId': consultation.id}) }}" class="btn btn-warning btn-sm"> Make Reclamation </a>
                                     </td>
                                 </tr>
                             {% endfor %}
