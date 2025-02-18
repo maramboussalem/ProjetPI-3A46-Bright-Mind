@@ -30,48 +30,7 @@
         </style>
             <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
                 <div class="container-xl">
-                    <a class="navbar-brand p-0 fw-bold text-white" href="{{ path('app_home') }}">
-                        <i class="fa fa-stethoscope me-1 col_blue"></i> BRIGHT <span class="fw-normal">Mind</span><br>
-                        <span class="font_14 fw-normal span_1">Médecine Familiale</span>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mb-0 ms-auto">
 
-                            <li class="nav-item"><a class="nav-link active" href="{{ path('app_home') }}">Accueil</a></li>
-                           
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Services Médicaux</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="">Course</a></li>
-                                    <li><a class="dropdown-item" href="#">Course Detail</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="nav-item"><a class="nav-link" href="{{ path('compagne_public') }}">Compagne de Sensibilisation</a></li>
-                            <li class="nav-item">
-                                <a class="nav-link link_icon rounded-circle" href="#"><i class="fa fa-user"></i></a>
-                            </li>
-
-                            
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle link_icon rounded-circle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown">
-                                    <i class="fa fa-search"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="input-group p-1">
-                                            <input type="text" class="form-control" placeholder="Search Here">
-                                            <button class="btn btn-primary">🔍</button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </nav>
         </section>
@@ -99,6 +58,7 @@
                             <li class="nav-item dropdown">
 
                             <li class="nav-item"><a class="nav-link" href="{{ path('app_service_public') }}">Services Médicaux</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_diagnostic_page') }}">Diagnostic</a></li>
                             
                             <li class="nav-item"><a class="nav-link" href="{{ path('app_medic') }}">Medicament</a></li>
                             

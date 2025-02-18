@@ -29,16 +29,30 @@ final class ParametresViteauxController extends AbstractController
         $form = $this->createForm(ParametresViteauxType::class, $parametresViteaux);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($parametresViteaux);
-            $entityManager->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                // Si le formulaire est valide, persister les données
+                $entityManager->persist($parametresViteaux);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_parametres_viteaux_index', [], Response::HTTP_SEE_OTHER);
+                // Message de succès
+                $this->addFlash('success', 'Paramètres vitaux ajoutés avec succès.');
+
+                return $this->redirectToRoute('app_parametres_viteaux_index');
+            } else {
+                // Si le formulaire n'est pas valide, afficher les erreurs
+                $this->addFlash('error', 'Veuillez corriger les erreurs dans le formulaire.');
+
+                // Afficher toutes les erreurs de validation du formulaire
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
         }
 
         return $this->render('parametres_viteaux/new.html.twig', [
             'parametres_viteaux' => $parametresViteaux,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -53,29 +67,40 @@ final class ParametresViteauxController extends AbstractController
     #[Route('/{id}/edit', name: 'app_parametres_viteaux_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, ParametresViteaux $parametresViteaux, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ParametresViteauxType::class, $parametresViteaux);
+        // Disable CSRF protection for this action
+        $form = $this->createForm(ParametresViteauxType::class, $parametresViteaux, [
+            'csrf_protection' => false, // Disable CSRF protection
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_parametres_viteaux_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Paramètres vitaux mis à jour avec succès.');
+            return $this->redirectToRoute('app_parametres_viteaux_index');
         }
 
         return $this->render('parametres_viteaux/edit.html.twig', [
             'parametres_viteaux' => $parametresViteaux,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}', name: 'app_parametres_viteaux_delete', methods: ['POST'])]
     public function delete(Request $request, ParametresViteaux $parametresViteaux, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$parametresViteaux->getId(), $request->getPayload()->getString('_token'))) {
+        // Disable CSRF token validation for delete action
+        $token = $request->request->get('_token');
+        
+        // If you want to completely remove CSRF token, comment the validation line:
+        if ($this->isCsrfTokenValid('delete' . $parametresViteaux->getId(), $token)) {
             $entityManager->remove($parametresViteaux);
             $entityManager->flush();
+            $this->addFlash('success', 'Paramètres vitaux supprimés avec succès.');
+        } else {
+            // Message of error if CSRF is invalid
+            $this->addFlash('error', 'Jeton CSRF invalide, suppression annulée.');
         }
 
-        return $this->redirectToRoute('app_parametres_viteaux_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_parametres_viteaux_index');
     }
 }

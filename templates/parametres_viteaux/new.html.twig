@@ -1,11 +1,40 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block title %}New ParametresViteaux{% endblock %}
+{% block title %}Créer un nouveau Paramètre Vital{% endblock %}
 
 {% block body %}
-    <h1>Create new ParametresViteaux</h1>
+    <div class="container mt-4">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Créer un nouveau Paramètre Vital</h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
 
-    {{ include('parametres_viteaux/_form.html.twig') }}
+                {% if form.vars.errors|length > 0 %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
 
-    <a href="{{ path('app_parametres_viteaux_index') }}">back to list</a>
+                {% for field in form %}
+                    <div class="mb-3">
+                        {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+
+                        {% if field.vars.errors|length > 0 %}
+                            <div class="text-danger">
+                                {{ form_errors(field) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+                <a href="{{ path('app_parametres_viteaux_index') }}" class="btn btn-secondary">Retour</a>
+                
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

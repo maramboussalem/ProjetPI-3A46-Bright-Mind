@@ -18,14 +18,14 @@ class DiagnosticType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('patientID')
-            ->add('medecinID')
-        ;
+            ->add('medecinID');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Diagnostic::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 }

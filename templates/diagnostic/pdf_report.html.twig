@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rapport du Diagnostic{% endblock %}
+
+{% block body %}
+    <h1>Rapport du Diagnostic</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <td>{{ diagnostic.id }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ diagnostic.name }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ diagnostic.description }}</td>
+        </tr>
+        <tr>
+            <th>Date du Diagnostic</th>
+            <td>{{ diagnostic.dateDiagnostic ? diagnostic.dateDiagnostic|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>ID Patient</th>
+            <td>{{ diagnostic.patientID }}</td>
+        </tr>
+        <tr>
+            <th>ID Médecin</th>
+            <td>{{ diagnostic.medecinID }}</td>
+        </tr>
+        <tr>
+    <th>ID Patient</th>
+    <td>{{ diagnostic.patientID ? diagnostic.patientID : 'N/A' }}</td>
+</tr>
+<tr>
+    <th>ID Médecin</th>
+    <td>{{ diagnostic.medecinID ? diagnostic.medecinID : 'N/A' }}</td>
+</tr>
+    </table>
+
+{% endblock %}

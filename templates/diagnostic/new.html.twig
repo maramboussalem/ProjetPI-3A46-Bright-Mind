@@ -1,11 +1,30 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block title %}New Diagnostic{% endblock %}
+{% block title %}Créer un nouveau Diagnostic{% endblock %}
 
 {% block body %}
-    <h1>Create new Diagnostic</h1>
-
-    {{ include('diagnostic/_form.html.twig') }}
-
-    <a href="{{ path('app_diagnostic_index') }}">back to list</a>
+    <div class="container mt-4">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Créer un nouveau Diagnostic</h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                            {% if field.vars.errors|length > 0 %}
+                                <div class="text-danger">
+                                    {{ form_errors(field) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                    <a href="{{ path('app_diagnostic_index') }}" class="btn btn-secondary">Retour</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

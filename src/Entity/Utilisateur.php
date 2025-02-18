@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -74,6 +76,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "La confirmation du mot de passe est obligatoire.")]
     #[Assert\EqualTo(propertyPath: "motdepasse", message: "Les mots de passe ne correspondent pas.")]
     private ?string $motdepasse_confirmation = null;
+
+    /**
+     * @var Collection<int, ParametresViteaux>
+     */
+    #[ORM\OneToMany(targetEntity: ParametresViteaux::class, mappedBy: 'user')]
+    private Collection $parametresViteauxes;
+
+    public function __construct()
+    {
+        $this->parametresViteauxes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -278,6 +291,36 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
       return $this->email;
+    }
+
+    /**
+     * @return Collection<int, ParametresViteaux>
+     */
+    public function getParametresViteauxes(): Collection
+    {
+        return $this->parametresViteauxes;
+    }
+
+    public function addParametresViteaux(ParametresViteaux $parametresViteaux): static
+    {
+        if (!$this->parametresViteauxes->contains($parametresViteaux)) {
+            $this->parametresViteauxes->add($parametresViteaux);
+            $parametresViteaux->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParametresViteaux(ParametresViteaux $parametresViteaux): static
+    {
+        if ($this->parametresViteauxes->removeElement($parametresViteaux)) {
+            // set the owning side to null (unless already changed)
+            if ($parametresViteaux->getUser() === $this) {
+                $parametresViteaux->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 

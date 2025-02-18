@@ -9,7 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 #[Route('/diagnostic')]
 final class DiagnosticController extends AbstractController
@@ -23,13 +26,16 @@ final class DiagnosticController extends AbstractController
     }
 
     #[Route('/new', name: 'app_diagnostic_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $diagnostic = new Diagnostic();
         $form = $this->createForm(DiagnosticType::class, $diagnostic);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        // Validation de la saisie
+        $errors = $validator->validate($diagnostic);
+
+        if ($form->isSubmitted() && $form->isValid() && count($errors) === 0) {
             $entityManager->persist($diagnostic);
             $entityManager->flush();
 
@@ -38,7 +44,8 @@ final class DiagnosticController extends AbstractController
 
         return $this->render('diagnostic/new.html.twig', [
             'diagnostic' => $diagnostic,
-            'form' => $form,
+            'form' => $form->createView(),
+            'errors' => $errors,  // Afficher les erreurs de validation
         ]);
     }
 
@@ -51,12 +58,15 @@ final class DiagnosticController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_diagnostic_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Diagnostic $diagnostic, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Diagnostic $diagnostic, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $form = $this->createForm(DiagnosticType::class, $diagnostic);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        // Validation de la saisie
+        $errors = $validator->validate($diagnostic);
+
+        if ($form->isSubmitted() && $form->isValid() && count($errors) === 0) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_diagnostic_index', [], Response::HTTP_SEE_OTHER);
@@ -64,18 +74,41 @@ final class DiagnosticController extends AbstractController
 
         return $this->render('diagnostic/edit.html.twig', [
             'diagnostic' => $diagnostic,
-            'form' => $form,
+            'form' => $form->createView(),
+            'errors' => $errors, // Passer les erreurs au modèle pour affichage
         ]);
     }
 
     #[Route('/{id}', name: 'app_diagnostic_delete', methods: ['POST'])]
     public function delete(Request $request, Diagnostic $diagnostic, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$diagnostic->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$diagnostic->getId(), $request->get('_token'))) {
             $entityManager->remove($diagnostic);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_diagnostic_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/generate-pdf', name: 'app_diagnostic_generate_pdf')]
+    public function generatePdf(Diagnostic $diagnostic): Response
+    {
+        $html = $this->renderView('diagnostic/pdf_report.html.twig', [
+            'diagnostic' => $diagnostic,
+        ]);
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return new Response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="rapport_diagnostic.pdf"',
+        ]);
     }
 }

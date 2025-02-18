@@ -1,20 +1,20 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block title %}Diagnostic index{% endblock %}
+{% block title %}Diagnostic Index{% endblock %}
 
 {% block body %}
-    <h1>Diagnostic index</h1>
+    <h1>Liste des Diagnostics</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
+                <th>ID</th>
+                <th>Nom</th>
                 <th>Description</th>
-                <th>DateDiagnostic</th>
-                <th>PatientID</th>
-                <th>MedecinID</th>
-                <th>actions</th>
+                <th>Date du Diagnostic</th>
+                <th>ID Patient</th>
+                <th>ID Médecin</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -27,17 +27,19 @@
                 <td>{{ diagnostic.patientID }}</td>
                 <td>{{ diagnostic.medecinID }}</td>
                 <td>
-                    <a href="{{ path('app_diagnostic_show', {'id': diagnostic.id}) }}">show</a>
-                    <a href="{{ path('app_diagnostic_edit', {'id': diagnostic.id}) }}">edit</a>
+                    <a href="{{ path('app_diagnostic_show', {'id': diagnostic.id}) }}" class="btn btn-info">Afficher</a>
+                    <a href="{{ path('app_diagnostic_edit', {'id': diagnostic.id}) }}" class="btn btn-primary">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="7" class="text-center">Aucun enregistrement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_diagnostic_new') }}">Create new</a>
+    <div class="mt-3">
+        <a href="{{ path('app_diagnostic_new') }}" class="btn btn-success">Créer un nouveau</a>
+    </div>
 {% endblock %}
