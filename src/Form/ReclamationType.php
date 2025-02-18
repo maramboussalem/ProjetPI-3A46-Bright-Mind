@@ -64,9 +64,7 @@ class ReclamationType extends AbstractType
             'choice_label' => function (Consultation $consultation) {
                 return $consultation->getDateConsultation()->format('Y-m-d');
             },
-            'constraints' => [
-                new NotNull(['message' => 'Consultation is required.'])
-            ],
+            // 
         ];
 
         if ($options['is_new2']) {

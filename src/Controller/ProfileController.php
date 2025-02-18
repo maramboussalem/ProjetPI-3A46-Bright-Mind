@@ -11,8 +11,7 @@ final class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(): Response
     {
-
-        $utilisateur = $this->getUser();
+        $utilisateur = $this->getUser(); 
         return $this->render('profile/index.html.twig', [
             'utilisateur' => $utilisateur,
             'prenom' => $utilisateur->getPrenom(),
@@ -20,10 +19,10 @@ final class ProfileController extends AbstractController
         ]);
     }
 
+
     #[Route('/profileAdmin', name: 'app_profile_admin')]
     public function index_admin(): Response
     {
-
         $utilisateur = $this->getUser();
         return $this->render('profile/index_admin.html.twig', [
             'utilisateur' => $utilisateur,

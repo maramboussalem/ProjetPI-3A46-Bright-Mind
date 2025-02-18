@@ -6,11 +6,11 @@
 
 {{ form_start(form, {'attr': {'id': 'utilisateurForm', 'novalidate': 'novalidate'}}) }}
 
-{% if not form.vars.valid %}
-    <div class="alert alert-danger">
-        {{ form_errors(form) }}
-    </div>
-{% endif %}
+       {% if not form.vars.valid %}
+           <div class="alert alert-danger">
+               {{ form_errors(form) }}
+           </div>
+       {% endif %}
 
 <div style="display: none;">
     {{ form_widget(form.antecedentsMedicaux) }}
@@ -20,7 +20,7 @@
     {{ form_widget(form.role) }}
 </div>
 
-{# Afficher les champs souhaités #}
+
 <div class="form-group">
     {{ form_label(form.nom) }}
     {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
@@ -118,4 +118,5 @@
 </div>
 
 {{ form_end(form) }}
+
 {% endblock %}
