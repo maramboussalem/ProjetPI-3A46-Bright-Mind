@@ -9,17 +9,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
-
 
 final class DiagnosticPageController extends AbstractController
 {
     #[Route('/diag/page', name: 'app_diagnostic_page', methods: ['GET', 'POST'])]
     public function index(
         Request $request,
-        Security $security, 
-        EntityManagerInterface $entityManager, 
+        Security $security,
+        EntityManagerInterface $entityManager,
         ParametresViteauxRepository $parametresViteauxRepository
     ): Response {
         // Create the form
@@ -29,13 +28,13 @@ final class DiagnosticPageController extends AbstractController
         $form = $this->createForm(ParametresViteauxType::class, $parametresViteaux);
         $form->handleRequest($request);
 
-
+        // Handle form submission
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 // Persist the entity if valid
                 $entityManager->persist($parametresViteaux);
                 $entityManager->flush();
-                
+
                 // Success message
                 $this->addFlash('success', 'Paramètres vitaux ajoutés avec succès.');
 
@@ -51,9 +50,10 @@ final class DiagnosticPageController extends AbstractController
             }
         }
 
-        // Fetch existing records
+        // Fetch existing records from the database
         $parametresViteauxes = $parametresViteauxRepository->findAll();
 
+        // Render the template with the form and the existing records
         return $this->render('diagnostic_page/index.html.twig', [
             'parametres_viteauxes' => $parametresViteauxes,
             'form' => $form->createView(),

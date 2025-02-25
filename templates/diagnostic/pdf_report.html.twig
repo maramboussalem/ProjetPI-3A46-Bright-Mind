@@ -1,43 +1,150 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport du Diagnostic</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f4f6f9;
+        }
 
-{% block title %}Rapport du Diagnostic{% endblock %}
+        .container-fluid {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 50px 0;
+        }
 
-{% block body %}
-    <h1>Rapport du Diagnostic</h1>
+        h1 {
+            color: #003366;
+        }
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <td>{{ diagnostic.id }}</td>
-        </tr>
-        <tr>
-            <th>Nom</th>
-            <td>{{ diagnostic.name }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ diagnostic.description }}</td>
-        </tr>
-        <tr>
-            <th>Date du Diagnostic</th>
-            <td>{{ diagnostic.dateDiagnostic ? diagnostic.dateDiagnostic|date('Y-m-d') : '' }}</td>
-        </tr>
-        <tr>
-            <th>ID Patient</th>
-            <td>{{ diagnostic.patientID }}</td>
-        </tr>
-        <tr>
-            <th>ID Médecin</th>
-            <td>{{ diagnostic.medecinID }}</td>
-        </tr>
-        <tr>
-    <th>ID Patient</th>
-    <td>{{ diagnostic.patientID ? diagnostic.patientID : 'N/A' }}</td>
-</tr>
-<tr>
-    <th>ID Médecin</th>
-    <td>{{ diagnostic.medecinID ? diagnostic.medecinID : 'N/A' }}</td>
-</tr>
-    </table>
+        h2 {
+            color: #666;
+        }
 
-{% endblock %}
+        .rapport-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 0 auto;
+            border: 2px solid #003366; /* Custom border for the rapport container */
+        }
+
+        .rapport-container h3 {
+            color: #003366;
+            margin-bottom: 30px;
+        }
+
+        .contact-section {
+            background-color: #003366;
+            color: white;
+            padding: 30px;
+            margin-top: 50px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .contact-section h4 {
+            color: #fff;
+        }
+
+        .contact-section p {
+            font-size: 16px;
+        }
+
+        .contact-section .btn-primary {
+            background-color: #fff;
+            color: #003366;
+            border-color: #fff;
+        }
+
+        .contact-section .btn-primary:hover {
+            background-color: #003366;
+            color: #fff;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd; /* Border for table cells */
+        }
+
+        table th {
+            background-color: #003366;
+            color: white;
+        }
+
+        table td {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BrightMind Header -->
+    <div class="container-fluid">
+        <div>
+            <h1>Bright Mind</h1>
+            <h2>SYSTÈME INTELLIGENT DE GESTION HOSPITALIER</h2>
+            <h3>Créé par ActUp</h3>
+        </div>
+    </div>
+
+    <!-- Diagnostic Report -->
+    <div class="container">
+        <div class="rapport-container">
+            <h3>Rapport du Diagnostic</h3>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <td>{{ diagnostic.id }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ diagnostic.name }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ diagnostic.description }}</td>
+                </tr>
+                <tr>
+                    <th>Date du Diagnostic</th>
+                    <td>{{ diagnostic.dateDiagnostic ? diagnostic.dateDiagnostic|date('Y-m-d') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>ID Patient</th>
+                    <td>{{ diagnostic.patientID }}</td>
+                </tr>
+                <tr>
+                    <th>ID Médecin</th>
+                    <td>{{ diagnostic.medecinID }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contact Us Section -->
+    <div class="contact-section">
+        <h4>Contactez-nous</h4>
+        <p>Adresse: 123 Rue de l'Innovation, Tunis, Tunisie</p>
+        <p>Téléphone: +216 70 000 000</p>
+        <p>Email: contact@brightmind.com</p>
+        <div class="mt-3">
+            <a href="mailto:contact@brightmind.com" class="btn btn-primary">Envoyer un Email</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional, for any further interactivity) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
