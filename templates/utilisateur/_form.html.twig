@@ -298,6 +298,22 @@ a.btn-secondary:hover {
             </div>
         {% endif %}
     </div>
+
 </div>
+ <div class="form-group">
+    <!-- Affichage de l'image CAPTCHA -->
+    <img src="{{ path('app_captcha_generate') }}" alt="CAPTCHA" />
+    {{ form_row(form.captcha) }}
+
+    {# Affichage des erreurs liées au CAPTCHA #}
+    {% if form.captcha.vars.errors %}
+        <div class="form-error">
+            {% for error in form.captcha.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
 
 {{ form_end(form) }}

@@ -1,0 +1,119 @@
+{% block title %}<title>Vérification par téléphone</title>{% endblock %}
+
+{% block head %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 350px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #007b99;
+            margin-bottom: 25px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #007b99, #00c0c7);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(78, 183, 186);
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .alert-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .alert-success {
+            color: #fff;
+            background-color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .links {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: rgb(1, 138, 172);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+    
+        <img src="{{ asset('img/4.jpg') }}" alt="Bright Mind Logo" class="logo">
+        <form method="POST" action="{{ path('app_reset_password_send_code', { 'id': utilisateur.id }) }}">
+            <div class="form-group">
+                <input type="text" id="phone" name="phone" class="form-control" placeholder="Numéro de téléphone" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Envoyer le code</button>
+        </form>
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        <div class="links">
+            <a href="{{ path('app_login') }}">Retour à la connexion</a>
+        </div>
+    </div>
+{% endblock %}

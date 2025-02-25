@@ -36,9 +36,10 @@
 
     <div class="container">
         <div class="profile">
-            <img src="{{ asset('img/2.jpg') }}" alt="Avatar" class="rounded-circle" width="250">
+            <img src="{{ asset(utilisateur.imgUrl) }}" alt="Avatar" class="rounded-circle" width="250">
             <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
             <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
+            <img src="{{ path('app_utilisateur_generate_user_qr', {'id': utilisateur.id}) }}" alt="QR Code avec les informations de l'utilisateur" />
         </div>
         <div class="details">
             <h1>Détails de l'Utilisateur</h1>
@@ -67,10 +68,7 @@
             <div class="d-flex gap-2">
                <a href="{{ path('app_utilisateur_index') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
    
-                <form method="post" action="{{ path('app_utilisateur_delete', {'id': utilisateur.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" class="flex-fill">
-                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ utilisateur.id) }}">
-                  <button type="submit" class="btn btn-danger w-100">Supprimer</button>
-                </form>
+               
             </div>
         </div>
     </div>

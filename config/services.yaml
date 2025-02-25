@@ -6,8 +6,12 @@
 parameters:
     upload_directory: '%kernel.project_dir%/public/front/compagne/img'
     medicament_directory: '%kernel.project_dir%/public/Medicament'
+    user_directory: '%kernel.project_dir%/public/user/img'
 
 services:
+    App\Repository\UtilisateurRepository:
+        autowire: true
+        autoconfigure: true
 
     # default configuration for services in *this* file
     _defaults:
@@ -25,3 +29,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\TwilioSmsService:
+        arguments:
+            $sid: '%env(TWILIO_SID)%'
+            $authToken: '%env(TWILIO_AUTH_TOKEN)%'
+            $twilioPhoneNumber: '%env(TWILIO_PHONE_NUMBER)%'
+
+    App\Service\CaptchaGenerator: ~

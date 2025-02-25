@@ -1,0 +1,58 @@
+{# templates/utilisateur/statistiques.html.twig #}
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+    <h1>Statistiques des Utilisateurs</h1>
+
+    <canvas id="statistiquesChart" width="400" height="200"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('statistiquesChart').getContext('2d');
+        var statistiquesChart = new Chart(ctx, {
+            type: 'bar', // Type de graphique (barres ici)
+            data: {
+                labels: ['Total Utilisateurs', 'Total Médecins', 'Total Patients'], // Étiquettes de l'axe des x
+                datasets: [{
+                    label: 'Statistiques des utilisateurs',
+                    data: [
+                        {{ total_utilisateurs }},
+                        {{ total_medecins }},
+                        {{ total_patients }}
+                    ], // Les valeurs des statistiques
+                    backgroundColor: [
+                        'rgb(241, 136, 0)', // Couleur pour "Total Utilisateurs"
+                        'rgb(0, 144, 41)', // Couleur pour "Total Médecins"
+                        'rgb(0, 60, 255)'  // Couleur pour "Total Patients"
+                    ],
+                    borderColor: [
+                        'rgb(241, 136, 0)',
+                        'rgb(0, 144, 41)',
+                        'rgb(0, 60, 255)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + ' utilisateurs'; // Personnalisation de l'étiquette
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <a href="{{ path('app_utilisateur_index') }}" class="btn btn-secondary flex-fill">Retour à la liste</a>
+{% endblock %}
+

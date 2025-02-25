@@ -35,6 +35,18 @@ class AdminController extends AbstractController
             $admin->setHopital(null);
             $admin->setDisponibilite(null);
 
+             /** @var UploadedFile $file */
+        $file = $form->get('file')->getData();
+
+        if ($file) {
+            $fileName = uniqid() . '.' . $file->guessExtension();
+            $file->move(
+                $this->getParameter('user_directory'), 
+                $fileName
+            );
+            $admin->setimgUrl('user/img/' . $fileName);
+        }
+
             $entityManager->persist($admin);
             $entityManager->flush();
 

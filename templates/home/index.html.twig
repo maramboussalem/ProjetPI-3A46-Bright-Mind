@@ -3,20 +3,150 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block body %}
+<style>
+/* Général */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
 
+h1, h5 {
+    font-weight: bold;
+}
+
+/* Carrousel */
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Section FAQ */
+#faq {
+    padding: 50px 0;
+}
+
+.faq_1 h1 {
+    font-size: 2.5rem;
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #ddd;
+}
+
+.nav-tabs .nav-link {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+/* Contenu des questions */
+.faq_2il {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.faq_2il:hover {
+    transform: scale(1.02);
+}
+
+/* Liens */
+.fw-bold a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.fw-bold a:hover {
+    color: #007bff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .faq_1 h1 {
+        font-size: 2rem;
+    }
+
+    .faq_2il {
+        padding: 15px;
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 1rem;
+        padding: 8px 15px;
+    }
+}
+
+</style>
 <div class="main clearfix position-relative">
     <div class="main_2 clearfix">
         <section id="center" class="center_home">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="{{ asset('img/1.jpg') }}" class="d-block w-100" alt="...">
+                    <img src="{{ asset('img/11.jpg') }}" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-md-block">
 					<style>
 					   .carousel-caption h1 {
                          color: white !important;
                           }
+
+						  .creative-title {
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+    color: #004080;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+    position: relative;
+    margin-top: 20px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Ajoute une ombre légère */
+.creative-title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(to right, #004080, #00bcd4);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Contrôle de l'espace entre la navbar et le titre */
+.navbar {
+    margin-bottom: 200px; /* Ajustez la valeur selon vos besoins */
+}
+
+.creative-title {
+    margin-top: 200px; /* Ajustez l'espacement au besoin */
+}
+
 					</style>
-                        <h1 class="mt-3"> Système Intelligent de Gestion Hospitalière</h1>
+                        <h1 class="creative-title">Système Intelligent de Gestion Hospitalière</h1>
+
                         <h6 class="mb-0 mt-4">
                         </h6>
 					</div>

@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\EqualTo;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 
 class UtilisateurType extends AbstractType
 {
@@ -48,6 +50,15 @@ class UtilisateurType extends AbstractType
             ->add('specialite', TextType::class)
             ->add('hopital', TextType::class)
             ->add('disponibilite', TextType::class)
+            ->add('file', FileType::class, [
+                'label' => 'Upload File',
+                'mapped' => false, // to prevent this field from being mapped to an entity
+                'required' => false,
+            ])
+            ->add('captcha', TextType::class, [
+                'label' => 'Entrez le code CAPTCHA',
+            ])
+        
             ->add('Enregistrer', SubmitType::class);
     }
 

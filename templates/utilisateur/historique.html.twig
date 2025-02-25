@@ -1,0 +1,25 @@
+
+{% block title %} <title> Historique des connexions </title>{% endblock %}
+
+{% block body %}
+<h1>Historique des connexions et modifications</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date & Heure</th>
+            <th>Événement</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in historique %}
+            <tr>
+                <td>{{ event.timestamp|date('d/m/Y H:i:s') }}</td>
+                <td>{{ event.eventType }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('app_profile') }}">Retour au profil</a>
+{% endblock %}

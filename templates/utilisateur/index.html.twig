@@ -3,6 +3,19 @@
 {% block title %}Utilisateur index{% endblock %}
 
 {% block body %}
+ <!-- Formulaire de recherche -->
+    <h2>Recherche d'utilisateurs</h2>
+    <form action="{{ path('app_utilisateur_index') }}" method="GET" class="mb-4">
+        <div class="row">
+            <div class="col">
+                <label for="search" class="form-label">Rechercher par nom, prénom ou email</label>
+                <input type="text" name="search" id="search" class="form-control" value="{{ app.request.query.get('search') }}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mt-4">Rechercher</button>
+            </div>
+        </div>
+    </form>
     <h2>Liste des Patients</h2>
     <table class="table">
         <thead>
@@ -14,7 +27,9 @@
                 <th>Adresse</th>
                 <th>Téléphone</th>
                 <th>Antécédents Médicaux</th>
+                <th>Status</th>
                 <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,10 +43,30 @@
                         <td>{{ utilisateur.adresse }}</td>
                         <td>{{ utilisateur.telephone }}</td>
                         <td>{{ utilisateur.antecedentsMedicaux }}</td>
-                        <td>
-                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"class="btn btn-warning">show</a>
+                       <td>
+                            {% if utilisateur.isActive %}
+                                <span class="badge bg-success">Actif</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactif</span>
+                            {% endif %}
                         </td>
-                    </tr>
+                        <td>      
+    {% if utilisateur.isActive %}
+        <form action="{{ path('app_utilisateur_deactivate', {'id': utilisateur.id}) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('deactivate' ~ utilisateur.id) }}">
+            <button type="submit" class="btn btn-danger">Désactiver</button>
+        </form>
+    {% else %}
+        <form action="{{ path('app_utilisateur_activate', {'id': utilisateur.id}) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ utilisateur.id) }}">
+            <button type="submit" class="btn btn-success">Activer</button>
+        </form>
+    {% endif %}
+                        </td>
+                            <td>
+                        <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}" class="btn btn-warning">Afficher</a>
+                        </td>
+                                        </tr>
                 {% endif %}
             {% endfor %}
         </tbody>
@@ -50,7 +85,9 @@
                 <th>Spécialité</th>
                 <th>Hôpital</th>
                 <th>Disponibilité</th>
+                <th>Status</th>
                 <th>Actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -66,14 +103,43 @@
                         <td>{{ utilisateur.specialite }}</td>
                         <td>{{ utilisateur.hopital }}</td>
                         <td>{{ utilisateur.disponibilite }}</td>
-                        <td>
-                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"class="btn btn-warning">show</a>
+                         <td>
+                            {% if utilisateur.isActive %}
+                                <span class="badge bg-success">Actif</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactif</span>
+                            {% endif %}
+                        </td>
+                       <td>
+                            
+    {% if utilisateur.isActive %}
+        <form action="{{ path('app_utilisateur_deactivate', {'id': utilisateur.id}) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('deactivate' ~ utilisateur.id) }}">
+            <button type="submit" class="btn btn-danger">Désactiver</button>
+        </form>
+    {% else %}
+        <form action="{{ path('app_utilisateur_activate', {'id': utilisateur.id}) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ utilisateur.id) }}">
+            <button type="submit" class="btn btn-success">Activer</button>
+        </form>
+    {% endif %}
+ </td>
+  <td>
+
+    <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}" class="btn btn-warning">Afficher</a>
+
                         </td>
                     </tr>
                 {% endif %}
             {% endfor %}
         </tbody>
     </table>
+
+
+    <!-- Bouton pour afficher les statistiques -->
+<div class="mb-4">
+    <a href="{{ path('app_utilisateur_statistiques') }}" class="btn btn-info">Afficher les statistiques</a>
+</div>
 
     
 {% endblock %}

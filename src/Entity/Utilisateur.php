@@ -42,7 +42,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le numéro de téléphone est obligatoire.")]
-    #[Assert\Regex(pattern: "/^[0-9]{8}$/", message: "Le numéro de téléphone doit contenir exactement 8 chiffres.")]
+   // #[Assert\Regex(pattern: "/^[0-9]{8}$/", message: "Le numéro de téléphone doit contenir exactement 8 chiffres.")]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
@@ -76,6 +76,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "La confirmation du mot de passe est obligatoire.")]
     #[Assert\EqualTo(propertyPath: "motdepasse", message: "Les mots de passe ne correspondent pas.")]
     private ?string $motdepasse_confirmation = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isActive = true; 
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $verificationCode= null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $captcha= null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imgUrl = null;
 
     /**
      * @var Collection<int, Consultation>
@@ -319,6 +331,54 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
 
+        return $this;
+    }
+
+
+    public function isActive(): bool
+    {
+       return $this->isActive;
+    }
+
+public function setActive(bool $isActive): self
+{
+    $this->isActive = $isActive;
+
+    return $this;
+}
+
+public function getVerificationCode(): ?string
+{
+    return $this->verificationCode;
+}
+
+public function setVerificationCode(?string $verificationCode): self
+{
+    $this->verificationCode = $verificationCode;
+
+    return $this;
+}
+
+
+public function getCaptcha(): ?string
+{
+    return $this->captcha;
+}
+
+public function setCaptcha(?string $captcha): self
+{
+    $this->captcha = $captcha;
+    return $this;
+}
+
+    public function getimgUrl(): ?string
+    {
+        return $this->imgUrl;
+    }
+
+    public function setimgUrl(?string $imgUrl): self
+    {
+        $this->imgUrl = $imgUrl;
         return $this;
     }
 }

@@ -1,0 +1,18 @@
+{# templates/utilisateur/search.html.twig #}
+
+<h1>Résultats de la recherche</h1>
+
+<form method="get" action="{{ path('app_utilisateur_search') }}">
+    <input type="text" name="q" value="{{ term }}" placeholder="Rechercher par nom...">
+    <button type="submit">Rechercher</button>
+</form>
+
+{% if utilisateurs is not empty %}
+    <ul>
+        {% for utilisateur in utilisateurs %}
+            <li>{{ utilisateur.nom }}</li>  {# Ensure 'nom' is correct or use the correct field from your entity #}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun utilisateur trouvé.</p>
+{% endif %}

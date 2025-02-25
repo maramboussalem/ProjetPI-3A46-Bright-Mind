@@ -15,6 +15,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use App\Repository\UtilisateurRepository; 
+use Symfony\Component\Security\Core\Exception\AuthenticationException; 
+use App\Repository\ConnectionHistoryRepository;
+use App\Entity\ConnectionHistory;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,13 +27,35 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    private UtilisateurRepository $utilisateurRepository;
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(private UrlGeneratorInterface $urlGenerator, UtilisateurRepository $utilisateurRepository, EntityManagerInterface $entityManager)
     {
+        $this->utilisateurRepository = $utilisateurRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function authenticate(Request $request): Passport
     {
         $email = $request->getPayload()->getString('email');
+
+          // Utiliser la propriété injectée directement
+          $utilisateur = $this->utilisateurRepository->findOneByEmail($email);
+
+           // Create connection history and persist it
+        $history = new ConnectionHistory();
+        $history->setUtilisateur($utilisateur);
+        $history->setTimestamp(new \DateTime());
+        $history->setEventType('Connexion réussie');
+        $this->entityManager->persist($history); // Use the injected entity manager
+        $this->entityManager->flush();  
+        
+           if ($utilisateur && !$utilisateur->isActive()) {
+             // Remplacer l'exception par un message d'erreur plus précis et éviter le plantage
+           throw new \Symfony\Component\Security\Core\Exception\AuthenticationException('Votre compte a été désactivé. Veuillez contacter le support.');
+    }
+    
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
@@ -59,4 +86,31 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
+{
+    // Si l'exception est liée à un compte désactivé
+    if ($exception->getMessage() === 'Votre compte a été désactivé. Veuillez contacter le support.') {
+        // Récupérer l'email de l'utilisateur depuis la requête
+        $email = $request->getPayload()->getString('email');
+
+        // Récupérer l'utilisateur à partir de la base de données
+        $utilisateur = $this->utilisateurRepository->findOneByEmail($email);
+
+        if ($utilisateur) {
+            // Générer l'URL pour la vérification du code de l'utilisateur
+            $url = $this->urlGenerator->generate('app_utilisateur_request_activation_code', [
+                'id' => $utilisateur->getId()
+            ]);
+
+            // Rediriger vers l'URL de vérification
+            return new RedirectResponse($url);
+        }
+    }
+
+    // Redirection par défaut si aucune autre exception
+    return new RedirectResponse($this->urlGenerator->generate(self::LOGIN_ROUTE));
+}
+
+
 }

@@ -27,12 +27,31 @@
         #navbar_sticky {
     background-color: #004080 !important; /* Bleu foncé */
 }
-        </style>
-            <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
-                <div class="container-xl">
+/* Adjust navbar */
+#navbar_sticky {
+    padding-left: 10px;
+    padding-right: 180px;
+}
 
-                </div>
-            </nav>
+/* Adjust navbar elements spacing */
+.navbar-nav .nav-item {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    white-space: nowrap; /* Empêche le retour à la ligne */
+}
+
+
+#navbar_sticky {
+    height: 90px; /* Ajustez cette valeur selon vos besoins */
+}
+        </style>
         </section>
     </div>
 </head>
@@ -43,7 +62,6 @@
             <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
                 <div class="container-xl">
                     <a class="navbar-brand p-0 fw-bold text-white" href="{{ path('app_home') }}">
-                        
                         <i class="fa fa-stethoscope me-1 col_blue"></i> BRIGHT <span class="fw-normal">Mind</span><br>
                         <span class="font_14 fw-normal span_1">Médecine Familiale</span>
                     </a>
@@ -54,31 +72,22 @@
                         <ul class="navbar-nav mb-0 ms-auto">
 
                             <li class="nav-item"><a class="nav-link active" href="{{ path('app_home') }}">Accueil</a></li>
-                           
-                            <li class="nav-item dropdown">
-
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_service_public') }}">Services Médicaux</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_service_public') }}">Services</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ path('app_diagnostic_page') }}">Diagnostic</a></li>
-                            
                             <li class="nav-item"><a class="nav-link" href="{{ path('app_medic') }}">Medicament</a></li>
-                            
-                            <li class="nav-item"><a class="nav-link" href="{{ path('compagne_public') }}">Compagne de Sensibilisation</a></li>
-                            
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_consultation_index2') }}">Submit A Ticket <i class="fa fa-ticket ms-2"></i></a></li>
-                               
-                           
-                            
+                            <li class="nav-item"><a class="nav-link" href="{{ path('compagne_public') }}">Compagne</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_consultation_index2') }}">Submit a Ticket</a></li>
 <li class="nav-item dropdown">
-    {% if app.user%}
-        <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-user"></i> {{ app.user.nom }} {{ app.user.prenom }}
+    {% if app.user %}
+        <a class="nav-link active dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ asset(app.user.imgUrl) }}" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+            <span><i class="fa fa-user"></i> {{ app.user.nom }} {{ app.user.prenom }}</span>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="{{ path('app_profile') }}">Mon Profil</a></li>
             <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se déconnecter</a></li>
         </ul>
     {% else %}
-    
         <a class="nav-link active" href="{{ path('app_login') }}">
             <i class="fa fa-user"></i> Se connecter
         </a>
@@ -86,17 +95,10 @@
             <a href="{{ path('app_utilisateur_new') }}" class="link">S'inscrire</a>
         </div>
     {% endif %}
-</li> 
+</li>
+
                             <li class="nav-item dropdown">
                                 
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="input-group p-1">
-                                            <input type="text" class="form-control" placeholder="Search Here">
-                                            <button class="btn btn-primary">🔍</button>
-                                        </div>
-                                    </li>
-                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -111,66 +113,55 @@
        
     {% endblock %}
 </body>    
-<section id="touch" class="p_3 bg_dark">
- <div class="container-xl">
-     <div class="touch_1 row">
-	  <div class="col-md-6">
-	   <div class="touch_1l">
-	      <h5 class="fw-normal space_5 dashline text-white-50">CONTACTEZ-NOUS</h5>
-	<h1 class="mt-3 font_50 text-white">Prenez Contact</h1>
-	<p class="text-light mt-3 mb-4"></p>
-	  <div class="touch_1li row">
-	   <div class="col-md-2 col-sm-2">
-	    <div class="touch_1lil">
-		 <span class="d-inline-block text-center text-white fs-2"><i class="fa fa-map-marker"></i></span>
-		</div>
-	   </div>
-	   <div class="col-md-10 col-sm-10">
-	    <div class="touch_1lir">
-		 <p class="fs-5 text-light mb-0">
-Primary: <span class="fw-bold">123 BrightMind, Ariana</span><br>
-Second: <span class="fw-bold">263 BrightMind, Ezzhra</span></p>
-		</div>
-	   </div>
-	  </div><hr>
-	  <div class="touch_1li row">
-	   <div class="col-md-2 col-sm-2">
-	    <div class="touch_1lil">
-		 <span class="d-inline-block text-center text-white fs-2"><i class="fa fa-phone"></i></span>
-		</div>
-	   </div>
-	   <div class="col-md-10 col-sm-10">
-	    <div class="touch_1lir">
-		 <p class="fs-5 text-light mb-0">
-Primary: <span class="fw-bold"> +(216) 22968457</span><br>
-Second: <span class="fw-bold"> +(216) 96333585</span></p>
-		</div>
-	   </div>
-	  </div><hr>
-	  <div class="touch_1li row">
-	   <div class="col-md-2 col-sm-2">
-	    <div class="touch_1lil">
-		 <span class="d-inline-block text-center text-white fs-2"><i class="fa fa-envelope"></i></span>
-		</div>
-	   </div>
-	   <div class="col-md-10 col-sm-10">
-	    <div class="touch_1lir">
-		 <p class="fs-5 text-light mb-0">
-Primary: <span class="fw-bold"> BrightMind@gmail.com</span><br>
-Second: <span class="fw-bold"> BrightMind18@gmail.com</span></p>
-		</div>
-	   </div>
-	  </div>
-	  <h6 class="mb-0 mt-5"><a class="button" href="#">Contactez-nous Us <i class="fa fa-caret-right ms-1 col_blue align-top"></i></a></h6>
-	   </div>
-	  </div>
-	  <div class="col-md-6">
-	   <div class="touch_1r">
-	     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114964.53925916665!2d-80.29949920266738!3d25.782390733064336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b0a20ec8c111%3A0xff96f271ddad4f65!2sMiami%2C+FL%2C+USA!5e0!3m2!1sen!2sin!4v1530774403788" height="580" style="border:0; width:100%;" allowfullscreen=""></iframe>
-	   </div>
-	  </div>
-	 </div>
- </div>
+<section id="touch" class="p-2 bg_dark"> <!-- Réduction du padding -->
+    <div class="container-xl">
+        <div class="touch_1 row">
+            <div class="col-md-6">
+                <div class="touch_1l">
+                    <h5 class="fw-normal space_5 dashline text-white-50">CONTACTEZ-NOUS</h5>
+                    <h2 class="mt-2 font_40 text-white">Prenez Contact</h2> <!-- Taille de police réduite -->
+                    <div class="touch_1li row">
+                        <div class="col-md-2 col-sm-2">
+                            <span class="d-inline-block text-center text-white fs-4"><i class="fa fa-map-marker"></i></span>
+                        </div>
+                        <div class="col-md-10 col-sm-10">
+                            <p class="fs-6 text-light mb-0">
+                                <span class="fw-bold">123 BrightMind, Ariana</span><br>
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="touch_1li row">
+                        <div class="col-md-2 col-sm-2">
+                            <span class="d-inline-block text-center text-white fs-4"><i class="fa fa-phone"></i></span>
+                        </div>
+                        <div class="col-md-10 col-sm-10">
+                            <p class="fs-6 text-light mb-0">
+                               <span class="fw-bold"> +(216) 96333585</span>
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="touch_1li row">
+                        <div class="col-md-2 col-sm-2">
+                            <span class="d-inline-block text-center text-white fs-4"><i class="fa fa-envelope"></i></span>
+                        </div>
+                        <div class="col-md-10 col-sm-10">
+                            <p class="fs-6 text-light mb-0">
+                                 <span class="fw-bold"> BrightMind@gmail.com</span><br>
+                            </p>
+                        </div>
+                    </div>
+                    <h6 class="mb-2 mt-3"><a class="button" href="#">Contactez-nous <i class="fa fa-caret-right ms-1 col_blue align-top"></i></a></h6>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="touch_1r">
+                    <iframe src="https://www.google.com/maps/embed?..." height="300" style="border:0; width:100%;" allowfullscreen=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
     {% block js %}

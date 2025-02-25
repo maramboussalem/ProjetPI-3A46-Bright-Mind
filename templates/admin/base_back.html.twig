@@ -196,27 +196,32 @@
         </li><!-- End Messages Nav -->
 
         <li class="nav-item dropdown pe-3">
-
-         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-  <img src="{{ asset('img/2.jpg') }}" alt="Profile" class="rounded-circle">
-  <span class="d-none d-md-block dropdown-toggle ps-2">
-    {% if app.user  %}
-    {{ app.user.nom }} {{ app.user.prenom }}
-{% else %}
-    Invité
-{% endif %}
-
-  </span>
-</a>
+  <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+    {% if app.user and app.user.imgUrl %}
+      <img src="{{ asset(app.user.imgUrl) }}" alt="Avatar" class="rounded-circle me-2" width="40" height="40">
+    {% else %}
+      <img src="{{ asset('img/default-avatar.jpg') }}" alt="Default Avatar" class="rounded-circle me-2" width="40" height="40">
+    {% endif %}
+    
+    <span class="d-none d-md-block dropdown-toggle ps-2">
+      {% if app.user %}
+        {{ app.user.nom }} {{ app.user.prenom }}
+      {% else %}
+        Invité
+      {% endif %}
+    </span>
+  </a>
 
   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-  <li>
-    <a class="dropdown-item d-flex align-items-center" href="{{ path('app_logout') }}">
-      <i class="bi bi-box-arrow-right"></i>
-      <span>Se déconnecter</span>
-    </a>
-  </li>
-</ul>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" href="{{ path('app_logout') }}">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Se déconnecter</span>
+      </a>
+    </li>
+  </ul>
+</li>
+
 
         </li><!-- End Profile Nav -->
 

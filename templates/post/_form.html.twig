@@ -47,6 +47,13 @@
 
         <div class="form-group">
             {{ form_row(form.file) }}
+            {% if form.file.vars.errors %}
+        <div class="form-error">
+            {% for error in form.file.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
         </div>
 
         <button type="submit">{{ button_label|default('Save') }}</button>

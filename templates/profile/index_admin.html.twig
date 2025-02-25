@@ -12,11 +12,18 @@
    </style>
     
     <div class="container">
-        <div class="profile">
-            <img src="{{ asset('img/2.jpg') }}" alt="Avatar" class="rounded-circle" width="250">
-            <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
-            <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
+
+    <div class="profile d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="{{ asset(utilisateur.imgUrl) }}" alt="Avatar" class="rounded-circle" width="250">
+                <div class="ms-3">
+                    <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h2>
+                    <p><strong>Rôle:</strong> {{ utilisateur.role }}</p>
+                </div>
+            </div>
+            <img src="{{ path('app_utilisateur_generate_user_qr', {'id': utilisateur.id}) }}" alt="QR Code" width="150" height="150" class="ms-4">
         </div>
+
         <div class="details">
             <table class="table table-bordered">
                 <tbody>

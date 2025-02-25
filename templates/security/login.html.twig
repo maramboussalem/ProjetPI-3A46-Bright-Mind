@@ -156,6 +156,7 @@
 {% block body %}
     <div class="container">
         <form method="post" enctype="multipart/form-data" novalidate="novalidate">
+           
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -186,7 +187,7 @@
 
             <button class="btn btn-lg btn-primary" type="submit">Se connecter</button>
            
-            <a href="#" class="link">Mot de passe oublié ?</a>
+            <a href="{{ path('app_reset_password_email') }}" class="link">Mot de passe oublié ?</a>
             <a href="{{ path('app_utilisateur_new') }}" class="link">S'inscrire</a>
         </form>
         

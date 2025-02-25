@@ -40,4 +40,26 @@ class UtilisateurRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function searchByTerm($term)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.nom LIKE :term')
+            ->orWhere('u.prenom LIKE :term')
+            ->orWhere('u.email LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countByRole(string $role): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%"'.$role.'"%')  // Ensure the role matches the structure of the stored roles
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    
+    
 }

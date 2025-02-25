@@ -25,6 +25,7 @@ class Post
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Une image est oubligatoire')]
     private ?string $imageUrl = null;
 
     /**
