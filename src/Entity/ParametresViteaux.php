@@ -6,6 +6,7 @@ use App\Repository\ParametresViteauxRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ORM\Entity(repositoryClass: ParametresViteauxRepository::class)]
 class ParametresViteaux
 {
@@ -67,6 +68,18 @@ class ParametresViteaux
         )]       
     private ?string $ecg = null;
 
+    #[ORM\Column(type: "float", nullable: true)]
+    #[Assert\NotNull(message: "Le glycémie est obligatoire.")]
+    #[Assert\Type("float")]
+    #[Assert\Positive(message: "Le glycémie doit être positive.")]
+    #[Assert\Range(
+        min: 0,
+        max: 5,
+        notInRangeMessage: "Le glycémie doit être entre {{ min }} et {{ max }}."
+    )]
+    private ?float $gad = null;
+
+
     #[ORM\Column]
     #[Assert\NotNull(message: "La pression artérielle systolique est obligatoire.")]
     #[Assert\Type('integer')]
@@ -108,6 +121,10 @@ class ParametresViteaux
     #[ORM\ManyToOne(inversedBy: 'parametresViteauxes')]
     private ?Utilisateur $user = null;
 
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $createdAt = null;
+
+
     public function getId(): ?int { return $this->id; }
     public function getName(): ?string { return $this->name; }
     public function setName(string $name): static { $this->name = $name; return $this; }
@@ -117,6 +134,8 @@ class ParametresViteaux
     public function setFr(int $fr): static { $this->fr = $fr; return $this; }
     public function getEcg(): ?string { return $this->ecg; }
     public function setEcg(string $ecg): static { $this->ecg = $ecg; return $this; }
+    public function getGad(): ?int { return $this->gad; }
+    public function setGad(int $gad): static { $this->gad = $gad; return $this; }
     public function getTas(): ?int { return $this->tas; }
     public function setTas(int $tas): static { $this->tas = $tas; return $this; }
     public function getTad(): ?int { return $this->tad; }
@@ -137,6 +156,16 @@ class ParametresViteaux
     {
         $this->user = $user;
 
+        return $this;
+    }
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 }

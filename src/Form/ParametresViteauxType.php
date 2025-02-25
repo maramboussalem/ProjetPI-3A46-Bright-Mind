@@ -8,6 +8,10 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+
+
 
 class ParametresViteauxType extends AbstractType
 {
@@ -29,6 +33,11 @@ class ParametresViteauxType extends AbstractType
             ->add('ecg', TextType::class, [
                 'label' => 'ECG',
                 'attr' => ['class' => 'form-control'],
+            ])
+            ->add('gad', NumberType::class, [
+                'required' => false,
+                'label' => 'GAD',
+                'attr' => ['step' => 'any']
             ])
             ->add('tas', IntegerType::class, [
                 'label' => 'Pression Artérielle Systolique (TAS)',
@@ -57,7 +66,7 @@ class ParametresViteauxType extends AbstractType
     $resolver->setDefaults([
         'data_class' => ParametresViteaux::class,
         'attr' => ['novalidate' => 'novalidate'],
-        'csrf_protection' => true, // Ensure CSRF protection is enabled
+        'csrf_protection' => true,
     ]);
 }
 

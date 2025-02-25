@@ -4,7 +4,47 @@
 
 {% block body %}
 <style>
-    /* Add padding to the top of the container to avoid overlap with the navbar */
+    .filter-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 15px;
+    }
+
+    .filter-container .form-control {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .form-button, .reset-button {
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .form-button {
+        background-color: #28a745;
+    }
+
+    .form-button:hover {
+        background-color: #218838;
+    }
+
+    .reset-button {
+        background-color: #dc3545;
+    }
+
+    .reset-button:hover {
+        background-color: #c82333;
+    }
+
     .container {
         margin: 3em auto;
         max-width: 900px;
@@ -14,7 +54,6 @@
         background: #f9f9f9;
         border-radius: 8px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        margin-top: 0px;
     }
 
     .form-container {
@@ -51,27 +90,6 @@
         font-size: 16px;
     }
 
-    .form-button {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: 20px;
-        width: 100%;
-        text-align: center;
-    }
-
-    .form-button:hover {
-        background-color: #218838;
-    }
-
-    .form-button:focus {
-        outline: none;
-    }
-
     .alert {
         margin-top: 20px;
         padding: 10px;
@@ -80,16 +98,15 @@
         border-radius: 5px;
     }
 
-    /* Modal Styles */
     #loadingModal {
-        display: none; /* Hidden by default */
+        display: none;
         position: fixed;
         z-index: 1;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.4); /* Black with transparency */
+        background-color: rgba(0, 0, 0, 0.4);
         padding-top: 100px;
     }
 
@@ -103,7 +120,6 @@
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
         .form-group {
             flex-direction: column;
@@ -114,9 +130,8 @@
         }
     }
 
-    /* Custom CSS for error messages */
     .text-danger {
-        color: #e74c3c;  /* Rouge clair pour les erreurs */
+        color: #e74c3c;
         font-size: 14px;
         margin-top: 5px;
     }
@@ -124,16 +139,13 @@
 <div style="height: 120px;"></div>
 <div class="container">
 
-    <!-- Success Flash Message -->
     {% for message in app.flashes('success') %}
         <div class="alert">{{ message }}</div>
     {% endfor %}
 
-    <!-- Form Container -->
     <div class="form-container">
         <h2>Faire un diagnostic préliminaire</h2>
 
-        <!-- Form to add new Paramètre Vital -->
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
             <div class="form-row">
@@ -198,6 +210,18 @@
 
             <div class="form-row">
                 <div class="form-group">
+                    {{ form_label(form.gad) }}
+                    {{ form_widget(form.gad, {'attr': {'class': 'form-control', 'required': 'required', 'min': '0', 'max': '5'}}) }}
+                    {% if form.gad.vars.errors|length > 0 %}
+                        <div class="text-danger">
+                            {{ form_errors(form.gad) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
                     {{ form_label(form.tas) }}
                     {{ form_widget(form.tas, {'attr': {'class': 'form-control', 'required': 'required', 'min': '0', 'max': '300'}}) }}
                     {% if form.tas.vars.errors|length > 0 %}
@@ -249,6 +273,118 @@
         {{ form_end(form) }}
     </div>
 </div>
+
+<div class="form-container">
+    <h2>Historique des diagnostics</h2>
+
+    <div class="filter-container">
+        <input type="text" id="filterName" class="form-control" placeholder="Nom">
+        <input type="number" id="filterAge" class="form-control" placeholder="Âge">
+        <input type="number" id="filterFc" class="form-control" placeholder="FC">
+        <input type="number" id="filterFr" class="form-control" placeholder="FR">
+        <input type="number" id="filterEcg" class="form-control" placeholder="ECG">
+        <input type="double" id="filterGad" class="form-control" placeholder="GAD">
+        <input type="number" id="filterTas" class="form-control" placeholder="TAS">
+        <input type="number" id="filterTad" class="form-control" placeholder="TAD">
+        <input type="number" id="filterSpo2" class="form-control" placeholder="SPO2">
+        <input type="number" id="filterGsc" class="form-control" placeholder="GSC">
+        <input type="date" id="filterDate" class="form-control" name="filterDate">
+        <button class="form-button reset-button" onclick="resetFilters()">Réinitialiser</button>
+
+    </div>
+
+    {% if parametres_viteauxes is not empty %}
+        <table class="table" id="parametresTable">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Âge</th>
+                    <th>FC</th>
+                    <th>FR</th>
+                    <th>ECG</th>
+                    <th>GAD</th>
+                    <th>TAS</th>
+                    <th>TAD</th>
+                    <th>SPO2</th>
+                    <th>GSC</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parametre in parametres_viteauxes %}
+                    <tr>
+                        <td>{{ parametre.name }}</td>
+                        <td>{{ parametre.age }}</td>
+                        <td>{{ parametre.fc }}</td>
+                        <td>{{ parametre.fr }}</td>
+                        <td>{{ parametre.ecg }}</td>
+                        <td>{{ parametre.gad is not null ? parametre.gad|number_format(2, '.', ',') : 'N/A' }}</td>
+                        <td>{{ parametre.tas }}</td>
+                        <td>{{ parametre.tad }}</td>
+                        <td>{{ parametre.spo2 }}</td>
+                        <td>{{ parametre.gsc }}</td>
+                        <td>{{ parametre.createdAt ? parametre.createdAt|date('Y-m-d H:i') : 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune donnée disponible</p>
+    {% endif %}
+</div>
+
+<script>
+    // Filtrage dynamique
+    document.querySelectorAll('.filter-container input').forEach(input => {
+        input.addEventListener('input', filterTable);
+    });
+
+    function filterTable() {
+        var filters = {
+            name: document.getElementById("filterName").value.toLowerCase(),
+            age: document.getElementById("filterAge").value,
+            fc: document.getElementById("filterFc").value,
+            fr: document.getElementById("filterFr").value,
+            ecg: document.getElementById("filterEcg").value,
+            gad: document.getElementById("filterGad").value,
+            tas: document.getElementById("filterTas").value,
+            tad: document.getElementById("filterTad").value,
+            spo2: document.getElementById("filterSpo2").value,
+            gsc: document.getElementById("filterGsc").value,
+            date: document.getElementById("filterDate").value,
+        };
+
+        var rows = document.querySelectorAll("#parametresTable tbody tr");
+
+        rows.forEach(row => {
+            var cells = row.getElementsByTagName("td");
+            var match = true;
+
+            if (filters.name && !cells[0].textContent.toLowerCase().includes(filters.name)) match = false;
+            if (filters.age && cells[1].textContent != filters.age) match = false;
+            if (filters.fc && cells[2].textContent != filters.fc) match = false;
+            if (filters.fr && cells[3].textContent != filters.fr) match = false;
+            if (filters.ecg && cells[4].textContent != filters.ecg) match = false;
+            if (filters.gad && cells[5].textContent != filters.gad) match = false;
+            if (filters.tas && cells[6].textContent != filters.tas) match = false;
+            if (filters.tad && cells[7].textContent != filters.tad) match = false;
+            if (filters.spo2 && cells[8].textContent != filters.spo2) match = false;
+            if (filters.gsc && cells[9].textContent != filters.gsc) match = false;
+            if (filters.date) {
+            var rowDate = cells[10].textContent.trim().split(" ")[0];
+            if (rowDate !== filters.date) match = false;
+            }
+
+            row.style.display = match ? "" : "none";
+        });
+    }
+
+    // Réinitialiser les filtres
+    function resetFilters() {
+        document.querySelectorAll('.filter-container input').forEach(input => input.value = "");
+        filterTable();
+    }
+</script>
 
 <!-- Loading Modal -->
 <div id="loadingModal">

@@ -26,28 +26,27 @@ final class ParametresViteauxController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $parametresViteaux = new ParametresViteaux();
-        $form = $this->createForm(ParametresViteauxType::class, $parametresViteaux);
-        $form->handleRequest($request);
+        
+        // Set the creation date
+        $parametresViteaux->setCreatedAt(new \DateTime());
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                // Si le formulaire est valide, persister les données
+        $form = $this->createForm(ParametresViteauxType::class, $parametresViteaux);
+        
+        // Only handle request if it's a POST request
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager->persist($parametresViteaux);
                 $entityManager->flush();
 
-                // Message de succès
                 $this->addFlash('success', 'Paramètres vitaux ajoutés avec succès.');
 
                 return $this->redirectToRoute('app_parametres_viteaux_index');
-            } else {
-                // Si le formulaire n'est pas valide, afficher les erreurs
-                $this->addFlash('error', 'Veuillez corriger les erreurs dans le formulaire.');
-
-                // Afficher toutes les erreurs de validation du formulaire
-                foreach ($form->getErrors(true) as $error) {
-                    $this->addFlash('error', $error->getMessage());
-                }
             }
+
+            // If the form has errors, Symfony automatically displays them in Twig
+            $this->addFlash('error', 'Veuillez corriger les erreurs dans le formulaire.');
         }
 
         return $this->render('parametres_viteaux/new.html.twig', [
@@ -55,6 +54,7 @@ final class ParametresViteauxController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_parametres_viteaux_show', methods: ['GET'])]
     public function show(ParametresViteaux $parametresViteaux): Response
