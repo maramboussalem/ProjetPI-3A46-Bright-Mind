@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block stylesheets %}
+    <!-- Ajoute ici tes styles CSS supplémentaires -->
+{% endblock %}
+
+{% block body %}
+<br><br><br><br><br><br>
+  <center>  <h1>ServiceMed</h1>  </center> 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom Service</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service_med in service_meds %}
+                <tr>
+                    <td>{{ service_med.nomService }}</td>
+                    <td>{{ service_med.descriptionMed }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        
+        
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Ajoute ici tes scripts JavaScript supplémentaires -->
+{% endblock %}

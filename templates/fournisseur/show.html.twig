@@ -1,0 +1,32 @@
+{% extends 'admin/base_back.html.twig' %}
+
+
+{% block title %}Fournisseur{% endblock %}
+
+{% block body %}
+ 
+    <div class="card">
+    
+        <div class="card-header">
+        <h1  class="text-center" >{{ fournisseur.NomFournisseur }}</h1>
+        </div>
+        <div class="card-body">
+        <ul>
+            <li>{{ fournisseur.Adresse }}</li>
+            <li>{{ fournisseur.Telephone }}</li>
+            <li>{{ fournisseur.Email }}</li>
+        </ul>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-warning" href="{{ path('app_fournisseur_edit', {'id': fournisseur.id}) }}">Modifier</a>
+
+            
+        </div>
+    </div>
+ 
+               
+      
+ 
+
+    {{ include('fournisseur/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Medicament Index{% endblock %}
+
+{% block body %}
+ 
+<div class="container">
+    <div class="card shadow-lg border-0 h-100 hover-card">
+
+        <div class="row">
+
+            <div class="col-6">
+                <img src="{{ asset('Medicament/' ~ medicament.image) }}" class="card-img-top img-fluid"
+                    style="max-height: 300px;" alt="{{ medicament.NomMedicament }}">
+            </div>
+            <div class="col-6">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ medicament.NomMedicament }}</h5>
+                    <p class="card-text text-muted">{{ medicament.Description }}</p>
+                    <ul class="">
+                        <li class="list-group-item">Quantité: <strong>{{ medicament.Quantite }}</strong></li>
+                        <li class="list-group-item">Prix: <strong>{{ medicament.Prix }} TND</strong></li>
+                        <li class="list-group-item">Type: <strong>{{ medicament.Type }}</strong></li>
+                        <li class="list-group-item">Expiration: <strong>{{ medicament.expireat|date('d/m/Y') }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              
+                <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-outline-warning mx-5">Modifier</a>
+
+                {{ include('medicament/_delete_form.html.twig') }}
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+ 
+
+
+<style>
+    .hover-card:hover {
+        transform: scale(1.05);
+        transition: 0.3s;
+    }
+
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

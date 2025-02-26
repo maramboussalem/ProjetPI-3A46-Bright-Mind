@@ -1,0 +1,16 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Respond to Reclamation{% endblock %}
+
+{% block body %}
+    <h1>Respond to Reclamation #{{ reclamation.id }}</h1>
+
+    <form method="post">
+        {{ form_start(form) }}
+            {{ form_row(form.reponse) }}
+            <button type="submit" class="btn btn-success">Submit Response</button>
+        {{ form_end(form) }}
+    </form>
+
+    <a href="{{ path('app_reclamation_index') }}">Back to index</a>
+{% endblock %}

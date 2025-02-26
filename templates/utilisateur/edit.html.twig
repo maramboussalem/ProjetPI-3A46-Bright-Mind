@@ -1,0 +1,88 @@
+ {% extends 'base.html.twig' %}
+
+{% block title %}Edit Utilisateur{% endblock %}
+
+{% block body %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 70px auto 0;
+        padding: 90px 40px 40px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 0px;
+    }
+
+   
+</style>
+
+<div style="height: 120px;"></div> {# Espacement entre la navbar et le formulaire #}
+<div class="container">
+    <h1>Veuillez mettre à jour vos coordonnées</h1>
+    {{ include('utilisateur/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {{ include('utilisateur/_delete_form.html.twig') }}
+</div>
+ <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const roleSelect = document.getElementById("utilisateur_role");
+            const patientFields = document.getElementById("patientFields");
+            const medecinFields = document.getElementById("medecinFields");
+
+            function toggleFields() {
+                const role = roleSelect.value;
+
+                if (role === "patient") {
+                    patientFields.classList.add("fade-in");
+                    medecinFields.style.display = "none";
+                    patientFields.style.display = "block";
+                    disableAndClearFields(medecinFields);
+                    enableFields(patientFields);
+                } else if (role === "medecin") {
+                    medecinFields.classList.add("fade-in");
+                    patientFields.style.display = "none";
+                    medecinFields.style.display = "block";
+                    disableAndClearFields(patientFields);
+                    enableFields(medecinFields);
+                } else {
+                    patientFields.style.display = "none";
+                    medecinFields.style.display = "none";
+                    disableAndClearFields(patientFields);
+                    disableAndClearFields(medecinFields);
+                }
+            }
+
+            function disableAndClearFields(container) {
+                container.querySelectorAll("input, select, textarea").forEach(input => {
+                    input.disabled = true;
+                    input.value = "";
+                });
+            }
+
+            function enableFields(container) {
+                container.querySelectorAll("input, select, textarea").forEach(input => {
+                    input.disabled = false;
+                });
+            }
+
+            roleSelect.addEventListener("change", toggleFields);
+            toggleFields(); // Exécuter au chargement de la page
+        });
+    </script>
+    <a href="{{ path('app_profile') }}" class="btn btn-secondary w-100">Annuler</a>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+<div class="mb-3">
+    <label class="form-label">Patient Name</label>
+    <input type="text" class="form-control" value="{{ consultation.patientName }}" disabled>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.sujet, 'Sujet', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.sujet, {
+        'attr': {
+            'class': 'form-control ' ~ (form.sujet.vars.errors|length > 0 ? 'is-invalid' : ''),
+            'required': 'required'
+        }
+    }) }}
+    {% for error in form.sujet.vars.errors %}
+        <div class="invalid-feedback">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.description, {
+        'attr': {
+            'class': 'form-control ' ~ (form.description.vars.errors|length > 0 ? 'is-invalid' : ''),
+            'rows': 4,
+            'required': 'required'
+        }
+    }) }}
+    {% for error in form.description.vars.errors %}
+        <div class="invalid-feedback">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.consultation, 'Date of Consultation', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.consultation, {
+        'attr': {
+            'class': 'form-control ' ~ (form.consultation.vars.errors|length > 0 ? 'is-invalid' : ''),
+            'type': 'date',
+            'required': 'required'
+        }
+    }) }}
+    {% for error in form.consultation.vars.errors %}
+        <div class="invalid-feedback">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<button type="submit" class="btn btn-primary w-100">{{ button_label|default('Submit') }}</button>
+
+{{ form_end(form) }}

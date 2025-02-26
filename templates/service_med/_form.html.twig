@@ -1,0 +1,21 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block body %}
+    <h1>Ajouter un service médical</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nomService) }}
+            {{ form_widget(form.nomService, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.nomService) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.descriptionMed) }}
+            {{ form_widget(form.descriptionMed, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.descriptionMed) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ajouter le service</button>
+    {{ form_end(form) }}
+{% endblock %}

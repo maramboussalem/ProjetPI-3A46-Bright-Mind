@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du médicament{% endblock %}
+
+{% block body %}
+    <h1>Détails du médicament</h1>
+
+    <p><strong>Nom :</strong> {{ medicament.NomMedicament }}</p>
+    <p><strong>Description :</strong> {{ medicament.Description }}</p>
+    <p><strong>Quantité :</strong> {{ medicament.Quantite }}</p>
+    <p><strong>Prix :</strong> {{ medicament.Prix }}</p>
+    <p><strong>Type :</strong> {{ medicament.Type }}</p>
+
+    <a href="{{ path('medicament_index') }}">Retour à la liste</a>
+{% endblock %}

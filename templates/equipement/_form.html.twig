@@ -1,0 +1,45 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block body %}
+    <h1>Ajouter un équipement</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nomEquipement) }}
+            {{ form_widget(form.nomEquipement, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.nomEquipement) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.quantiteStock) }}
+            {{ form_widget(form.quantiteStock, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.quantiteStock) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.prixUnitaire) }}
+            {{ form_widget(form.prixUnitaire, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.prixUnitaire) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.dateAchat) }}
+            {{ form_widget(form.dateAchat, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.dateAchat) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.etatEquipement) }}
+            {{ form_widget(form.etatEquipement, { 'attr': {'class': 'form-control custom-select'} }) }}
+            {{ form_errors(form.etatEquipement) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ajouter l'équipement</button>
+    {{ form_end(form) }}
+{% endblock %}

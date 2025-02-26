@@ -1,0 +1,79 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Utilisateur index{% endblock %}
+
+{% block body %}
+    <h2>Liste des Patients</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Sexe</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Antécédents Médicaux</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for utilisateur in utilisateurs %}
+                {% if utilisateur.role == 'patient' %}
+                    <tr>
+                        <td>{{ utilisateur.nom }}</td>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td>{{ utilisateur.sexe }}</td>
+                        <td>{{ utilisateur.adresse }}</td>
+                        <td>{{ utilisateur.telephone }}</td>
+                        <td>{{ utilisateur.antecedentsMedicaux }}</td>
+                        <td>
+                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"class="btn btn-warning">show</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Liste des Médecins</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Sexe</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Spécialité</th>
+                <th>Hôpital</th>
+                <th>Disponibilité</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for utilisateur in utilisateurs %}
+                {% if utilisateur.role == 'medecin' %}
+                    <tr>
+                        <td>{{ utilisateur.nom }}</td>
+                        <td>{{ utilisateur.prenom }}</td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td>{{ utilisateur.sexe }}</td>
+                        <td>{{ utilisateur.adresse }}</td>
+                        <td>{{ utilisateur.telephone }}</td>
+                        <td>{{ utilisateur.specialite }}</td>
+                        <td>{{ utilisateur.hopital }}</td>
+                        <td>{{ utilisateur.disponibilite }}</td>
+                        <td>
+                          <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"class="btn btn-warning">show</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Create New Post{% endblock %}
+{% block css %}
+ <link rel="stylesheet" href="{{ asset('back/compagne/adminCompagne.css') }}">
+{% endblock %}
+
+{% block body %}
+    <style>
+     .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+    </style>
+    
+
+    <form method="post" action="{{ path('app_post_new') }}" enctype="multipart/form-data" novalidate="novalidate">
+        {{ form_start(form,{ 'attr': {'novalidate': 'novalidate' }}) }}
+
+        <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title, { 'attr': {'class': 'custom-file-input'} }) }}
+            {% if form.title.vars.errors %}
+        <div class="form-error">
+            {% for error in form.title.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_widget(form.content, { 'attr': {'rows': '5','class': 'custom-file-input'} }) }}
+            {% if form.content.vars.errors %}
+        <div class="form-error">
+            {% for error in form.content.vars.errors %}
+                <p style="color: red;">{{ error.message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.file) }}
+        </div>
+
+        <button type="submit">{{ button_label|default('Save') }}</button>
+
+        {{ form_end(form) }}
+    </form>
+{% endblock %}
+

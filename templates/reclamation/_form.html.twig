@@ -1,0 +1,104 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+{% for field in form %}
+    {% if field.vars.name == 'utilisateurId' %}
+        <div class="mb-3">
+            {{ form_label(field, 'Adresse mail ', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(field, {
+                'attr': {
+                    'class': 'form-control ' ~ (field.vars.errors|length > 0 ? 'is-invalid' : ''),
+                    'required': 'required', 
+                    
+                }
+            }) }}
+            {% for error in field.vars.errors %}
+                <div class="invalid-feedback">{{ error.message }}</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="mb-3">
+            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+            {% for error in field.vars.errors %}
+                <div class="text-danger mt-1">
+                    <p>{{ error.message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}
+
+<button type="submit" class="btn btn-primary">Submit</button>
+
+{{ form_end(form) }}
+
+
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+button.btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #45a049;
+}
+
+/* Style for Symfony form errors */
+.form-error {
+    color: red;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+/* Custom styling for Symfony form fields */
+.form-group {
+    margin-bottom: 20px;
+}
+</style>
