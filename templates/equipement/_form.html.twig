@@ -9,7 +9,7 @@
             {{ form_widget(form.nomEquipement, { 'attr': {'class': 'form-control'} }) }}
             {{ form_errors(form.nomEquipement) }}
         </div>
-        
+
         <div class="form-group">
             {{ form_label(form.description) }}
             {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
@@ -36,10 +36,16 @@
 
         <div class="form-group">
             {{ form_label(form.etatEquipement) }}
-            {{ form_widget(form.etatEquipement, { 'attr': {'class': 'form-control custom-select'} }) }}
+            {{ form_widget(form.etatEquipement, { 'attr': {'class': 'form-control'} }) }}
             {{ form_errors(form.etatEquipement) }}
         </div>
 
-        <button type="submit" class="btn btn-primary">Ajouter l'équipement</button>
+        <div class="form-group">
+            {{ form_label(form.img) }}
+            {{ form_widget(form.img, { 'attr': {'class': 'form-control-file'} }) }}
+            {{ form_errors(form.img) }}
+        </div>
+
+        <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
     {{ form_end(form) }}
 {% endblock %}

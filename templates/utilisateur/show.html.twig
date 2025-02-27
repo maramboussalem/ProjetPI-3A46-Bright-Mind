@@ -51,7 +51,7 @@
                     <tr><th>Sexe</th><td>{{ utilisateur.sexe }}</td></tr>
                     <tr><th>Adresse</th><td>{{ utilisateur.adresse }}</td></tr>
                     <tr><th>Téléphone</th><td>{{ utilisateur.telephone }}</td></tr>
-                    
+
                     {% if utilisateur.role == 'patient' %}
                         <tr><th>Antécédents Médicaux</th><td>{{ utilisateur.antecedentsMedicaux }}</td></tr>
                     {% endif %}
@@ -59,7 +59,7 @@
                     {% if utilisateur.role == 'medecin' %}
                         <tr><th>Spécialité</th><td>{{ utilisateur.specialite }}</td></tr>
                         <tr><th>Hôpital</th><td>{{ utilisateur.hopital }}</td></tr>
-                        <tr><th>Disponibilité</th><td>{{ utilisateur.disponibilite }}</td></tr>
+
                     {% endif %}
                 
                 </tbody>

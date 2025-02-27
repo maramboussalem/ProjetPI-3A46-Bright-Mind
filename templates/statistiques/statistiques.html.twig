@@ -1,0 +1,115 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Statistiques des Équipements{% endblock %}
+
+{% block body %}
+<style>
+    /* Style général de la page */
+    .container {
+        margin-top: 40px;
+        text-align: center;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    /* Style pour le graphique */
+    #equipementChart {
+        width: 100%;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto;
+    }
+
+    /* Style de la légende du graphique */
+    .chart-legend {
+        margin-top: 20px;
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    /* Ajout d'un petit effet d'ombre autour du graphique */
+    .chart-container {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    /* Adaptation responsive */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+        
+        #equipementChart {
+            height: 300px;
+        }
+    }
+</style>
+
+<div class="container">
+    <h1>Statistiques des équipements</h1>
+    <div class="chart-container">
+        <canvas id="equipementChart"></canvas>
+    </div>
+    <div class="chart-legend">
+        <p><span style="color: green;">■</span> Neuf</p>
+        <p><span style="color: blue;">■</span> Réparé</p>
+        <p><span style="color: red;">■</span> Abimé</p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    fetch('/api/equipements/statistiques') // Utilisation de la route API
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('equipementChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Neuf', 'Réparé', 'Abimé'],
+                    datasets: [{
+                        label: 'Équipements',
+                        data: [data.Neuf, data.Réparé, data.Abimé],
+                        backgroundColor: ['green', 'blue', 'red'],
+                        borderColor: ['darkgreen', 'darkblue', 'darkred'],
+                        borderWidth: 1,
+                        hoverBackgroundColor: ['#A4D8A1', '#A0C7E6', '#F5A0A0'],
+                        hoverBorderColor: ['darkgreen', 'darkblue', 'darkred'],
+                        hoverBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.raw + ' équipements';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        });
+</script>
+{% endblock %}

@@ -13,6 +13,7 @@
         "doctrine/orm": "^3.3",
         "dompdf/dompdf": "^3.1",
         "endroid/qr-code": "^5.1",
+        "endroid/qr-code-bundle": "^5.0",
         "intervention/image": "^3.11",
         "knplabs/knp-paginator-bundle": "^6.6",
         "phpdocumentor/reflection-docblock": "^5.6",

@@ -33,6 +33,5 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_PATIEN }
-        - { path: ^/profile, roles: ROLE_MEDECIN }
-
+        - { path: ^/medcin, roles: ROLE_MEDECIN }
 

@@ -19,6 +19,16 @@ final class ProfileController extends AbstractController
         ]);
     }
 
+    #[Route('/profilemedcin', name: 'app_profileMedcin')]
+    public function index_medcin(): Response
+    {
+        $utilisateur = $this->getUser(); 
+        return $this->render('profile/index_medcin.html.twig', [
+            'utilisateur' => $utilisateur,
+            'prenom' => $utilisateur->getPrenom(),
+            'nom' => $utilisateur->getNom(),
+        ]);
+    }
 
     #[Route('/profileAdmin', name: 'app_profile_admin')]
     public function index_admin(): Response

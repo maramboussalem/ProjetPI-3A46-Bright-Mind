@@ -7,10 +7,53 @@
     <div class="form-container">
         <h1>Veuillez saisir vos informations pour créer un compte</h1>
 
+     
             {{ include('utilisateur/_form.html.twig') }}
     </div>
 
-    <script>
+<style>
+    #password-strength-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #ddd;
+        border-radius: 4px;
+        margin-top: 5px;
+        transition: width 0.3s ease-in-out;
+    }
+    .weak { width: 33%; background-color: red; }
+    .medium { width: 66%; background-color: orange; }
+    .strong { width: 100%; background-color: green; }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let passwordInput = document.getElementById("{{ form.motdepasse.vars.id }}");
+    
+    if (passwordInput) {
+        passwordInput.addEventListener("input", checkPasswordStrength);
+    }
+
+    function checkPasswordStrength() {
+        let password = passwordInput.value;
+        let strengthText = document.getElementById("password-strength-text");
+        let strengthBar = document.getElementById("password-strength-bar");
+
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[a-z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[\W]/.test(password)) strength++;
+
+        let strengthLevels = ["Très faible", "Faible", "Moyen", "Fort", "Très fort"];
+        let colors = ["#ff0000", "#ff6600", "#ffcc00", "#99cc33", "#009900"];
+
+        strengthText.textContent = strengthLevels[strength];
+        strengthText.style.color = colors[strength];
+        strengthBar.style.backgroundColor = colors[strength];
+        strengthBar.style.width = (strength * 20) + "%";
+    }
+})
         document.addEventListener("DOMContentLoaded", function () {
             const roleSelect = document.getElementById("utilisateur_role");
             const patientFields = document.getElementById("patientFields");

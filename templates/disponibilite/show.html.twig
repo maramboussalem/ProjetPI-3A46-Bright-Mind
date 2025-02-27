@@ -1,0 +1,112 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Disponibilite{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Titre principal */
+h1 {
+    text-align: center;
+    color: rgb(21, 14, 224);
+    margin-top: 30px;
+    font-size: 32px;
+}
+
+/* Table */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Lien de retour à la liste */
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(21, 14, 224);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: rgb(21, 14, 224);
+}
+
+/* Formulaire de suppression */
+.delete-form {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.delete-form button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-form button:hover {
+    background-color: #c82333;
+}
+</style>
+
+<br>
+    <h1>Disponibilite</h1>
+<br>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ disponibilite.id }}</td>
+            </tr>
+            <tr>
+                <th>DateHeure</th>
+                <td>{{ disponibilite.dateHeure ? disponibilite.dateHeure|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EstReserve</th>
+                <td>{{ disponibilite.estReserve ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_disponibilite_index') }}">back to list</a>
+
+   
+
+    {{ include('disponibilite/_delete_form.html.twig') }}
+{% endblock %}
