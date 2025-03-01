@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Subscriber;
+
+
+
 
 #[Route('/post')]
 final class PostController extends AbstractController
@@ -48,14 +52,19 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
             // Optionally, you can set the filename on your Post entity, for example:
             $post->setImageUrl('front/compagne/img/' . $fileName); // Assuming you have a `setFileName` method in your `Post` entity
         }
-
+        $post->setPublishedAt(new \DateTime());
         // Persist the post entity and flush to the database
         $entityManager->persist($post);
         $entityManager->flush();
+        $post->setPublishedAt(new \DateTime());
+        
+        
+              
+    
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
-
+    
     return $this->render('post/new.html.twig', [
         'post' => $post,
         'form' => $form->createView(),

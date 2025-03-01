@@ -62,11 +62,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(min: 5, minMessage: "Le nom de l'hôpital doit comporter au moins {{ limit }} caractères.")]
     private ?string $hopital = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Length(min: 5, minMessage: "La disponibilité doit comporter au moins {{ limit }} caractères.")]
-    private ?string $disponibilite = null;
-
+    
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
     #[Assert\Length(min: 8, max: 20, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.", maxMessage: "Le mot de passe ne peut pas dépasser {{ limit }} caractères.")]
@@ -245,18 +241,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setHopital(?string $hopital): static
     {
         $this->hopital = $hopital;
-
-        return $this;
-    }
-
-    public function getDisponibilite(): ?string
-    {
-        return $this->disponibilite;
-    }
-
-    public function setDisponibilite(?string $disponibilite): static
-    {
-        $this->disponibilite = $disponibilite;
 
         return $this;
     }

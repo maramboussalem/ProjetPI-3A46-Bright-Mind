@@ -1,9 +1,19 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block body %}
-    <h1>Ajouter un service médical</h1>
 
-    {{ form_start(form) }}
+{% block title %}Ajouter un service médical{% endblock %}
+
+{% block body %}
+    <center><h1>Ajouter un service médical</h1></center>
+    <br>
+
+    {{ form_start(form, { 'enctype': 'multipart/form-data' }) }}
+        <div class="form-group">
+            {{ form_label(form.imageM) }}
+            {{ form_widget(form.imageM, { 'attr': {'class': 'form-control-file'} }) }}
+            {{ form_errors(form.imageM) }}
+        </div>
+
         <div class="form-group">
             {{ form_label(form.nomService) }}
             {{ form_widget(form.nomService, { 'attr': {'class': 'form-control'} }) }}
@@ -16,6 +26,15 @@
             {{ form_errors(form.descriptionMed) }}
         </div>
 
+        <div class="form-group">
+            <h4>Disponibilités</h4>
+            {{ form_widget(form.disponibilites) }}
+            {{ form_errors(form.disponibilites) }}
+        </div>
+
+ 
+
         <button type="submit" class="btn btn-primary">Ajouter le service</button>
     {{ form_end(form) }}
 {% endblock %}
+

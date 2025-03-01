@@ -4,9 +4,94 @@
 {% block title %}New ServiceMed{% endblock %}
 
 {% block body %}
-    <h1>Create new ServiceMed</h1>
+<style>
+    /* Style pour la page de création de Service Médical */
+h1 {
+    text-align: center;
+    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
 
-    {{ include('service_med/_form.html.twig') }}
+/* Style du formulaire */
+form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+/* Label du formulaire */
+label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+    color: #333;
+}
+
+/* Champs du formulaire */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Placeholder */
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+}
+
+/* Styles des boutons */
+button, .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:rgb(21, 14, 224);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+button:hover, .btn:hover {
+    background-color:rgb(21, 14, 224);
+}
+
+/* Lien pour revenir à la liste */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Marges et espacements pour le contenu */
+body {
+    background-color: #f4f6f9;
+    font-family: Arial, sans-serif;
+    padding: 40px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+</style> 
+    
+
+  {{ include('service_med/_form.html.twig') }}
 
     <a href="{{ path('app_service_med_index') }}">back to list</a>
 {% endblock %}

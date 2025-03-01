@@ -74,7 +74,6 @@
                 <td>{{ parametres_viteaux.gsc }}</td>
                 <td>
                     <a href="{{ path('app_parametres_viteaux_show', {'id': parametres_viteaux.id}) }}" class="btn btn-info">Afficher</a>
-                    <a href="{{ path('app_parametres_viteaux_edit', {'id': parametres_viteaux.id}) }}" class="btn btn-primary">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -84,10 +83,6 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <div class="mt-3">
-        <a href="{{ path('app_parametres_viteaux_new') }}" class="btn btn-success">Créer un nouveau</a>
-    </div>
 
     <script>
         function applyFilter() {

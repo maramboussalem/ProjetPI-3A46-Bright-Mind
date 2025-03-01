@@ -1,0 +1,176 @@
+{% extends 'medcin/base_backMedcin.html.twig' %}
+
+{% block title %}Service Médical{% endblock %}
+
+{% block body %}
+<style>
+    /* Styles globaux */
+    .container {
+        width: 100%;
+        margin-top: 30px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Styles pour le calendrier */
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+    }
+
+    .calendar .day-header {
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        color: #444;
+        background-color: #f1f1f1;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .calendar .day {
+        position: relative;
+        padding: 15px;
+        text-align: center;
+        font-size: 14px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .calendar .today {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        transform: scale(1.05);
+    }
+
+    .calendar .reserved {
+        background-color: #dc3545; /* Rouge */
+        color: white;
+    }
+
+    .calendar .not-reserved {
+        background-color: #28a745; /* Vert */
+        color: white;
+    }
+
+    .calendar .unavailable {
+        background-color: #b0b0b0; /* Gris */
+        color: white;
+    }
+
+    .calendar .day:hover {
+        background-color: #e3e3e3;
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+
+    .calendar .day p {
+        margin: 0;
+    }
+
+    .calendar .day .date {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .calendar .day .time {
+        font-size: 12px;
+        margin-top: 5px;
+        color: #666;
+    }
+
+    .calendar .day .status {
+        font-size: 12px;
+        margin-top: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+</style>
+
+<div class="container">
+    <center><h1>Service Médical</h1></center>
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Image</th>
+                <th>Nom Service</th>
+                <th>Consultation</th>
+             <th>Disponibilités</th> 
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for service_med in service_meds %}
+                <tr>
+                    <td>{{ service_med.id }}</td>
+                    <td>
+                        {% if service_med.imageM %}
+                            <img src="{{ asset('front/service_med/img/' ~ service_med.imageM) }}" alt="Image du service" style="max-width: 100px;">
+                        {% else %}
+                            <p>Aucune image disponible.</p>
+                        {% endif %}
+                    </td>
+                    <td>{{ service_med.nomService }}</td>
+                    <td>{{ service_med.descriptionMed }}</td>
+                    <td>
+                        {% if service_med.disponibilites is not empty %}
+                            <div class="calendar">
+                                {% set jours = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+                                {% set jours_fr = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}
+                                
+                                <!-- En-têtes des jours -->
+                                {% for jour in jours_fr %}
+                                    <div class="day-header">{{ jour }}</div>
+                                {% endfor %}
+
+                                {% set today = "now"|date("Y-m-d") %}
+
+                                <!-- Affichage des jours -->
+                                {% for i in 0..6 %}
+                                    {% set dispo = service_med.disponibilites|filter(d => d.dateHeure|date('D') == jours[i])|first %}
+                                    <div class="day {% if dispo and dispo.dateHeure|date('Y-m-d') == today %}today{% endif %} 
+                                                {% if dispo and dispo.estReserve %}reserved{% elseif dispo %}not-reserved{% else %}unavailable{% endif %}">
+                                        {% if dispo %}
+                                            <p class="date">{{ dispo.dateHeure|date('d/m/Y') }}</p>
+                                            <p class="time">{{ dispo.dateHeure|date('H:i') }}</p>
+                                            <p class="status">
+                                                {% if dispo.estReserve %}
+                                                    Réservé
+                                                {% else %}
+                                                    Disponible
+                                                {% endif %}
+                                            </p>
+                                        {% else %}
+                                            <p class="date">-</p>
+                                            <p class="time">-</p>
+                                            <p class="status">Indisponible</p>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>Aucune disponibilité.</p>
+                        {% endif %}
+
+
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucun service médical trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  
+{% endblock %}

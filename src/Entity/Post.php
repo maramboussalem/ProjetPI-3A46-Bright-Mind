@@ -24,8 +24,10 @@ class Post
     #[Assert\NotBlank(message: 'le contenu est oubligatoire')]
     private ?string $content = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $publishedAt = null;
+    
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Une image est oubligatoire')]
     private ?string $imageUrl = null;
 
     /**
@@ -107,6 +109,16 @@ class Post
             }
         }
 
+        return $this;
+    }
+    public function getPublishedAt(): ?\DateTimeInterface
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(?\DateTimeInterface $publishedAt): self
+    {
+        $this->publishedAt = $publishedAt;
         return $this;
     }
 }

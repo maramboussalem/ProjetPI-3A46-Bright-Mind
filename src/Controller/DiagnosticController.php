@@ -25,6 +25,15 @@ final class DiagnosticController extends AbstractController
         ]);
     }
 
+    #[Route('/DE', name: 'app_diagnosticM_index', methods: ['GET'])]
+    public function indexM(DiagnosticRepository $diagnosticRepository): Response
+    {
+        return $this->render('diagnostic/indexM.html.twig', [
+            'diagnostics' => $diagnosticRepository->findAll(),
+        ]);
+    }
+    
+
     #[Route('/new', name: 'app_diagnostic_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {

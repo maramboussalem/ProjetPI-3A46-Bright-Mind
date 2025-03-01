@@ -9,7 +9,6 @@
             <img src="{{ asset(post.imageUrl) }}" class="card-img-top" style="object-fit: cover;" alt="{{ post.title }}">
             <div class="card-body">
                 <h1 class="card-title text-primary">{{ post.title }}</h1>
-                <p class="text-muted">{{ post.comments|length }} Comments</p>
                 <p class="card-text">{{ post.content }}</p>
                 <a href="{{ path('compagne_public') }}" class="btn btn-secondary mt-3">Back to Posts</a>
             </div>
@@ -17,46 +16,9 @@
 
         <!-- Comment Section -->
         <div class="mt-5">
-            <h3>Comments ({{ post.comments|length }})</h3>
-            <div class="list-group mt-3">
+            <div id="comments-list" class="list-group mt-3">
                 {% for comment in post.comments %}
-    <div class="list-group-item" id="comment-{{ comment.id }}">
-        <p><strong>{{ comment.user.prenom }} {{ comment.user.nom }}</strong></p>
-
-        <div id="comment-content-{{ comment.id }}">
-            <p>{{ comment.content }}</p>
-        </div>
-
-        {% if comment.user == app.user %}
-            <div class="d-flex gap-2">
-                <!-- Edit Button Form -->
-                <form action="#" method="get" class="d-inline">
-                    <button type="button" class="btn btn-sm btn-primary d-flex align-items-center edit-btn" data-id="{{ comment.id }}">
-                        Edit <i class="ms-2 fas fa-edit"></i>
-                    </button>
-                </form>
-
-                <!-- Delete Form -->
-                <form action="{{ path('delete_comment', {'id': comment.id}) }}" method="post" class="d-inline">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete_comment' ~ comment.id) }}">
-                    <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center">
-                        Delete <i class="ms-2 fas fa-trash-alt"></i>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Hidden Edit Form -->
-            <div id="edit-form-{{ comment.id }}" class="d-none mt-2">
-                <form action="{{ path('edit_comment', {'id': comment.id}) }}" method="post">
-                    {{ form_start(editForms[comment.id]) }}
-                    {{ form_row(editForms[comment.id].content) }}
-                    <button type="submit" class="btn btn-sm btn-success">Save</button>
-                    <button type="button" class="btn btn-sm btn-secondary cancel-btn" data-id="{{ comment.id }}">Cancel</button>
-                    {{ form_end(editForms[comment.id]) }}
-                </form>
-            </div>
-        {% endif %}
-    </div>
+    {{ include('home/_comment.html.twig', {'comment': comment}) }}
 {% else %}
     <p>No comments yet. Be the first to comment!</p>
 {% endfor %}
@@ -66,9 +28,12 @@
 
         <!-- Add Comment Form -->
         {% if app.user %}
-            {{ form_start(commentForm) }}
+            {% form_theme commentForm '@FOSCKEditor/Form/ckeditor_widget.html.twig' %}
+            {{ form_start(commentForm, {'attr': {'id': 'comment-form'}}) }}
                 <div class="form-group mt-3">
-                    {{ form_widget(commentForm.content, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+    
+                {{ form_row(commentForm.content) }}
+                {{ form_row(commentForm._token) }}
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Post Comment</button>
             {{ form_end(commentForm) }}
@@ -76,15 +41,61 @@
             <a href="{{ path('app_login') }}">Se connecter</a>
         {% endif %}
     </div>
-
+        
 
 {% block javascripts %}
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Handle comment submission via AJAX
+    const commentForm = document.querySelector("#comment-form"); // Use the form's ID
+    if (commentForm) {
+        commentForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            let form = this;
+            let formData = new FormData(form); // Automatically includes CSRF token
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest" // Indicate this is an AJAX request
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                console.log("Response");
+                return response.json(); // Parse the JSON response
+            })
+            .then(data => {
+                if (data.status) { // Check for success (adjust based on your server response)
+                    // Append the new comment to the comments list
+                    document.querySelector("#comments-list").insertAdjacentHTML("beforeend", data.commentHtml);
+                    form.reset(); // Reset the form
+                } else {
+                    // Display error message to the user
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error submitting comment:", error);
+                alert("An error occurred while submitting the comment."); 
+            });
+        });
+    }
+});
+
+
+
+
+
+
+
+
 document.querySelectorAll('.edit-btn').forEach(button => {
     button.addEventListener('click', function (event) {
         event.preventDefault(); // Prevent form submission
         let commentId = this.getAttribute('data-id');
-        console.log("Edit button clicked for comment ID:", commentId); // Debugging
 
         let commentContent = document.getElementById(`comment-content-${commentId}`);
         let editForm = document.getElementById(`edit-form-${commentId}`);
@@ -101,7 +112,6 @@ document.querySelectorAll('.edit-btn').forEach(button => {
 document.querySelectorAll('.cancel-btn').forEach(button => {
     button.addEventListener('click', function () {
         let commentId = this.getAttribute('data-id');
-        console.log("Cancel button clicked for comment ID:", commentId); // Debugging
 
         let commentContent = document.getElementById(`comment-content-${commentId}`);
         let editForm = document.getElementById(`edit-form-${commentId}`);

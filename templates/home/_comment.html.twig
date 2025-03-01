@@ -1,0 +1,42 @@
+{# templates/home/_comment.html.twig #}
+
+<div class="list-group-item" id="comment-{{ comment.id }}">
+    <p><strong>{{ comment.user.prenom }} {{ comment.user.nom }}</strong></p>
+    <p><strong>Date:</strong> {{ comment.commentDate|date('Y-m-d H:i') }}</p>
+
+    <div id="comment-content-{{ comment.id }}">
+        <p>{{ comment.content }}</p>
+    </div>
+
+    {% if comment.user == app.user %}
+        <div class="d-flex gap-2">
+            <!-- Edit Button Form -->
+            <form action="#" method="get" class="d-inline">
+                <button type="button" class="btn btn-sm btn-primary d-flex align-items-center edit-btn" data-id="{{ comment.id }}">
+                    Edit <i class="ms-2 fas fa-edit"></i>
+                </button>
+            </form>
+
+            <!-- Delete Form -->
+            <form action="{{ path('delete_comment', {'id': comment.id}) }}" method="post" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_comment' ~ comment.id) }}">
+                <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center">
+                    Delete <i class="ms-2 fas fa-trash-alt"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Hidden Edit Form -->
+        {% if editForms[comment.id] is defined %}
+            <div id="edit-form-{{ comment.id }}" class="d-none mt-2">
+                <form action="{{ path('edit_comment', {'id': comment.id}) }}" method="post">
+                    {{ form_start(editForms[comment.id]) }}
+                    {{ form_row(editForms[comment.id].content) }}
+                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                    <button type="button" class="btn btn-sm btn-secondary cancel-btn" data-id="{{ comment.id }}">Cancel</button>
+                    {{ form_end(editForms[comment.id]) }}
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

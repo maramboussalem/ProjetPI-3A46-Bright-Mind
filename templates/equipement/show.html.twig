@@ -35,6 +35,17 @@
                 <th>EtatEquipement</th>
                 <td>{{ equipement.etatEquipement }}</td>
             </tr>
+            
+            <tr>
+                <th>Image</th>
+                <td>
+                    {% if equipement.img %}
+                        <img src="{{ asset('front/equipement/img/' ~ equipement.img) }}" alt="Image de l'équipement" style="max-width: 100px;">
+                    {% else %}
+                        <p>Aucune image disponible.</p>
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
 

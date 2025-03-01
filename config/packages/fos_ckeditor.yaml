@@ -1,0 +1,26 @@
+# config/packages/fos_ck_editor.yaml
+twig:
+    form_themes:
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+
+fos_ck_editor:
+    default_config: my_config
+    configs:
+        my_config:
+            # Custom toolbar with more buttons for noticeable functionality
+            toolbar:
+                - [Bold, Italic, Underline, -, Cut, Copy, Paste, -, Undo, Redo]
+                - [Link, Unlink, Image]
+                - [NumberedList, BulletedList, -, Outdent, Indent]
+                - [JustifyLeft, JustifyCenter, JustifyRight, JustifyBlock]
+                - [Source]  # Adds a "View Source" button for HTML editing
+            # UI color change for a visual difference
+            uiColor: '#9AB8F3'  # Light blue (hex code)
+            # Set a specific height for the editor
+            height: '300px'
+            # Enable basic formatting options
+            format_tags: 'p;h1;h2;h3;pre'  # Adds heading options
+            # Add extra allowed content for richer input
+            extraAllowedContent: 'span;ul;ol;li;img[src,alt]'
+            # Language (optional, change to your preference)
+            language: 'en'

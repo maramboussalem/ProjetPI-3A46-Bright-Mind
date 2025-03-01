@@ -22,6 +22,13 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Post $post = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $commentDate = null;
+    public function __construct()
+    {
+        $this->commentDate = new \DateTimeImmutable(); 
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +66,18 @@ class Comment
     public function setPost(?Post $post): static
     {
         $this->post = $post;
+
+        return $this;
+    }
+
+    public function getCommentDate(): ?\DateTimeImmutable
+    {
+        return $this->commentDate;
+    }
+
+    public function setCommentDate(\DateTimeImmutable $commentDate): static
+    {
+        $this->commentDate = $commentDate;
 
         return $this;
     }

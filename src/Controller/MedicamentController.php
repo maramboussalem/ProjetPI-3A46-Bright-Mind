@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Medicament;
 use App\Form\MedicamentType;
+use App\Repository\FournisseurRepository;
 use App\Repository\MedicamentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,12 +19,33 @@ final class MedicamentController extends AbstractController
 {
     // Index Route - List all medicaments
     #[Route('/', name: 'app_medicament_index', methods: ['GET'])]
-    public function index(MedicamentRepository $medicamentRepository): Response
+    public function index(Request $request, MedicamentRepository $medicamentRepository, FournisseurRepository $fournisseurRepository): Response
     {
+        $fournisseurId = $request->query->get('fournisseur', null);
+        $searchTerm = $request->query->get('search', '');
+
+        $queryBuilder = $medicamentRepository->createQueryBuilder('m');
+
+        if ($fournisseurId) {
+            $queryBuilder->andWhere('m.fournisseur = :fournisseurId')
+                ->setParameter('fournisseurId', $fournisseurId);
+        }
+
+        if (!empty($searchTerm)) {
+            $queryBuilder->andWhere('m.NomMedicament LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        $medicaments = $queryBuilder->getQuery()->getResult();
+
         return $this->render('medicament/index.html.twig', [
-            'medicaments' => $medicamentRepository->findAll(),
+            'medicaments' => $medicaments,
+            'fournisseurs' => $fournisseurRepository->findAll(),
+            'selectedFournisseur' => $fournisseurId,
+            'searchTerm' => $searchTerm, // Garder la valeur dans le champ de recherche
         ]);
     }
+
 
     // New Medicament Route - Form to create a new medicament
     #[Route('/new', name: 'app_medicament_new', methods: ['GET', 'POST'])]
@@ -60,11 +82,11 @@ final class MedicamentController extends AbstractController
 
 
             $imageFile = $form->get('image')->getData();
-           
+
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = $originalFilename . '.' . $imageFile->guessExtension();
-    
+
                 try {
                     $imageFile->move(
                         $this->getParameter('medicament_directory'),
@@ -74,13 +96,12 @@ final class MedicamentController extends AbstractController
                     $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image.');
                     return $this->redirectToRoute('app_student_group_index_administrateur');
                 }
-    
+
                 $medicament->setImage($newFilename);
             } else {
                 $medicament->setImage("default.jpg");
-
             }
-           
+
 
 
 

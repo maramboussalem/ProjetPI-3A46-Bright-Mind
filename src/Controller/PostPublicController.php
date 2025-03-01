@@ -14,6 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface; 
 use App\Repository\CommentRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class PostPublicController extends AbstractController
 {
@@ -29,36 +30,60 @@ public function index(EntityManagerInterface $entityManager): Response
 }
 #[Route('/compagne/{id}', name: 'post_detail')]
 public function show(int $id, EntityManagerInterface $entityManager, Request $request, Security $security): Response
-    {
-        $user = $security->getUser();
-        $post = $entityManager->getRepository(Post::class)->find($id);
+{
+    $user = $security->getUser();
+    $post = $entityManager->getRepository(Post::class)->find($id);
 
-        if (!$post) {
-            throw $this->createNotFoundException('Post not found');
-        }
-        $comment = new Comment();
-        $commentForm = $this->createForm(CommentType::class, $comment);
-        $commentForm->handleRequest($request);
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $comment->setPost($post);
-            $comment->setUser($user);
-            $entityManager->persist($comment);
-            $entityManager->flush();
-            return $this->redirectToRoute('post_detail', ['id' => $post->getId()]);
-        }
+    if (!$post) {
+        throw $this->createNotFoundException('Post not found');
+    }
 
+    // Create the comment form
+    $comment = new Comment();
+    $commentForm = $this->createForm(CommentType::class, $comment);
+    $commentForm->handleRequest($request);
+
+    // Handle comment submission
+    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+        $comment->setPost($post);
+        $comment->setUser($user);
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        // Add the new comment's edit form to the editForms array
         $editForms = [];
         foreach ($post->getComments() as $comment) {
-        $editForms[$comment->getId()] = $this->createForm(CommentType::class, $comment)->createView();
+            $editForms[$comment->getId()] = $this->createForm(CommentType::class, $comment)->createView();
         }
 
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse([
+                'status' => true,
+                'message' => 'Comment added successfully!',
+                'commentHtml' => $this->renderView('home/_comment.html.twig', [
+                    'comment' => $comment,
+                    'editForms' => $editForms,
+                    'post' => $post,
+                ]),
+            ]);
+        }
 
-        return $this->render('home/poste.html.twig', [
-            'post' => $post,
-            'commentForm' => $commentForm->createView(),
-            'editForms' => $editForms,
-        ]);
+        return $this->redirectToRoute('post_detail', ['id' => $post->getId()]);
     }
+
+    // Populate editForms for all comments
+    $editForms = [];
+    foreach ($post->getComments() as $comment) {
+        $editForms[$comment->getId()] = $this->createForm(CommentType::class, $comment)->createView();
+    }
+
+    // Render the page
+    return $this->render('home/poste.html.twig', [
+        'post' => $post,
+        'commentForm' => $commentForm->createView(),
+        'editForms' => $editForms,
+    ]);
+}
 #[Route('/comment/delete/{id}', name: 'delete_comment', methods: ['POST'])]
 public function delete(int $id, Request $request, CommentRepository $commentRepository, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): Response
     {

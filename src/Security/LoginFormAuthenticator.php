@@ -43,13 +43,17 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
           // Utiliser la propriété injectée directement
           $utilisateur = $this->utilisateurRepository->findOneByEmail($email);
 
-           // Create connection history and persist it
-        $history = new ConnectionHistory();
-        $history->setUtilisateur($utilisateur);
-        $history->setTimestamp(new \DateTime());
-        $history->setEventType('Connexion réussie');
-        $this->entityManager->persist($history); // Use the injected entity manager
-        $this->entityManager->flush();  
+          if (!$utilisateur) {
+    throw new AuthenticationException('Utilisateur non trouvé.');
+}
+
+// Enregistrement de l'historique de connexion
+$history = new ConnectionHistory();
+$history->setUtilisateur($utilisateur);
+$history->setTimestamp(new \DateTime());
+$history->setEventType('Connexion réussie');
+$this->entityManager->persist($history);
+$this->entityManager->flush();
         
            if ($utilisateur && !$utilisateur->isActive()) {
              // Remplacer l'exception par un message d'erreur plus précis et éviter le plantage
@@ -78,6 +82,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
     }
 
+    if (in_array('ROLE_MEDECIN', $roles)) {
+        return new RedirectResponse($this->urlGenerator->generate('app_medcin'));
+    }
+    if (in_array('ROLE_PATIENT', $roles)) {
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+    }
+    
     // Rediriger vers la page d'accueil pour les autres utilisateurs
     return new RedirectResponse($this->urlGenerator->generate('app_home'));
 }
