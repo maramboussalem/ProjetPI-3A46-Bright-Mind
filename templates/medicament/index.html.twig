@@ -4,6 +4,29 @@
 
 {% block body %}
 <h1 class="text-center card p-3">List des medicaments </h1>
+  
+ 
+ 
+<form method="GET" action="{{ path('app_medicament_index') }}" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <select name="fournisseur" class="form-select" onchange="this.form.submit()">
+                <option value="">Tous les fournisseurs</option>
+                {% for fournisseur in fournisseurs %}
+                    <option value="{{ fournisseur.id }}" {% if selectedFournisseur == fournisseur.id %}selected{% endif %}>
+                        {{ fournisseur.NomFournisseur }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <input type="text" name="search" class="form-control" placeholder="Rechercher un médicament..." value="{{ searchTerm }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+        </div>
+    </div>
+</form>
 
     <div class="container">
         <div class="row">
@@ -27,6 +50,7 @@
                         </div>
                     </div>
                 </div>
+
             {% else %}
                 <div class="col-12 text-center">
                     <p class="text-muted">Aucun médicament trouvé.</p>

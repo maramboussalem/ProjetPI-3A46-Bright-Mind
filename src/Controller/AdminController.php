@@ -10,6 +10,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UtilisateurRepository;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 class AdminController extends AbstractController
 {
@@ -20,20 +22,29 @@ class AdminController extends AbstractController
     }
 
     #[Route('/create-admin', name: 'create_admin')]
-    public function createAdmin(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function createAdmin(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, SessionInterface $session): Response
     {
         $admin = new Utilisateur();
         $form = $this->createForm(UtilisateurType::class, $admin);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $captchaSaisi = $form->get('captcha')->getData();
+            $captchaSession = $session->get('captcha_text');
+    
+            if ($captchaSaisi !== $captchaSession) {
+                $form->get('captcha')->addError(new \Symfony\Component\Form\FormError('Le code CAPTCHA est incorrect.'));
+                return $this->render('admin/create_admin.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
             $admin->setMotdepasse($passwordHasher->hashPassword($admin, $admin->getMotdepasse()));
             $admin->setRoles(['admin']);
             $admin->setRole('admin');
             $admin->setAntecedentsMedicaux(null);
             $admin->setSpecialite(null);
             $admin->setHopital(null);
-            $admin->setDisponibilite(null);
 
              /** @var UploadedFile $file */
         $file = $form->get('file')->getData();
@@ -78,24 +89,43 @@ class AdminController extends AbstractController
 
 
     #[Route('/admin/edit/{id}', name: 'admin_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Utilisateur $admin, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function edit(Request $request, Utilisateur $admin, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, SessionInterface $session): Response
     {
         $form = $this->createForm(UtilisateurType::class, $admin);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
+            $captchaSaisi = $form->get('captcha')->getData();
+            $captchaSession = $session->get('captcha_text');
+    
+            if ($captchaSaisi !== $captchaSession) {
+                $form->get('captcha')->addError(new \Symfony\Component\Form\FormError('Le code CAPTCHA est incorrect.'));
+                return $this->render('admin/create_admin.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $admin->setRoles(['admin']);
             $admin->setRole('admin');
-    
             $admin->setAntecedentsMedicaux(null);
             $admin->setSpecialite(null);
             $admin->setHopital(null);
-            $admin->setDisponibilite(null);
-    
+
             if ($form->get('motdepasse')->getData()) {
                 $admin->setMotdepasse($passwordHasher->hashPassword($admin, $form->get('motdepasse')->getData()));
             }
-    
+              /** @var UploadedFile $file */
+        $file = $form->get('file')->getData();
+
+        if ($file) {
+            $fileName = uniqid() . '.' . $file->guessExtension();
+            $file->move(
+                $this->getParameter('user_directory'), 
+                $fileName
+            );
+            $admin->setimgUrl('user/img/' . $fileName);
+        }
+            
             $entityManager->flush();
             return $this->redirectToRoute('admin_list');
         }

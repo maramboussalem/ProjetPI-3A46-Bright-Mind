@@ -1,0 +1,11 @@
+endroid_qr_code:
+    custom:
+        writer: Endroid\QrCode\Writer\SvgWriter
+        writer_options:
+            exclude_xml_declaration: true
+        data: 'This is customized QR code'
+        size: 300
+        encoding: 'UTF-8'
+        error_correction_level: 'low'
+        round_block_size_mode: 'margin'
+        validate_result: false

@@ -7,6 +7,9 @@ parameters:
     upload_directory: '%kernel.project_dir%/public/front/compagne/img'
     medicament_directory: '%kernel.project_dir%/public/Medicament'
     user_directory: '%kernel.project_dir%/public/user/img'
+    equipement_directory: '%kernel.project_dir%/public/front/equipement/img'
+    service_med_directory: '%kernel.project_dir%/public/front/service_med/img'
+    equipement_images_directory: '%kernel.project_dir%/public/uploads/equipements'
 
 services:
     App\Repository\UtilisateurRepository:
@@ -36,3 +39,5 @@ services:
             $twilioPhoneNumber: '%env(TWILIO_PHONE_NUMBER)%'
 
     App\Service\CaptchaGenerator: ~
+
+    App\Service\StatistiqueMetier: ~

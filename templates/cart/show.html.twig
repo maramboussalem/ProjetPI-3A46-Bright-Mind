@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff; /* Bleu clair */
+        color: #333;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    h1 {
+        color: #3498db; /* Bleu principal */
+        margin-bottom: 20px;
+    }
+
+    /* Animation de survol de la ligne du tableau */
+    .table tr {
+        transition: background-color 0.3s ease;
+    }
+
+    .table tr:hover {
+        background-color: #ecf6fd; /* Bleu très clair au survol */
+        transform: scale(1.02); /* Légère agrandissement au survol */
+    }
+
+    .table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #2980b9; /* Bleu foncé */
+        color: white;
+    }
+
+    /* Animation sur les boutons */
+    .btn {
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s, transform 0.2s ease-in-out;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+    }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c0392b;
+        transform: scale(1.1); /* Agrandissement au survol */
+    }
+
+    .btn-outline-secondary {
+        color: #333;
+        border: 1px solid #3498db;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #3498db;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .btn-warning {
+        background-color: #f39c12;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: #e67e22;
+        transform: scale(1.1);
+    }
+
+    .btn-success {
+        background-color: #1abc9c; /* Bleu-vert */
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #16a085;
+        transform: scale(1.1);
+    }
+
+    /* Animation d'apparition des alertes */
+    .alert {
+        width: 50%;
+        margin: 10px auto;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+    }
+
+    .alert-success {
+        background-color: #d5f5e3; /* Vert très pâle */
+        color: #1e8449;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    h3 {
+        margin-top: 20px;
+        color: #333;
+    }
+
+</style>
+
+<br><br><br><br><br><br>
+
+<h1>Mon Panier</h1>
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% if cart is empty %}
+    <p>Votre panier est vide.</p>
+{% else %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+                <tr>
+                    <td><img src="{{ asset('Medicament/' ~ item.medicament.image) }}" width="50" height="50" alt="{{ item.medicament.NomMedicament }}"></td>
+                    <td>{{ item.medicament.NomMedicament }}</td>
+                    <td>{{ item.medicament.Prix }} TND</td>
+                    <td>
+                        <a href="{{ path('cart_decrease', { id: item.medicament.id }) }}" class="btn btn-sm btn-outline-secondary">-</a>
+                        {{ item.quantity }}
+                        <a href="{{ path('cart_increase', { id: item.medicament.id }) }}" class="btn btn-sm btn-outline-secondary">+</a>
+                    </td>
+                    <td>{{ item.medicament.Prix * item.quantity }} TND</td>
+                    <td>
+                        <a href="{{ path('cart_remove', {'id': item.medicament.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cart_clear') }}" class="btn btn-warning">Vider le panier</a>
+
+
+    <!-- Affichage du total -->
+    <h3>Total du panier : {{ totalPanier|number_format(2, '.', ' ') }} TND</h3>
+
+{% endif %}
+
+<a href="{{ path('cart_imprimer') }}" class="btn btn-success">Imprimer 
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/>
+        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1"/>
+    </svg>
+</a>
+
+{% endblock %}

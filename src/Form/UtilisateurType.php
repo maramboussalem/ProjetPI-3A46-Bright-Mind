@@ -49,7 +49,6 @@ class UtilisateurType extends AbstractType
             ->add('antecedentsMedicaux', TextareaType::class)
             ->add('specialite', TextType::class)
             ->add('hopital', TextType::class)
-            ->add('disponibilite', TextType::class)
             ->add('file', FileType::class, [
                 'label' => 'Upload File',
                 'mapped' => false, // to prevent this field from being mapped to an entity
