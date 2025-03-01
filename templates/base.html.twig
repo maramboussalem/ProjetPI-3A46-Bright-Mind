@@ -156,8 +156,17 @@
                             </p>
                         </div>
                     </div>
-                    <h6 class="mb-2 mt-3"><a class="button" href="{{ path('mailchimp_subscribe') }}">Contactez-nous <i class="fa fa-caret-right ms-1 col_blue align-top"></i></a></h6>
-
+                    <h6 class="mb-2 mt-3"><a class="button" href="#">Contactez-nous <i class="fa fa-caret-right ms-1 col_blue align-top"></i></a></h6>
+                    {% for message in app.flashes('success') %}
+                    <div class="alert alert-success mt-3" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
                     <!-- Subscription Button Form -->
                     {% if app.user %}
                         <form action="{{ path('mailchimp_subscribe') }}" method="POST" class="mt-3">
@@ -166,7 +175,6 @@
                             <input type="hidden" name="lastName" value="{{ app.user.nom ?? '' }}">
                             <input type="hidden" name="status_if_new" value="subscribed">
                             <button type="submit" class="btn btn-primary">Subscribe to Newsletter</button>
-                        <!-- Include CSRF token if needed -->
                         </form>
                     {% endif %}
                 </div>

@@ -71,9 +71,16 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
     ]);
 }
 
-    #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
-    public function show(Post $post): Response
+    #[Route('/{id}', name: 'app_post_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show(string $id, PostRepository $postRepository, EntityManagerInterface $entityManager): Response
     {
+        $id = (int) $id; // Cast to integer
+        $post = $postRepository->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException('No post found for ID ' . $id);
+        }
+
         return $this->render('post/show.html.twig', [
             'post' => $post,
         ]);
@@ -106,5 +113,18 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         }
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/statistics', name: 'app_post_statistics', methods: ['GET'])]
+    public function statistics(PostRepository $postRepository): Response
+    {
+        $posts = $postRepository->findAll();
+        $totalViews = array_sum(array_map(fn($post) => $post->getViews() ?? 0, $posts));
+        $totalComments = array_sum(array_map(fn($post) => $post->getCommentCount() ?? 0, $posts));
+
+        return $this->render('post/statistics.html.twig', [
+            'total_views' => $totalViews,
+            'total_comments' => $totalComments,
+            'posts' => $posts,
+        ]);
     }
 }

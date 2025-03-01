@@ -30,6 +30,9 @@ class Post
     #[ORM\Column(length: 255)]
     private ?string $imageUrl = null;
 
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private ?int $views = 0;
+
     /**
      * @var Collection<int, Comment>
      */
@@ -121,4 +124,24 @@ class Post
         $this->publishedAt = $publishedAt;
         return $this;
     }
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
+        return $this;
+    }
+
+    public function incrementViews(): self
+    {
+        $this->views++;
+        return $this;
+    }
+    public function getCommentCount(): int
+{
+    return $this->comments->count();
+}
 }

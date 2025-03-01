@@ -33,11 +33,13 @@ public function show(int $id, EntityManagerInterface $entityManager, Request $re
 {
     $user = $security->getUser();
     $post = $entityManager->getRepository(Post::class)->find($id);
+    
 
     if (!$post) {
         throw $this->createNotFoundException('Post not found');
     }
-
+    $post->incrementViews();
+    $entityManager->flush();
     // Create the comment form
     $comment = new Comment();
     $commentForm = $this->createForm(CommentType::class, $comment);

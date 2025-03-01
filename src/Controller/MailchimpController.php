@@ -52,15 +52,15 @@ class MailchimpController extends AbstractController
     
             try {
                 $response = $this->mailchimpService->addSubscriber($listId, $subscriber);
-                $this->addFlash('success', 'Successfully subscribed to Mailchimp!');
-                return $this->redirectToRoute('mailchimp_subscribe');
+                $this->addFlash('success', 'Successfully subscribed !');
+                
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Error: ' . $e->getMessage());
+                $this->addFlash('error', 'Already Subcribed');
             }
+            $referer = $request->headers->get('referer');
+            return $this->redirect($referer ?: $this->generateUrl('compagne_public'));
         }
     
-        return $this->render('mailchimp/subscribe.html.twig', [
-            'form' => null, // No form needed if using raw POST
-        ]);
+        return $this->redirectToRoute('compagne_public');
     }
 }
