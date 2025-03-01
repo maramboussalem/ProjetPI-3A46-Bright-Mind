@@ -3,14 +3,135 @@
 {% block title %}Modifier un Service Médical{% endblock %}
 
 {% block body %}
+   <style>
+ /* Style pour la page de modification de Service Médical */
+h1 {
+    text-align: center;
+    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Formulaire de modification */
+form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+/* Étiquettes des champs de formulaire */
+label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+    color: #333;
+}
+
+/* Champs de saisie et widgets */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Placeholder dans les champs */
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+}
+
+/* Style des fichiers d'input */
+.form-control-file {
+    padding: 5px;
+    background-color: #f1f1f1;
+}
+
+/* Boutons de soumission */
+button, .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:rgb(21, 14, 224);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+button:hover, .btn:hover {
+    background-color: rgb(21, 14, 224);
+}
+
+/* Lien retour à la liste */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Marges et espacements pour le contenu */
+body {
+    background-color: #f4f6f9;
+    font-family: Arial, sans-serif;
+    padding: 40px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Espacement pour les erreurs du formulaire */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Espacement et bordure des erreurs */
+.form-error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+</style> 
+    
+    
+    
     <h1>Modifier un Service Médical</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
+  
+     {{ form_start(form) }}
+       <div class="form-group">
+            {{ form_label(form.imageM) }}
+            {{ form_widget(form.imageM, { 'attr': {'class': 'form-control-file'} }) }}
+            {{ form_errors(form.imageM) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.nomService) }}
+            {{ form_widget(form.nomService, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.nomService) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.descriptionMed) }}
+            {{ form_widget(form.descriptionMed, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.descriptionMed) }}
+        </div>
+       
         <button type="submit" class="btn btn-success">Mettre à jour</button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_service_med_index') }}" class="btn btn-secondary">← Retour à la liste</a>
 
-    {{ include('service_med/_delete_form.html.twig') }}
 {% endblock %}

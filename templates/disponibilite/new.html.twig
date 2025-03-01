@@ -1,0 +1,15 @@
+{% extends 'medcin/base_backMedcin.html.twig' %}
+
+{% block title %}New Disponibilité{% endblock %}
+
+
+{% block body %}
+
+
+<h1>Create New Disponibilité</h1>
+
+{{ include('disponibilite/_form.html.twig') }}
+
+<a href="{{ path('app_disponibiliteM_index') }}" class="btn btn-secondary">Back to list</a>
+
+{% endblock %}

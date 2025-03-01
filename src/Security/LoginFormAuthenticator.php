@@ -78,6 +78,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
     }
 
+    if (in_array('ROLE_MEDECIN', $roles)) {
+        return new RedirectResponse($this->urlGenerator->generate('app_medcin'));
+    }
+    if (in_array('ROLE_PATIENT', $roles)) {
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+    }
+    
     // Rediriger vers la page d'accueil pour les autres utilisateurs
     return new RedirectResponse($this->urlGenerator->generate('app_home'));
 }

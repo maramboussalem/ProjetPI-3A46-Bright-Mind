@@ -171,10 +171,13 @@ a.btn-secondary:hover {
         </div>
     {% endif %}
 </div>
-
 <div class="form-group">
     {{ form_label(form.motdepasse) }}
-    {{ form_widget(form.motdepasse) }}
+    {{ form_widget(form.motdepasse, { 'attr': {'id': form.motdepasse.vars.id, 'oninput': 'checkPasswordStrength()'} }) }}
+
+    <div id="password-strength-text" style="margin-top: 5px; font-weight: bold;"></div>
+    <div id="password-strength-bar" style="height: 5px; width: 100%; background-color: #ddd; margin-top: 5px;"></div>
+
     {% if form.motdepasse.vars.errors %}
         <div class="form-error">
             {% for error in form.motdepasse.vars.errors %}

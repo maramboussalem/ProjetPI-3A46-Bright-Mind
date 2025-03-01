@@ -7,19 +7,24 @@ parameters:
     upload_directory: '%kernel.project_dir%/public/front/compagne/img'
     medicament_directory: '%kernel.project_dir%/public/Medicament'
     user_directory: '%kernel.project_dir%/public/user/img'
+    equipement_directory: '%kernel.project_dir%/public/front/equipement/img'
+    service_med_directory: '%kernel.project_dir%/public/front/service_med/img'
+    equipement_images_directory: '%kernel.project_dir%/public/uploads/equipements'
+    openai_api_key: '%env(OPENAI_API_KEY)%'
+    gemini_api_key: '%env(GEMINI_API_KEY)%'
 
 services:
     App\Repository\UtilisateurRepository:
         autowire: true
         autoconfigure: true
 
-    # default configuration for services in *this* file
+    # Default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    # Makes classes in src/ available to be used as services
+    # This creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
@@ -27,8 +32,8 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Add more service definitions when explicit configuration is needed
+    # Please note that last definitions always *replace* previous ones
     App\Service\TwilioSmsService:
         arguments:
             $sid: '%env(TWILIO_SID)%'
@@ -36,3 +41,8 @@ services:
             $twilioPhoneNumber: '%env(TWILIO_PHONE_NUMBER)%'
 
     App\Service\CaptchaGenerator: ~
+    App\Service\StatistiqueMetier: ~
+    
+    App\Service\ChatbotService:
+        arguments:
+            $apiKey: '%gemini_api_key%'

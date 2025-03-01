@@ -1,0 +1,123 @@
+{% extends 'medcin/base_backMedcin.html.twig' %}
+
+{% block title %}Disponibilite {% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+<style>
+/* Général */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Titre principal */
+h1 {
+    text-align: center;
+    color:rgb(21, 14, 224);
+    margin-top: 20px;
+}
+
+/* Table */
+.table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+    background-color:rgb(21, 14, 224);
+    color: white;
+}
+
+.table th, .table td {
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Lien action */
+a {
+    text-decoration: none;
+    color: #007bff;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Ajouter un nouveau */
+a[href*="create"] {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(21, 14, 224);
+    color: white;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+a[href*="create"]:hover {
+    background-color:rgb(21, 14, 224);
+}
+
+/* Centrer le texte dans les cellules */
+td, th {
+    text-align: center;
+    vertical-align: middle;
+}
+</style>
+<br>
+   <center> <h1>Disponibilite index</h1> </center>
+<br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateHeure</th>
+                <th>EstReserve</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for disponibilite in disponibilites %}
+            <tr>
+                <td>{{ disponibilite.id }}</td>
+                <td>{{ disponibilite.dateHeure ? disponibilite.dateHeure|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ disponibilite.estReserve ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_disponibilite_show', {'id': disponibilite.id}) }}">show</a>
+                    <a href="{{ path('app_disponibilite_edit', {'id': disponibilite.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_disponibilite_new') }}">Create new</a>
+{% endblock %}
