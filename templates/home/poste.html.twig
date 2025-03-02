@@ -10,7 +10,7 @@
             <div class="card-body">
                 <h1 class="card-title text-primary">{{ post.title }}</h1>
                 <p class="card-text">{{ post.content }}</p>
-                <a href="{{ path('compagne_public') }}" class="btn btn-secondary mt-3">Back to Posts</a>
+                <a href="{{ path('compagne_public') }}" class="btn btn-secondary mt-3">Retour aux Postes</a>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
                 {% for comment in post.comments %}
     {{ include('home/_comment.html.twig', {'comment': comment}) }}
 {% else %}
-    <p>No comments yet. Be the first to comment!</p>
+    <p>Pas encore de commentaires. Soyez le premier à commenter!</p>
 {% endfor %}
 
         </div>
@@ -35,7 +35,7 @@
                 {{ form_row(commentForm.content) }}
                 {{ form_row(commentForm._token) }}
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Post Comment</button>
+                <button type="submit" class="btn btn-primary mt-3">Publier</button>
             {{ form_end(commentForm) }}
         {% else  %}
             <a href="{{ path('app_login') }}">Se connecter</a>

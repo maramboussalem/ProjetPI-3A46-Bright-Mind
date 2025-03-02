@@ -133,12 +133,12 @@ body {
         <div class="blog-content">
             <h2 class="blog-title">{{ post.title }}</h2>
             <div class="blog-meta">
-                <span class="blog-comments"><i class="icon-comments"></i> {{ post.comments|length }} Comments</span>
+                <span class="blog-comments"><i class="icon-comments"></i> {{ post.comments|length }} Commentaires</span>
             </div>
             <p class="blog-excerpt">
                 {{ post.content }}
             </p>
-            <a  href="{{ path('post_detail', { 'id': post.id }) }}" class="blog-read-more">Read More &raquo;</a>
+            <a  href="{{ path('post_detail', { 'id': post.id }) }}" class="blog-read-more">En savoir plus &raquo;</a>
         </div>
     </div>
 {% endfor %}

@@ -13,7 +13,7 @@
             <!-- Edit Button Form -->
             <form action="#" method="get" class="d-inline">
                 <button type="button" class="btn btn-sm btn-primary d-flex align-items-center edit-btn" data-id="{{ comment.id }}">
-                    Edit <i class="ms-2 fas fa-edit"></i>
+                    Editer <i class="ms-2 fas fa-edit"></i>
                 </button>
             </form>
 
@@ -21,7 +21,7 @@
             <form action="{{ path('delete_comment', {'id': comment.id}) }}" method="post" class="d-inline">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete_comment' ~ comment.id) }}">
                 <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center">
-                    Delete <i class="ms-2 fas fa-trash-alt"></i>
+                    Supprimer <i class="ms-2 fas fa-trash-alt"></i>
                 </button>
             </form>
         </div>
