@@ -20,7 +20,8 @@ use Symfony\Component\Form\FormError;
 use App\Repository\ConnectionHistoryRepository; // Ajoutez ce use pour l'historique des connexions
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
-
+use App\Service\EmailService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/utilisateur')]
 final class UtilisateurController extends AbstractController
@@ -41,7 +42,7 @@ final class UtilisateurController extends AbstractController
     }
 
     #[Route('/new', name: 'app_utilisateur_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TwilioSmsService $smsService, SessionInterface $session): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TwilioSmsService $smsService, SessionInterface $session ,EmailService $emailService): Response
     {
         $utilisateur = new Utilisateur();
         $form = $this->createForm(UtilisateurType::class, $utilisateur);
@@ -69,6 +70,11 @@ final class UtilisateurController extends AbstractController
                 $utilisateur->setSpecialite($form->get('specialite')->getData());
                 $utilisateur->setHopital($form->get('hopital')->getData());
             }
+
+             // Générer un token d'activation unique
+        $activationToken = bin2hex(random_bytes(16));
+        $utilisateur->setActivationToken($activationToken);
+
         /** @var UploadedFile $file */
         $file = $form->get('file')->getData();
 
@@ -83,11 +89,91 @@ final class UtilisateurController extends AbstractController
             $entityManager->persist($utilisateur);
             $entityManager->flush();
             
+            $activationLink = $this->generateUrl('app_activate', ['token' => $activationToken], UrlGeneratorInterface::ABSOLUTE_URL);
+
+$htmlContent = "
+    <html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 20px;
+                text-align: center;
+            }
+            .container {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                max-width: 600px;
+                margin: auto;
+            }
+            .button {
+                background-color:rgb(73, 157, 247);
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                display: inline-block;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Activation de votre compte</h2>
+            <p>Bonjour,</p>
+            <p>Votre compte a été créé avec succès ! Pour l'activer, cliquez sur le bouton ci-dessous :</p>
+            <a href='$activationLink' class='button'>Activer mon compte</a>
+            <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.</p>
+            <p>Merci et à bientôt sur notre plateforme.</p>
+            <p>Cordialement,<br>L'équipe [Bright-Mind]</p>
+        </div>
+    </body>
+    </html>
+";
+
+$emailService->sendEmail(
+    $utilisateur->getEmail(),
+    'Bienvenue sur notre plateforme - Activation requise',
+    $htmlContent,
+    true // Spécifie que l'email est en HTML
+);
+
+$this->addFlash('warning', 'Votre compte a été créé avec succès ! Veuillez vérifier votre e-mail pour activer votre compte avant de vous connecter.');
             return $this->redirectToRoute('app_login');
         }
         return $this->render('utilisateur/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+   
+   #[Route('/activatet/{token}', name: 'app_activate')]
+   public function activatet(string $token, EntityManagerInterface $entityManager): Response
+   {
+       // Récupérer l'utilisateur à partir du token
+       $utilisateur = $entityManager->getRepository(Utilisateur::class)->findOneBy(['activationToken' => $token]);
+
+       if (!$utilisateur) {
+           throw $this->createNotFoundException('Le token d\'activation est invalide.');
+       }
+
+       // Mettre à jour le champ isActive
+       $utilisateur->setActive(true);
+       $utilisateur->setActivationToken(null); // Supprimer le token après activation
+       $entityManager->flush();
+
+       // Rediriger vers la page de connexion ou un message de confirmation
+       return $this->redirectToRoute('app_login');
+   }
+
+   #[Route('/activation-email-sent', name: 'app_activation_email_sent')]
+    public function activationEmailSent(): Response
+    {
+        return $this->render('utilisateur/activation_email_sent.html.twig');
     }
 
     #[Route('/utilisateur/{id}', name: 'app_utilisateur_show')]
@@ -268,20 +354,18 @@ public function requestActivationCode(Utilisateur $utilisateur, Request $request
     ]);
 }
 
-#[Route('/search', name: 'app_utilisateur_search', methods: ['GET', 'POST'])]
-public function search(Request $request, UtilisateurRepository $utilisateurRepository): Response
+#[Route('/search', name: 'app_utilisateur_search', methods: ['GET'])]
+public function search(Request $request, UtilisateurRepository $utilisateurRepository, NormalizerInterface $normalizer): JsonResponse
 {
-    $term = $request->query->get('q', '');  // Ensure the "q" parameter is being captured correctly
+    $term = $request->query->get('q', '');
 
-    // Perform the search if a term is provided, otherwise return all users
-    $utilisateurs = !empty($term) ? $utilisateurRepository->searchByName($term) : $utilisateurRepository->findAll();
+    $utilisateurs = !empty($term) ? $utilisateurRepository->searchByTerm($term) : [];
 
-    // Return the view with the users and search term
-    return $this->render('utilisateur/index.html.twig', [
-        'utilisateurs' => $utilisateurs,
-        'term' => $term,  // Pass the search term to the template
-    ]);
+    $jsonContent = $normalizer->normalize($utilisateurs, 'json', ['groups' => 'utilisateur']);
+
+    return new JsonResponse($jsonContent);
 }
+
 
 #[Route('/statistiques', name: 'app_utilisateur_statistiques')]
     public function statistiques(UtilisateurRepository $utilisateurRepository): Response
@@ -349,4 +433,5 @@ public function generateUserQRCode(Utilisateur $utilisateur, ConnectionHistoryRe
         'historique' => $historique,
      ]);
     }
+    
 }

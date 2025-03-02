@@ -74,7 +74,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $motdepasse_confirmation = null;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $isActive = true; 
+    private bool $isActive = false; 
     
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $verificationCode= null;
@@ -84,6 +84,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imgUrl = null;
+    
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $activationToken = null;
 
     /**
      * @var Collection<int, Consultation>
@@ -363,6 +366,18 @@ public function setCaptcha(?string $captcha): self
     public function setimgUrl(?string $imgUrl): self
     {
         $this->imgUrl = $imgUrl;
+        return $this;
+    }
+
+    public function getActivationToken(): ?string
+    {
+        return $this->activationToken;
+    }
+
+    public function setActivationToken(?string $activationToken): self
+    {
+        $this->activationToken = $activationToken;
+
         return $this;
     }
 }

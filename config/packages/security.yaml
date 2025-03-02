@@ -21,7 +21,12 @@ security:
             logout:
                 path: app_logout
                 target: /home
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            custom_authenticators:
+                - App\Security\LoginFormAuthenticator  # Votre authentificateur existant pour le formulaire
+                - App\Security\GoogleAuthenticator
+                - App\Security\GithubAuthenticator
+        # Autres configurations des firewalls
+
             entry_point: App\Security\LoginFormAuthenticator  # Ajoute cette ligne pour définir le point d'entrée
 
             remember_me:
@@ -33,5 +38,5 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_PATIEN }
-        - { path: ^/medcin, roles: ROLE_MEDECIN }
-
+        - { path: ^/medcin, roles: [ROLE_MEDECIN, ROLE_ADMIN] }
+        

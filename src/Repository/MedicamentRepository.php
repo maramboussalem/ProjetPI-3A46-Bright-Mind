@@ -15,6 +15,27 @@ class MedicamentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Medicament::class);
     }
+    // src/Repository/MedicamentRepository.php
+
+    public function searchAndGroupByFournisseur(?string $search = null, ?string $type = null)
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->leftJoin('m.fournisseur', 'f')
+            ->addSelect('f')
+            ->orderBy('f.NomFournisseur', 'ASC');
+
+        if ($search) {
+            $qb->andWhere('m.NomMedicament LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($type) {
+            $qb->andWhere('m.Type = :type')
+                ->setParameter('type', $type);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 
     //    /**
     //     * @return Medicament[] Returns an array of Medicament objects
