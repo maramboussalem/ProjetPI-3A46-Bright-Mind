@@ -7,8 +7,14 @@ use App\Form\MedicamentType;
 use App\Repository\FournisseurRepository;
 use App\Repository\MedicamentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Writer\SvgWriter;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,10 +23,31 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/medicament')]
 final class MedicamentController extends AbstractController
 {
+
+    #[Route('/api/toggle-medicament/{id}', name: 'app_toggle_med', methods: ['POST'])]
+    public function toggleUser(Request $request, Medicament $medicament, EntityManagerInterface $entityManager): JsonResponse
+    {
+       
+        if (!$medicament) {
+            return new JsonResponse(['success' => false, 'message' => 'medicament not found.'], 404);
+        }
+
+        $medicament->setIsshown(!$medicament->isshown());
+        $entityManager->persist($medicament);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'message' => $medicament->isshown() ? 'Medicament est masqué de clients' : 'Medicament est affiché pour les clients.']);
+    }
+
+
     // Index Route - List all medicaments
     #[Route('/', name: 'app_medicament_index', methods: ['GET'])]
-    public function index(Request $request, MedicamentRepository $medicamentRepository, FournisseurRepository $fournisseurRepository): Response
-    {
+    public function index(
+        Request $request, 
+        MedicamentRepository $medicamentRepository, 
+        FournisseurRepository $fournisseurRepository,
+        PaginatorInterface $paginator
+    ): Response {
         $fournisseurId = $request->query->get('fournisseur', null);
         $searchTerm = $request->query->get('search', '');
 
@@ -38,13 +65,35 @@ final class MedicamentController extends AbstractController
 
         $medicaments = $queryBuilder->getQuery()->getResult();
 
+
+
+    
+        $pagination2 = $paginator->paginate(
+            $medicaments,
+            $request->query->getInt('page', 1),
+            3  // items per page
+        );
+    
+        $expirationWarnings = [];
+        $today = new \DateTime();
+        $warningThreshold = (clone $today)->modify('+3 days');
+    
+        foreach ($medicaments as $medicament) {
+            if ($medicament->getExpireat() <= $warningThreshold) {
+                $expirationWarnings[$medicament->getId()] = "⚠️ Ce médicament  va expiré bientôt ou déja expiré !";
+            }
+        }
+     
+    
         return $this->render('medicament/index.html.twig', [
-            'medicaments' => $medicaments,
+            'medicaments' => $pagination2,
             'fournisseurs' => $fournisseurRepository->findAll(),
             'selectedFournisseur' => $fournisseurId,
-            'searchTerm' => $searchTerm, // Garder la valeur dans le champ de recherche
+            'searchTerm' => $searchTerm,
+            'expirationWarnings' => $expirationWarnings
         ]);
     }
+    
 
 
     // New Medicament Route - Form to create a new medicament
@@ -122,8 +171,32 @@ final class MedicamentController extends AbstractController
     #[Route('/{id}', name: 'app_medicament_show', methods: ['GET'])]
     public function show(Medicament $medicament): Response
     {
+
+
+
+        $data =  $medicament->getNomMedicament() .' | quantité disponible ' . $medicament->getQuantite() .' | Prix : ' . $medicament->getPrix() ;
+
+        $result = Builder::create()
+        ->writer(new SvgWriter())
+        ->data($data)
+         ->encoding(new Encoding('UTF-8'))
+         ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
+         ->size(300)
+        // ->logoPath($logoPath) // Add logo
+         //->logoPunchoutBackground(true)
+         ->margin(10)
+         ->build();
+ 
+     // Generate a Data URI to include image data inline
+     $dataUri = $result->getDataUri();
+
+
+
+
+
         return $this->render('medicament/show.html.twig', [
             'medicament' => $medicament,
+            'qr'=>$dataUri
         ]);
     }
 
@@ -171,4 +244,49 @@ final class MedicamentController extends AbstractController
 
         return $this->redirectToRoute('app_medicament_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    #[Route('/medicament/statistiques', name: 'app_medicament_statistique', methods: ['GET'])]
+    public function statistiques(MedicamentRepository $medicamentRepository): Response
+    {
+        // Get all medicaments
+        $medicaments = $medicamentRepository->findAll();
+        $data = [];
+    
+        // Loop through all medicaments and group by type
+        foreach ($medicaments as $medicament) {
+            $type = $medicament->getType(); // Make sure getType() is a valid method
+            if ($type) {
+                // Sum the quantities per type
+                if (!isset($data[$type])) {
+                    $data[$type] = 0;
+                }
+                $data[$type] += $medicament->getQuantite();
+            }
+        }
+    
+        return $this->render('medicament/statistiques.html.twig', [
+            'data' => json_encode($data)
+        ]);
+    }
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }

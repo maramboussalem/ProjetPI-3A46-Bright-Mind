@@ -1,0 +1,77 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Statistiques des Médicaments{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center text-primary mb-4">Statistiques des Médicaments</h1>
+
+        <div class="card shadow-lg">
+            <div class="card-header bg-info text-white">
+                <h4>Graphique des Quantités par Type de Médicament</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="medicamentChart"></canvas>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('app_medicament_index') }}" class="btn btn-primary btn-lg">Retour à la liste des Médicaments</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('medicamentChart').getContext('2d');
+        var data = {{ data|raw }};
+        
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    label: 'Quantité des Médicaments',
+                    data: Object.values(data),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 5
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleFont: {
+                            size: 16
+                        },
+                        bodyFont: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

@@ -32,13 +32,16 @@ final class DiagnosticController extends AbstractController
             'diagnostics' => $diagnosticRepository->findAll(),
         ]);
     }
-    
 
-    #[Route('/new', name: 'app_diagnostic_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    #[Route('/new/{patientId}', name: 'app_diagnostic_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, int $patientId): Response
     {
         $diagnostic = new Diagnostic();
-        $form = $this->createForm(DiagnosticType::class, $diagnostic);
+        
+        // Create form with patientId option
+        $form = $this->createForm(DiagnosticType::class, $diagnostic, [
+            'patient_id' => $patientId,
+        ]);
         $form->handleRequest($request);
 
         // Validation de la saisie
@@ -48,13 +51,13 @@ final class DiagnosticController extends AbstractController
             $entityManager->persist($diagnostic);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_diagnostic_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_diagnosticM_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('diagnostic/new.html.twig', [
             'diagnostic' => $diagnostic,
             'form' => $form->createView(),
-            'errors' => $errors,  // Afficher les erreurs de validation
+            'errors' => $errors,
         ]);
     }
 
@@ -78,13 +81,13 @@ final class DiagnosticController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && count($errors) === 0) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_diagnostic_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_diagnosticM_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('diagnostic/edit.html.twig', [
             'diagnostic' => $diagnostic,
             'form' => $form->createView(),
-            'errors' => $errors, // Passer les erreurs au modèle pour affichage
+            'errors' => $errors,
         ]);
     }
 

@@ -6,6 +6,7 @@ use App\Entity\Fournisseur;
 use App\Form\FournisseurType;
 use App\Repository\FournisseurRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +17,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class FournisseurController extends AbstractController
 {
     #[Route(name: 'app_fournisseur_index', methods: ['GET'])]
-    public function index(FournisseurRepository $fournisseurRepository): Response
+    public function index(FournisseurRepository $fournisseurRepository , Request $request , PaginatorInterface $paginator): Response
     {
+
+        $pagination = $paginator->paginate(
+            $fournisseurRepository->findAll(),
+            $request->query->getInt('page', 1),
+            2 // items per page
+        );
+
         return $this->render('fournisseur/index.html.twig', [
-            'fournisseurs' => $fournisseurRepository->findAll(),
+            'fournisseurs' => $pagination,
         ]);
     }
 
