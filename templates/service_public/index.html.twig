@@ -72,7 +72,10 @@
                                         <div class="card-body">
                                             <h5 class="card-title">{{ service_med.nomService }}</h5>
                                             <p class="card-text"><strong>Prix de la consultation : </strong>{{ service_med.descriptionMed }}</p>
-                                            <a href="#" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#reservationModal{{ loop.index }}">Prendre Rendez-vous</a>
+                                            <a href="{{ path('app_map', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">    voire localisation </a>
+
+<a href="{{ path('app_rdv_new_from_service', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">Prendre Rendez-vous</a>
+
                                         </div>
                                     </div>
                                 </div>

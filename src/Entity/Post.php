@@ -24,8 +24,14 @@ class Post
     #[Assert\NotBlank(message: 'le contenu est oubligatoire')]
     private ?string $content = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $publishedAt = null;
+    
     #[ORM\Column(length: 255)]
     private ?string $imageUrl = null;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private ?int $views = 0;
 
     /**
      * @var Collection<int, Comment>
@@ -108,4 +114,34 @@ class Post
 
         return $this;
     }
+    public function getPublishedAt(): ?\DateTimeInterface
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(?\DateTimeInterface $publishedAt): self
+    {
+        $this->publishedAt = $publishedAt;
+        return $this;
+    }
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
+        return $this;
+    }
+
+    public function incrementViews(): self
+    {
+        $this->views++;
+        return $this;
+    }
+    public function getCommentCount(): int
+{
+    return $this->comments->count();
+}
 }

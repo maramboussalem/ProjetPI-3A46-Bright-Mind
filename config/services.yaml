@@ -12,6 +12,8 @@ parameters:
     equipement_images_directory: '%kernel.project_dir%/public/uploads/equipements'
     openai_api_key: '%env(OPENAI_API_KEY)%'
     gemini_api_key: '%env(GEMINI_API_KEY)%'
+    openai_api_key: '%env(OPENAI_API_KEY)%'
+    gemini_api_key: '%env(GEMINI_API_KEY)%'
 services:
     App\Repository\UtilisateurRepository:
         autowire: true

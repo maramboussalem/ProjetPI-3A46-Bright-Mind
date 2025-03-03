@@ -48,9 +48,16 @@ class ServiceMed
     
     private Collection $disponibilites;
 
+    /**
+     * @var Collection<int, Rdv>
+     */
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'serviceName')]
+    private Collection $rdvs;
+
     public function __construct()
     {
         $this->disponibilites = new ArrayCollection();
+        $this->rdvs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +152,36 @@ class ServiceMed
 
         // Retourne true si toutes les validations sont réussies
         return true;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setServiceName($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getServiceName() === $this) {
+                $rdv->setServiceName(null);
+            }
+        }
+
+        return $this;
     }
 }
 

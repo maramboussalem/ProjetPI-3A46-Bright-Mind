@@ -115,14 +115,19 @@
     {% block body %}
        
     {% endblock %}
+     {% block js %}
+       <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+       <script src="{{ asset('bundles/fosckeditor/ckeditor.js') }}"></script>
+       <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    {% endblock %}
 </body>    
-<section id="touch" class="p-2 bg_dark"> <!-- Réduction du padding -->
+<section id="touch" class="p-2 bg_dark">
     <div class="container-xl">
         <div class="touch_1 row">
             <div class="col-md-6">
                 <div class="touch_1l">
                     <h5 class="fw-normal space_5 dashline text-white-50">CONTACTEZ-NOUS</h5>
-                    <h2 class="mt-2 font_40 text-white">Prenez Contact</h2> <!-- Taille de police réduite -->
+                    <h2 class="mt-2 font_40 text-white">Prenez Contact</h2>
                     <div class="touch_1li row">
                         <div class="col-md-2 col-sm-2">
                             <span class="d-inline-block text-center text-white fs-4"><i class="fa fa-map-marker"></i></span>
@@ -140,7 +145,7 @@
                         </div>
                         <div class="col-md-10 col-sm-10">
                             <p class="fs-6 text-light mb-0">
-                               <span class="fw-bold"> +(216) 96333585</span>
+                                <span class="fw-bold"> +(216) 96333585</span>
                             </p>
                         </div>
                     </div>
@@ -151,11 +156,31 @@
                         </div>
                         <div class="col-md-10 col-sm-10">
                             <p class="fs-6 text-light mb-0">
-                                 <span class="fw-bold"> BrightMind@gmail.com</span><br>
+                                <span class="fw-bold"> BrightMind@gmail.com</span><br>
                             </p>
                         </div>
                     </div>
                     <h6 class="mb-2 mt-3"><a class="button" href="#">Contactez-nous <i class="fa fa-caret-right ms-1 col_blue align-top"></i></a></h6>
+                    {% for message in app.flashes('success') %}
+                    <div class="alert alert-success mt-3" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    <!-- Subscription Button Form -->
+                    {% if app.user %}
+                        <form action="{{ path('mailchimp_subscribe') }}" method="POST" class="mt-3">
+                            <input type="hidden" name="email" value="{{ app.user.email }}">
+                            <input type="hidden" name="firstName" value="{{ app.user.prenom ?? '' }}">
+                            <input type="hidden" name="lastName" value="{{ app.user.nom ?? '' }}">
+                            <input type="hidden" name="status_if_new" value="subscribed">
+                            <button type="submit" class="btn btn-primary">Abonnez-vous à la newsletter</button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-md-6">
@@ -167,9 +192,6 @@
     </div>
 </section>
 
-    {% block js %}
-       <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    {% endblock %}
-
+   
 </html>
 
