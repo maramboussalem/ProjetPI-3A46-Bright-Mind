@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f30a92c67b59fcee81ae79d677ccc63",
+    "content-hash": "0ac46912ead979831bd4852a647bc25d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6107,75 +6107,6 @@
             "time": "2025-01-24T15:27:15+00:00"
         },
         {
-            "name": "symfony/mailgun-mailer",
-            "version": "v6.4.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/mailgun-mailer.git",
-                "reference": "ad4e79798a5eb80af99004a4871b4fe5effe33a3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mailgun-mailer/zipball/ad4e79798a5eb80af99004a4871b4fe5effe33a3",
-                "reference": "ad4e79798a5eb80af99004a4871b4fe5effe33a3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/mailer": "^5.4.21|^6.2.7|^7.0"
-            },
-            "conflict": {
-                "symfony/http-foundation": "<6.2"
-            },
-            "require-dev": {
-                "symfony/http-client": "^6.3|^7.0",
-                "symfony/webhook": "^6.3|^7.0"
-            },
-            "type": "symfony-mailer-bridge",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Mailer\\Bridge\\Mailgun\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Mailgun Mailer Bridge",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/mailgun-mailer/tree/v6.4.13"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-09-25T14:18:03+00:00"
-        },
-        {
             "name": "symfony/messenger",
             "version": "v6.4.16",
             "source": {
@@ -8346,16 +8277,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v6.4.13",
+            "version": "v6.4.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "bee9bfabfa8b4045a66bf82520e492cddbaffa66"
+                "reference": "3b9bf9f33997c064885a7bfc126c14b9daa0e00e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/bee9bfabfa8b4045a66bf82520e492cddbaffa66",
-                "reference": "bee9bfabfa8b4045a66bf82520e492cddbaffa66",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/3b9bf9f33997c064885a7bfc126c14b9daa0e00e",
+                "reference": "3b9bf9f33997c064885a7bfc126c14b9daa0e00e",
                 "shasum": ""
             },
             "require": {
@@ -8421,7 +8352,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v6.4.13"
+                "source": "https://github.com/symfony/translation/tree/v6.4.19"
             },
             "funding": [
                 {
@@ -8437,7 +8368,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-27T18:14:25+00:00"
+            "time": "2025-02-13T10:18:43+00:00"
         },
         {
             "name": "symfony/translation-contracts",

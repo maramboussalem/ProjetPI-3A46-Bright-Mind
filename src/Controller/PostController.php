@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Subscriber;
-
+use App\Service\EmailService;
 
 
 
@@ -27,50 +27,64 @@ final class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
-public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $post = new Post();
-    $form = $this->createForm(PostType::class, $post);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Get the file from the form
-        /** @var UploadedFile $file */
-        $file = $form->get('file')->getData();
-
-        if ($file) {
-            // Generate a unique file name
-            $fileName = uniqid() . '.' . $file->guessExtension();
-
-            // Move the file to the directory where you want to store it
-            $file->move(
-                $this->getParameter('upload_directory'), // This is the directory where the file should be saved
-                $fileName
-            );
-
-            // Optionally, you can set the filename on your Post entity, for example:
-            $post->setImageUrl('front/compagne/img/' . $fileName); // Assuming you have a `setFileName` method in your `Post` entity
+ 
+    
+#[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService): Response
+    {
+        $post = new Post();
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
+            /** @var UploadedFile $file */
+            $file = $form->get('file')->getData();
+    
+            if ($file) {
+                $fileName = uniqid() . '.' . $file->guessExtension();
+                $file->move(
+                    $this->getParameter('upload_directory'),
+                    $fileName
+                );
+                $post->setImageUrl('front/compagne/img/' . $fileName);
+            }
+    
+            // Set published date and save post
+            $post->setPublishedAt(new \DateTime());
+            $entityManager->persist($post);
+            $entityManager->flush();
+    
+            // Fetch all users
+            $users = $entityManager->getRepository('App\Entity\Utilisateur')->findAll();
+    
+            // Send email to each user with post details
+            foreach ($users as $user) {
+                $emailSubject = 'New Post: ' . $post->getTitle();
+                $emailBody = sprintf(
+                    "Hello %s %s,\n\nA new post has been published!\n\nTitle: %s\nContent: %s\nImage: %s\n\nCheck it out on our site!\n\nBest regards,\nYour App Team",
+                    $user->getPrenom() ?? 'User', // Assuming prenom and nom exist; adjust if different
+                    $user->getNom() ?? '',
+                    $post->getTitle(),
+                    $post->getContent(),
+                    $post->getImageUrl()?? 'No image uploaded'
+                );
+    
+                $emailService->sendEmail(
+                    $user->getEmail(),
+                    $emailSubject,
+                    $emailBody
+                );
+            }
+    
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
         }
-        $post->setPublishedAt(new \DateTime());
-        // Persist the post entity and flush to the database
-        $entityManager->persist($post);
-        $entityManager->flush();
-        $post->setPublishedAt(new \DateTime());
-        
-        
-              
     
-
-        return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+        return $this->render('post/new.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+        ]);
     }
-    
-    return $this->render('post/new.html.twig', [
-        'post' => $post,
-        'form' => $form->createView(),
-    ]);
-}
-
     #[Route('/{id}', name: 'app_post_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(string $id, PostRepository $postRepository, EntityManagerInterface $entityManager): Response
     {
