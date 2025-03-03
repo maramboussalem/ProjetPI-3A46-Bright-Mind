@@ -221,7 +221,6 @@
       
     </li>
   </ul>
-</li>
 
 
         </li><!-- End Profile Nav -->
@@ -276,6 +275,21 @@
        <li>
             <a href="{{path('app_disponibiliteM_index')}}">
                 <i class="bi bi-capsule"></i><span>Disponiblite</span>
+            </a>
+        </li>
+    </ul>
+    <a class="nav-link collapsed" data-bs-target="#diagnostic-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-box-seam"></i><span>Diagnostic</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="diagnostic-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+            <a href="{{path('app_diagnosticM_index')}}">
+                <i class="bi bi-truck"></i><span>Diagnostic</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{path('app_parametres_viteaux_indexM')}}">
+                <i class="bi bi-capsule"></i><span>Paramétres Vitaux</span>
             </a>
         </li>
     </ul>

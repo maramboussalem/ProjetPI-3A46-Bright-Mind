@@ -48,7 +48,10 @@
         </div>
 <br><br>
 <!-- Chatbot UI -->
-
+<div class="text-center mb-4">
+ <a href="{{ path('chat') }}" class="btn btn-info">Parler au Chatbot</a>
+   
+</div>
 
 <br> <br>
         <div class="row g-4">
@@ -157,9 +160,7 @@
             {% endfor %}
         </div>
     </div>
-<div class="text-center mb-4">
-    
-</div>
+
     <!-- Pagination -->
     <div class="navigation d-flex justify-content-center my-4">
        {{ knp_pagination_render(service_meds) }}

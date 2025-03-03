@@ -269,122 +269,87 @@
             </div>
 
             <button class="form-button" type="submit">Soumettre le Diagnostic</button>
+            <!-- Hidden button for opening the chatbot modal -->
+            <button id="openChatbotBtn" style="display: none;" data-toggle="modal" data-target="#chatbotModal">Open Chatbot</button>
 
         {{ form_end(form) }}
+    </div>
+</div>
+
+
+<!-- Pie Chart Container -->
+<div class="form-container">
+<div class="chart-container">
+        <h2>Suivi des paramétres Vitaux</h2>
+        <button id="toggleChartButton" class="form-button" type="button">Afficher/Cacher le Graphique</button>
+        <div id="chartContainer" style="display: none;">
+            <canvas id="vitalChart"></canvas>
+        </div>
     </div>
 </div>
 
 <div class="form-container">
     <h2>Historique des diagnostics</h2>
 
-    <div class="filter-container">
-        <input type="text" id="filterName" class="form-control" placeholder="Nom">
-        <input type="number" id="filterAge" class="form-control" placeholder="Âge">
-        <input type="number" id="filterFc" class="form-control" placeholder="FC">
-        <input type="number" id="filterFr" class="form-control" placeholder="FR">
-        <input type="number" id="filterEcg" class="form-control" placeholder="ECG">
-        <input type="double" id="filterGad" class="form-control" placeholder="GAD">
-        <input type="number" id="filterTas" class="form-control" placeholder="TAS">
-        <input type="number" id="filterTad" class="form-control" placeholder="TAD">
-        <input type="number" id="filterSpo2" class="form-control" placeholder="SPO2">
-        <input type="number" id="filterGsc" class="form-control" placeholder="GSC">
-        <input type="date" id="filterDate" class="form-control" name="filterDate">
-        <button class="form-button reset-button" onclick="resetFilters()">Réinitialiser</button>
-
-    </div>
+    <form method="GET" action="{{ path('app_diagnostic_page') }}" class="filter-container">
+    <input type="text" name="name" id="filterName" class="form-control" placeholder="Nom" value="{{ app.request.query.get('name') }}">
+    <input type="number" name="age" id="filterAge" class="form-control" placeholder="Âge" value="{{ app.request.query.get('age') }}">
+    <input type="number" name="fc" id="filterFc" class="form-control" placeholder="FC" value="{{ app.request.query.get('fc') }}">
+    <input type="number" name="fr" id="filterFr" class="form-control" placeholder="FR" value="{{ app.request.query.get('fr') }}">
+    <input type="number" name="ecg" id="filterEcg" class="form-control" placeholder="ECG" value="{{ app.request.query.get('ecg') }}">
+    <input type="number" name="gad" id="filterGad" class="form-control" placeholder="GAD" value="{{ app.request.query.get('gad') }}">
+    <input type="number" name="tas" id="filterTas" class="form-control" placeholder="TAS" value="{{ app.request.query.get('tas') }}">
+    <input type="number" name="tad" id="filterTad" class="form-control" placeholder="TAD" value="{{ app.request.query.get('tad') }}">
+    <input type="number" name="spo2" id="filterSpo2" class="form-control" placeholder="SPO2" value="{{ app.request.query.get('spo2') }}">
+    <input type="number" name="gsc" id="filterGsc" class="form-control" placeholder="GSC" value="{{ app.request.query.get('gsc') }}">
+    <input type="date" name="date" id="filterDate" class="form-control" value="{{ app.request.query.get('date') }}">
+    <button class="form-button" type="submit">Filtrer</button>
+    <a href="{{ path('app_diagnostic_page') }}" class="reset-button">Réinitialiser</a>
+</form>
 
     {% if parametres_viteauxes is not empty %}
-        <table class="table" id="parametresTable">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Âge</th>
-                    <th>FC</th>
-                    <th>FR</th>
-                    <th>ECG</th>
-                    <th>GAD</th>
-                    <th>TAS</th>
-                    <th>TAD</th>
-                    <th>SPO2</th>
-                    <th>GSC</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for parametre in parametres_viteauxes %}
-                    <tr>
-                        <td>{{ parametre.name }}</td>
-                        <td>{{ parametre.age }}</td>
-                        <td>{{ parametre.fc }}</td>
-                        <td>{{ parametre.fr }}</td>
-                        <td>{{ parametre.ecg }}</td>
-                        <td>{{ parametre.gad is not null ? parametre.gad|number_format(2, '.', ',') : 'N/A' }}</td>
-                        <td>{{ parametre.tas }}</td>
-                        <td>{{ parametre.tad }}</td>
-                        <td>{{ parametre.spo2 }}</td>
-                        <td>{{ parametre.gsc }}</td>
-                        <td>{{ parametre.createdAt ? parametre.createdAt|date('Y-m-d H:i') : 'N/A' }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Aucune donnée disponible</p>
-    {% endif %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Âge</th>
+            <th>FC</th>
+            <th>FR</th>
+            <th>ECG</th>
+            <th>GAD</th>
+            <th>TAS</th>
+            <th>TAD</th>
+            <th>SPO2</th>
+            <th>GSC</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for parametre in parametres_viteauxes %}
+        {% if parametre.user == app.user %}
+            <tr>
+                <td>{{ parametre.name }}</td>
+                <td>{{ parametre.age }}</td>
+                <td class="{{ parametre.fc < 60 or parametre.fc > 100 ? 'text-danger' : '' }}">{{ parametre.fc }}</td>
+                <td class="{{ parametre.fr < 12 or parametre.fr > 25 ? 'text-danger' : '' }}">{{ parametre.fr }}</td>
+                <td>{{ parametre.ecg }}</td>
+                <td>{{ parametre.gad is not null ? parametre.gad|number_format(2, '.', ',') : 'N/A' }}</td>
+                <td class="{{ parametre.tas < 90 or parametre.tas > 140 ? 'text-danger' : '' }}">{{ parametre.tas }}</td>
+                <td class="{{ parametre.tad < 60 or parametre.tad > 90 ? 'text-danger' : '' }}">{{ parametre.tad }}</td>
+                <td class="{{ parametre.spo2 < 95 ? 'text-danger' : '' }}">{{ parametre.spo2 }}</td>
+                <td>{{ parametre.gsc }}</td>
+                <td>{{ parametre.createdAt ? parametre.createdAt|date('Y-m-d H:i') : 'N/A' }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>Aucune donnée disponible</p>
+{% endif %}
+
 </div>
 
-<script>
-    // Filtrage dynamique
-    document.querySelectorAll('.filter-container input').forEach(input => {
-        input.addEventListener('input', filterTable);
-    });
-
-    function filterTable() {
-        var filters = {
-            name: document.getElementById("filterName").value.toLowerCase(),
-            age: document.getElementById("filterAge").value,
-            fc: document.getElementById("filterFc").value,
-            fr: document.getElementById("filterFr").value,
-            ecg: document.getElementById("filterEcg").value,
-            gad: document.getElementById("filterGad").value,
-            tas: document.getElementById("filterTas").value,
-            tad: document.getElementById("filterTad").value,
-            spo2: document.getElementById("filterSpo2").value,
-            gsc: document.getElementById("filterGsc").value,
-            date: document.getElementById("filterDate").value,
-        };
-
-        var rows = document.querySelectorAll("#parametresTable tbody tr");
-
-        rows.forEach(row => {
-            var cells = row.getElementsByTagName("td");
-            var match = true;
-
-            if (filters.name && !cells[0].textContent.toLowerCase().includes(filters.name)) match = false;
-            if (filters.age && cells[1].textContent != filters.age) match = false;
-            if (filters.fc && cells[2].textContent != filters.fc) match = false;
-            if (filters.fr && cells[3].textContent != filters.fr) match = false;
-            if (filters.ecg && cells[4].textContent != filters.ecg) match = false;
-            if (filters.gad && cells[5].textContent != filters.gad) match = false;
-            if (filters.tas && cells[6].textContent != filters.tas) match = false;
-            if (filters.tad && cells[7].textContent != filters.tad) match = false;
-            if (filters.spo2 && cells[8].textContent != filters.spo2) match = false;
-            if (filters.gsc && cells[9].textContent != filters.gsc) match = false;
-            if (filters.date) {
-            var rowDate = cells[10].textContent.trim().split(" ")[0];
-            if (rowDate !== filters.date) match = false;
-            }
-
-            row.style.display = match ? "" : "none";
-        });
-    }
-
-    // Réinitialiser les filtres
-    function resetFilters() {
-        document.querySelectorAll('.filter-container input').forEach(input => input.value = "");
-        filterTable();
-    }
-</script>
 
 <!-- Loading Modal -->
 <div id="loadingModal">
@@ -393,19 +358,122 @@
     </div>
 </div>
 
-<script>
-    // Show loading dialog on form submission
-    document.querySelector("form").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent form submission
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chart toggle functionality
+            const chartContainer = document.getElementById("chartContainer");
+            const toggleChartButton = document.getElementById("toggleChartButton");
+            
+            toggleChartButton.addEventListener("click", function () {
+                chartContainer.style.display = chartContainer.style.display === "none" ? "block" : "none";
+            });
 
-        // Show the loading modal
-        document.getElementById("loadingModal").style.display = "block";
+            // Prepare chart data from the array of vital parameters
+            const vitalData = {
+    labels: [{% for param in parametres_viteauxes %}'{{ param.createdAt|date('Y-m-d H:i') }}',{% endfor %}],
+    datasets: [
+        {
+            label: 'FC (bpm)',
+            data: [{% for param in parametres_viteauxes %}{{ param.fc|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'TAS (mmHg)',
+            data: [{% for param in parametres_viteauxes %}{{ param.tas|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'SPO2 (%)',
+            data: [{% for param in parametres_viteauxes %}{{ param.spo2|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'FR (bpm)',
+            data: [{% for param in parametres_viteauxes %}{{ param.fr|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(153, 102, 255, 0.6)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'ECG',
+            data: [{% for param in parametres_viteauxes %}{{ param.ecg|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(255, 159, 64, 0.6)',
+            borderColor: 'rgba(255, 159, 64, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'GAD',
+            data: [{% for param in parametres_viteauxes %}{{ param.gad|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(255, 205, 86, 0.6)',
+            borderColor: 'rgba(255, 205, 86, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'TAD (mmHg)',
+            data: [{% for param in parametres_viteauxes %}{{ param.tad|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        },
+        {
+            label: 'GSC',
+            data: [{% for param in parametres_viteauxes %}{{ param.gsc|default('null') }},{% endfor %}],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }
+    ]
+};
 
-        // Submit the form after a brief delay to allow the modal to show
-        setTimeout(function() {
-            event.target.submit(); // Now submit the form
-        }, 2000); // 2-second delay
-    });
-</script>
+
+            // Render the chart
+            const ctx = document.getElementById('vitalChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',  // Changed to line chart for better historical data visualization
+                data: vitalData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Valeurs'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+
+            // Loading modal on form submission
+            document.querySelector("form").addEventListener("submit", function(event) {
+                event.preventDefault();
+                document.getElementById("loadingModal").style.display = "block";
+                setTimeout(function() {
+                    event.target.submit();
+                }, 2000);
+            });
+        });
+    </script>
+{% endblock %}
 
 {% endblock %}

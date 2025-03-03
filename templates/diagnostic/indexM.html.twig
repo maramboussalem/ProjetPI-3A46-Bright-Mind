@@ -1,4 +1,4 @@
-{% extends 'admin/base_back.html.twig' %}
+{% extends 'medcin/base_backMedcin.html.twig' %}
 
 {% block title %}Diagnostic Index{% endblock %}
 
@@ -52,6 +52,7 @@
                 <td>{{ diagnostic.medecinID }}</td>
                 <td>
                     <a href="{{ path('app_diagnostic_show', {'id': diagnostic.id}) }}" class="btn btn-info">Afficher</a>
+                    <a href="{{ path('app_diagnostic_edit', {'id': diagnostic.id}) }}" class="btn btn-primary">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -61,6 +62,10 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="mt-3">
+        <a href="{{ path('app_diagnostic_new') }}" class="btn btn-success">Créer un nouveau</a>
+    </div>
 
     <script>
         function applyFilter() {
