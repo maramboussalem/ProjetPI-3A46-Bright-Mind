@@ -27,20 +27,20 @@ class Diagnostic
     )]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Assert\NotBlank(message: "La date du diagnostic est requise.")]
     #[Assert\Type("\DateTimeInterface", message: "La date doit être une date valide.")]
     #[Assert\LessThanOrEqual("today", message: "La date du diagnostic ne peut pas être dans le futur.")]
     private ?\DateTimeInterface $dateDiagnostic = null;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: "L'identifiant du patient est requis.")]
-    #[Assert\Type("integer", message: "L'identifiant du patient doit être un nombre entier.")]
+    #[ORM\Column(nullable: true)]
+    // Removed #[Assert\NotBlank(message: "L'identifiant du patient est requis.")]
+    // #[Assert\Type("integer", message: "L'identifiant du patient doit être un nombre entier.")]
     private ?int $patientID = null;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: "L'identifiant du médecin est requis.")]
-    #[Assert\Type("integer", message: "L'identifiant du médecin doit être un nombre entier.")]
+    #[ORM\Column(nullable: true)]
+    // Removed #[Assert\NotBlank(message: "L'identifiant du médecin est requis.")]
+    // #[Assert\Type("integer", message: "L'identifiant du médecin doit être un nombre entier.")]
     private ?int $medecinID = null;
 
     public function getId(): ?int
@@ -79,7 +79,7 @@ class Diagnostic
 
     public function setDateDiagnostic(?\DateTimeInterface $dateDiagnostic): static
     {
-        $this->dateDiagnostic = $dateDiagnostic ?: new \DateTime(); // Default to today if null
+        $this->dateDiagnostic = $dateDiagnostic;
         return $this;
     }
 
@@ -88,7 +88,7 @@ class Diagnostic
         return $this->patientID;
     }
 
-    public function setPatientID(int $patientID): static
+    public function setPatientID(?int $patientID): static
     {
         $this->patientID = $patientID;
 
@@ -100,7 +100,7 @@ class Diagnostic
         return $this->medecinID;
     }
 
-    public function setMedecinID(int $medecinID): static
+    public function setMedecinID(?int $medecinID): static
     {
         $this->medecinID = $medecinID;
 

@@ -64,7 +64,10 @@
     </table>
 
     <div class="mt-3">
-        <a href="{{ path('app_diagnostic_new') }}" class="btn btn-success">Créer un nouveau</a>
+        {# Removed the problematic link #}
+        {# <a href="{{ path('app_diagnostic_new') }}" class="btn btn-success">Créer un nouveau</a> #}
+        {# Replaced with a link back to parametres_viteaux list #}
+        <a href="{{ path('app_parametres_viteaux_index') }}" class="btn btn-secondary">Retour aux Paramètres Vitaux</a>
     </div>
 
     <script>

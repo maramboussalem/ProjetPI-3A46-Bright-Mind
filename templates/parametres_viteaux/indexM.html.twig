@@ -74,6 +74,7 @@
                 <td>{{ parametres_viteaux.gsc }}</td>
                 <td>
                     <a href="{{ path('app_parametres_viteaux_show', {'id': parametres_viteaux.id}) }}" class="btn btn-info">Afficher</a>
+                    <a href="{{ path('app_diagnostic_new', {'patientId': parametres_viteaux.id}) }}" class="btn btn-success btn-sm">Diagnostic</a>
                 </td>
             </tr>
         {% else %}
