@@ -1,76 +1,192 @@
-{% extends 'admin/base_back.html.twig' %}
+	{% extends 'admin/base_back.html.twig' %}
 
-{% block title %}Medicament Index{% endblock %}
+	{% block title %}Medicament Index
+	{% endblock %}
 
-{% block body %}
-<h1 class="text-center card p-3">List des medicaments </h1>
-  
- 
- 
-<form method="GET" action="{{ path('app_medicament_index') }}" class="mb-3">
-    <div class="row">
-        <div class="col-md-4">
-            <select name="fournisseur" class="form-select" onchange="this.form.submit()">
-                <option value="">Tous les fournisseurs</option>
-                {% for fournisseur in fournisseurs %}
-                    <option value="{{ fournisseur.id }}" {% if selectedFournisseur == fournisseur.id %}selected{% endif %}>
-                        {{ fournisseur.NomFournisseur }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-6">
-            <input type="text" name="search" class="form-control" placeholder="Rechercher un médicament..." value="{{ searchTerm }}">
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Rechercher</button>
-        </div>
-    </div>
-</form>
+	{% block body %}
+		<h1 class="text-center card p-3">List des medicaments
+		</h1>
 
-    <div class="container">
-        <div class="row">
-            {% for medicament in medicaments %}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0 h-100 hover-card">
-                        <img src="{{ asset('Medicament/' ~ medicament.image) }}" class="card-img-top img-fluid" style="max-height: 200px;" alt="{{ medicament.NomMedicament }}">
-                        <div class="card-body">
-                           
-                             <li class="list-group-item">NomMedicament: <strong>{{medicament.NomMedicament  }}</strong></li>
-                                <li class="list-group-item">Description: <strong>{{ medicament.Description }} TND</strong></li>
-                                <li class="list-group-item">Quantité: <strong>{{ medicament.Quantite }}</strong></li>
-                                <li class="list-group-item">Prix: <strong>{{ medicament.Prix }} TND</strong></li>
-                                <li class="list-group-item">Type: <strong>{{ medicament.Type }}</strong></li>
-                                <li class="list-group-item">Expiration: <strong>{{ medicament.expireat|date('d/m/Y') }}</strong></li>
-                            </ul>
-                        </div>
-                        <div class="card-footer d-flex justify-content-between">
-                            <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}" class="btn btn-outline-primary">Voir</a>
-                            <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-outline-warning">Modifier</a>
-                        </div>
-                    </div>
-                </div>
 
-            {% else %}
-                <div class="col-12 text-center">
-                    <p class="text-muted">Aucun médicament trouvé.</p>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+		<form method="GET" action="{{ path('app_medicament_index') }}" class="mb-3">
+			<div class="row">
+				<div class="col-md-4">
+					<select name="fournisseur" class="form-select" onchange="this.form.submit()">
+						<option value="">Tous les fournisseurs</option>
+						{% for fournisseur in fournisseurs %}
+							<option value="{{ fournisseur.id }}" {% if selectedFournisseur == fournisseur.id %} selected {% endif %}>
+								{{ fournisseur.NomFournisseur }}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-6">
+					<input type="text" name="search" class="form-control" placeholder="Rechercher un médicament..." value="{{ searchTerm }}">
+				</div>
+				<div class="col-md-2">
+					<button type="submit" class="btn btn-primary w-100">Rechercher</button>
+				</div>
+			</div>
+		</form>
 
-    <div class="text-center mt-4">
-        <a href="{{ path('app_medicament_new') }}" class="btn btn-success">Créer un nouveau médicament</a>
-    </div>
+		<div class="container">
+			<div class="row">
+				{% for medicament in medicaments %}
+					<div class="col-md-4 mb-4 ">
+						<div class="card shadow-lg border-0 h-100 hover-card">
+							<img src="{{ asset('Medicament/' ~ medicament.image) }}" class="card-img-top img-fluid" style="max-height: 200px;" alt="{{ medicament.NomMedicament }}">
+							<div class="card-body">
 
-    <style>
-        .hover-card:hover {
-            transform: scale(1.05);
-            transition: 0.3s;
-        }
-        .card {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-    </style>
-{% endblock %}
+								<li class="list-group-item">NomMedicament:
+									<strong>{{medicament.NomMedicament  }}</strong>
+								</li>
+								<li class="list-group-item">
+								{% if medicament.id in expirationWarnings|keys %}
+							<p style="color: red; font-weight: bold;">
+								{{ expirationWarnings[medicament.id] }}
+							</p>
+						{% endif %}
+								</li>
+								<li class="list-group-item">Description:
+									<strong>{{ medicament.Description }}
+										TND</strong>
+								</li>
+								<li class="list-group-item">Quantité:
+									<strong>{{ medicament.Quantite }}</strong>
+								</li>
+								<li class="list-group-item">Prix:
+									<strong>{{ medicament.Prix }}
+										TND</strong>
+								</li>
+								<li class="list-group-item">Type:
+									<strong>{{ medicament.Type }}</strong>
+								</li>
+								<li class="list-group-item">Expiration:
+									<strong>{{ medicament.expireat|date('d/m/Y') }}</strong>
+								</li>
+							</ul>
+						</div>
+						<div class="card-footer d-flex justify-content-between  medicament-block" data-medicament-id="{{ medicament.id }}">
+							<a href="{{ path('app_medicament_show', {'id': medicament.id}) }}" class="btn btn-outline-primary">Voir</a>
+							<button class=" btn btn-outline-info toggle-medicament-btn {% if medicament.isshown %}unblock{% else %}block{% endif %}">
+								{% if medicament.isshown %}Masquer Médicament{% else %}Afficher Médicament
+								{% endif %}
+							</button>
+							<a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-outline-warning">Modifier</a>
+						</div>
+					</div>
+				</div>
+
+			{% else %}
+				<div class="col-12 text-center">
+					<p class="text-muted">Aucun médicament trouvé.</p>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<nav class="pagination-container">
+		<ul class="pagination">
+			{% if medicaments.currentPageNumber > 1 %}
+				<li>
+					<a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': medicaments.currentPageNumber - 1})) }}" class="pagination-link prev">« précedent</a>
+				</li>
+			{% endif %}
+
+			{% for page in medicaments.paginationData.pagesInRange %}
+				<li class="pagination-item {{ medicaments.currentPageNumber == page ? 'active' : '' }}">
+					<a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page})) }}" class="pagination-link">{{ page }}</a>
+				</li>
+			{% endfor %}
+
+			{% if medicaments.currentPageNumber < medicaments.paginationData.pageCount %}
+				<li>
+					<a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': medicaments.currentPageNumber + 1})) }}" class="pagination-link next">Suivant »</a>
+				</li>
+			{% endif %}
+		</ul>
+	</nav>
+	<style>
+		.pagination-container {
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		.pagination {
+			list-style: none;
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			gap: 8px;
+		}
+
+		.pagination-item {
+			display: inline-block;
+		}
+
+		.pagination-link {
+			display: block;
+			padding: 8px 12px;
+			text-decoration: none;
+			color: rgb(0, 25, 51);
+			border: 1px solid rgb(0, 25, 51);
+			border-radius: 5px;
+			transition: all 0.3s ease-in-out;
+		}
+
+		.pagination-link:hover {
+			background-color: rgb(0, 25, 51);
+			color: white;
+		}
+
+		.pagination-item.active .pagination-link {
+			background-color: rgb(0, 25, 51);
+			color: white;
+			font-weight: bold;
+		}
+
+		.prev,
+		.next {
+			font-weight: bold;
+		}
+	</style>
+	<div class="text-center mt-4">
+    <a href="{{ path('app_medicament_new') }}" class="btn btn-success">Créer un nouveau médicament</a>
+    <a href="{{ path('app_medicament_statistique') }}" class="btn btn-info">Voir les statistiques</a>
+</div>
+
+	<style>
+		.hover-card:hover {
+			transform: scale(1.05);
+			transition: 0.3s;
+		}
+		.card {
+			border-radius: 10px;
+			overflow: hidden;
+		}
+	</style>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).on('click', '.toggle-medicament-btn', function () {
+	const medicamentId = $(this).closest('.medicament-block').data('medicament-id');
+	const button = $(this);
+
+	$.ajax({
+	url: '/medicament/api/toggle-medicament/' + medicamentId,
+	method: 'POST',
+	success: function (response) {
+	if (response.success) {
+	if (button.hasClass('block')) {
+	button.text('Masquer Médicament').removeClass('block').addClass('unblock');
+	} else {
+	button.text('Afficher Médicament').removeClass('unblock').addClass('block');
+	}
+	alert(response.message);
+	}
+	},
+	error: function (xhr) {
+	alert('Une erreur s\'est produite: ' + xhr.responseText);
+	}
+	});
+	});
+	</script>{% endblock %}

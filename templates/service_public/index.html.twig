@@ -38,7 +38,18 @@
             background-color: #f9f9f9;
             transition: 0.3s;
         }
-   
+        .calendar .reserved {
+            background-color: #dc3545;
+            color: white;
+        }
+        .calendar .available {
+            background-color: #28a745;
+            color: white;
+        }
+        .calendar .unavailable {
+            background-color: #b0b0b0;
+            color: white;
+        }
     </style>
 <br><br><br>
     <div class="container my-5">
@@ -48,11 +59,12 @@
         </div>
 <br><br>
 <!-- Chatbot UI -->
+
+<!-- Chatbot UI -->
 <div class="text-center mb-4">
  <a href="{{ path('chat') }}" class="btn btn-info">Parler au Chatbot</a>
    
 </div>
-
 <br> <br>
         <div class="row g-4">
         <br> <br>
@@ -74,7 +86,7 @@
                                             <p class="card-text"><strong>Prix de la consultation : </strong>{{ service_med.descriptionMed }}</p>
                                             <a href="{{ path('app_map', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">    voire localisation </a>
 
-<a href="{{ path('app_rdv_new_from_service', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">Prendre Rendez-vous</a>
+<a href="{{ path('app_rdv_new_from_service', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">Prendre Rendez-vous</a> 
 
                                         </div>
                                     </div>
@@ -87,39 +99,45 @@
                             {% if service_med.disponibilites is not empty %}
                                 <div class="table-responsive">
                                     <table class="table table-bordered text-center">
-                                    
-                                        <thead>
-                                            <tr>
-                                                {% set jours_fr = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}
-                                                {% for jour in jours_fr %}
-                                                    <th>{{ jour }}</th>
-                                                {% endfor %}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                {% set disponibilites_map = {} %}
-                                                {% for dispo in service_med.disponibilites %}
-                                                    {% set jour_semaine = dispo.dateHeure|date('N') - 1 %}
-                                                    {% set disponibilites_map = disponibilites_map|merge({ (jour_semaine): dispo }) %}
-                                                {% endfor %}
+                                        {% if service_med.disponibilites is not empty %}
+                            <div class="calendar">
+                                {% set jours = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+                                {% set jours_fr = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}
+                                
+                                <!-- En-têtes des jours -->
+                                {% for jour in jours_fr %}
+                                    <div class="day-header">{{ jour }}</div>
+                                {% endfor %}
 
-                                                {% for i in 0..6 %}
-                                                    <td class="{% if disponibilites_map[i] is defined and disponibilites_map[i].estReserve %}reserved{% elseif disponibilites_map[i] is defined %}available{% else %}unavailable{% endif %}">
-                                                        {% if disponibilites_map[i] is defined %}
-                                                            {{ disponibilites_map[i].dateHeure|date('d F') }}<br>
-                                                              {{disponibilites_map[i].dateHeure|date('H:i') }}<br>
-                                                        {% if disponibilites_map[i].estReserve %}
-                                                     <span style="color: red;">Réservé</span>
-                                                        {% else %}
-                                                        <span style="color: green;">Disponible</span>
-                                                            {% endif %}
+                                {% set today = "now"|date("Y-m-d") %}
 
-                                                        {% else %}
-                                                            ---
-                                                        {% endif %}
-                                                    </td>
-                                                {% endfor %}
+                                <!-- Affichage des jours -->
+                                {% for i in 0..6 %}
+                                    {% set dispo = service_med.disponibilites|filter(d => d.dateHeure|date('D') == jours[i])|first %}
+                                    <div class="day {% if dispo and dispo.dateHeure|date('Y-m-d') == today %}today{% endif %} 
+                                                {% if dispo and dispo.estReserve %}reserved{% elseif dispo %}available{% else %}unavailable{% endif %}">
+                                        {% if dispo %}
+                                            <p class="date">{{ dispo.dateHeure|date('d/m/Y') }}</p>
+                                            <p class="time">{{ dispo.dateHeure|date('H:i') }}</p>
+                                            <p class="status">
+                                                {% if dispo.estReserve %}
+                                                    Réservé
+                                                {% else %}
+                                                    Disponible
+                                                {% endif %}
+                                            </p>
+                                        {% else %}
+                                            <p class="date">-</p>
+                                            <p class="time">-</p>
+                                            <p class="status">Indisponible</p>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>Aucune disponibilité.</p>
+                        {% endif %}
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -139,6 +157,7 @@
                                 <h5 class="modal-title" id="reservationModalLabel{{ loop.index }}">Prendre rendez-vous avec {{ service_med.nomService }}</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+                            
                             <div class="modal-body">
                                 <form id="reservation-form-{{ loop.index }}">
                                     <div class="mb-3">
@@ -174,14 +193,3 @@
         Votre rendez-vous a été pris avec succès !
     </div>
 {% endblock %}
-
- {% block javascripts %}
-   <script>
-
-</script>
-
-
-{% endblock %}
-
-
-

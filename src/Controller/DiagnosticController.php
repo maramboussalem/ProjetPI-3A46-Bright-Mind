@@ -48,7 +48,7 @@ final class DiagnosticController extends AbstractController
             $entityManager->persist($diagnostic);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_diagnostic_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_diagnosticM_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('diagnostic/new.html.twig', [
@@ -78,7 +78,7 @@ final class DiagnosticController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && count($errors) === 0) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_diagnostic_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_diagnosticM_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('diagnostic/edit.html.twig', [

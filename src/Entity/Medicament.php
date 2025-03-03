@@ -49,6 +49,9 @@ class Medicament
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    #[ORM\Column(options: ["default" => false])]
+    private ?bool $isshown = false;
+
     // Getters et setters...
 
     public function getNomMedicament(): ?string
@@ -116,10 +119,11 @@ class Medicament
         $this->fournisseur = $fournisseur;
         return $this;
     }
+
     public function getId(): ?int
-{
-    return $this->id;
-}
+    {
+        return $this->id;
+    }
 
     public function getExpireat(): ?\DateTimeInterface
     {
@@ -129,7 +133,6 @@ class Medicament
     public function setExpireat(\DateTimeInterface $expireat): static
     {
         $this->expireat = $expireat;
-
         return $this;
     }
 
@@ -141,8 +144,17 @@ class Medicament
     public function setImage(string $image): static
     {
         $this->image = $image;
-
         return $this;
     }
 
+    public function isshown(): ?bool
+    {
+        return $this->isshown;
+    }
+
+    public function setIsshown(bool $isshown): static
+    {
+        $this->isshown = $isshown;
+        return $this;
+    }
 }
