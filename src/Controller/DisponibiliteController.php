@@ -41,7 +41,7 @@ final class DisponibiliteController extends AbstractController
             $entityManager->persist($disponibilite);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_disponibilite_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_disponibiliteM_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('disponibilite/new.html.twig', [
@@ -67,7 +67,7 @@ final class DisponibiliteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_disponibilite_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_disponibiliteM_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('disponibilite/edit.html.twig', [
@@ -84,6 +84,6 @@ final class DisponibiliteController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_disponibilite_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_disponibiliteM_index', [], Response::HTTP_SEE_OTHER);
     }
 }

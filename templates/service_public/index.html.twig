@@ -48,7 +48,10 @@
         </div>
 <br><br>
 <!-- Chatbot UI -->
-
+<div class="text-center mb-4">
+ <a href="{{ path('chat') }}" class="btn btn-info">Parler au Chatbot</a>
+   
+</div>
 
 <br> <br>
         <div class="row g-4">
@@ -69,7 +72,10 @@
                                         <div class="card-body">
                                             <h5 class="card-title">{{ service_med.nomService }}</h5>
                                             <p class="card-text"><strong>Prix de la consultation : </strong>{{ service_med.descriptionMed }}</p>
-                                            <a href="#" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#reservationModal{{ loop.index }}">Prendre Rendez-vous</a>
+                                            <a href="{{ path('app_map', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">    voire localisation </a>
+
+<a href="{{ path('app_rdv_new_from_service', { 'serviceMedId': service_med.id }) }}" class="btn btn-primary mt-2">Prendre Rendez-vous</a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -157,9 +163,7 @@
             {% endfor %}
         </div>
     </div>
-<div class="text-center mb-4">
-    
-</div>
+
     <!-- Pagination -->
     <div class="navigation d-flex justify-content-center my-4">
        {{ knp_pagination_render(service_meds) }}

@@ -107,14 +107,28 @@ public function show2(Consultation $consultation): Response
     }
 
     #[Route('/{id}', name: 'app_consultation_delete', methods: ['POST'])]
-    public function delete(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $consultation->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($consultation);
-            $entityManager->flush();
+public function delete(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
+{
+    // Check if CSRF token is valid
+    if ($this->isCsrfTokenValid('delete' . $consultation->getId(), $request->request->get('_token'))) {
+        
+        // Step 1: Delete all related reclamations
+        $reclamations = $consultation->getReclamations();  // Get related reclamations
+        foreach ($reclamations as $reclamation) {
+            $entityManager->remove($reclamation);  // Remove each reclamation
         }
 
-        // Redirect to the appropriate consultations list page after deletion
-        return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);  // Redirect to index or index2 based on your choice
+        // Step 2: Now delete the consultation
+        $entityManager->remove($consultation);
+        $entityManager->flush();  // Apply the changes (deleting reclamations and consultation)
+
+        // Flash message (optional)
+        $this->addFlash('success', 'La consultation et ses réclamations ont été supprimées avec succès.');
+
     }
+
+    // Redirect to the appropriate consultations list page after deletion
+    return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
+}
+
 }

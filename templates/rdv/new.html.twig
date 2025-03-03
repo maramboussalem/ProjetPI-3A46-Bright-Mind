@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Rdv{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Create a New Rendez-vous</h1>
+
+        {{ form_start(form, { 'attr': { 'class': 'needs-validation', 'novalidate': 'novalidate' } }) }}
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Rendez-vous Details</h5>
+                
+                {{ form_widget(form) }}
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                </div>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+
+        <div class="mt-4">
+            <a href="{{ path('app_rdv_index') }}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+{% endblock %}

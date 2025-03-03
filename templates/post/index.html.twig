@@ -1,45 +1,60 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block title %}Post index{% endblock %}
+{% block title %}Postes{% endblock %}
 
 {% block body %}
-    <h1>Post index</h1>
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 fw-bold text-dark">Ajouter une Poste</h1>
+            <a href="{{ path('app_post_new') }}" 
+               class="btn btn-primary">
+                créer une nouvelle poste
+            </a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Image</th> {# Changed column name #}
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.content }}</td>
-                <td>
-                    {% if post.imageUrl %}
-                        <img src="{{ asset(post.imageUrl) }}" alt="Post Image" style="max-width: 100px; height: auto;">
-                    {% else %}
-                        No image
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_post_new') }}">Create new</a>
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="px-3 py-3">Titre</th>
+                            <th scope="col" class="px-3 py-3">Contenu</th>
+                            <th scope="col" class="px-3 py-3">Image</th>
+                            <th scope="col" class="px-3 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                            <tr>
+                                <td class="px-3 py-3 align-middle">{{ post.title }}</td>
+                                <td class="px-3 py-3 align-middle">
+                                    {{ post.content|length > 100 ? post.content|slice(0, 100) ~ '...' : post.content }}
+                                </td>
+                                <td class="px-3 py-3 align-middle">
+                                    {% if post.imageUrl %}
+                                        <img src="{{ asset(post.imageUrl) }}" 
+                                             alt="Post Image" 
+                                             class="img-thumbnail" 
+                                             style="max-width: 100px; height: auto;">
+                                    {% else %}
+                                        <span class="text-muted">No image</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-3 py-3 align-middle">
+                                    <a href="{{ path('app_post_show', {'id': post.id}) }}" 
+                                       class="btn btn-sm btn-outline-primary me-2">Montrer</a>
+                                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" 
+                                       class="btn btn-sm btn-outline-success">Editer</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="px-3 py-3 text-center text-muted">No records found</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

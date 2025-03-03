@@ -14,51 +14,106 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface; 
 use App\Repository\CommentRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class PostPublicController extends AbstractController
 {
 
-#[Route('/compagne', name: 'compagne_public')]
-public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/compagne', name: 'compagne_public')]
+public function index(EntityManagerInterface $entityManager, Request $request): Response
 {
-    $posts = $entityManager->getRepository(Post::class)->findAll();
+    $postsPerPage = 1;
+    $currentPage = $request->query->getInt('page', 1);
+    
+    $repository = $entityManager->getRepository(Post::class);
+    
+    
+    $totalPosts = $repository->createQueryBuilder('p')
+        ->select('COUNT(p.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    
+    $totalPages = ceil($totalPosts / $postsPerPage);
+    $currentPage = max(1, min($currentPage, $totalPages));
+    $offset = ($currentPage - 1) * $postsPerPage;
+    
+    $posts = $repository->findBy(
+        [],           
+        null,        
+        $postsPerPage, 
+        $offset        
+    );
 
     return $this->render('home/compagne.html.twig', [
-        'posts' => $posts
+        'posts' => $posts,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+        'postsPerPage' => $postsPerPage
     ]);
 }
 #[Route('/compagne/{id}', name: 'post_detail')]
 public function show(int $id, EntityManagerInterface $entityManager, Request $request, Security $security): Response
-    {
-        $user = $security->getUser();
-        $post = $entityManager->getRepository(Post::class)->find($id);
+{
+    $user = $security->getUser();
+    $post = $entityManager->getRepository(Post::class)->find($id);
+    
+    if (!$post) {
+        throw $this->createNotFoundException('Post not found');
+    }
 
-        if (!$post) {
-            throw $this->createNotFoundException('Post not found');
-        }
-        $comment = new Comment();
-        $commentForm = $this->createForm(CommentType::class, $comment);
-        $commentForm->handleRequest($request);
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $comment->setPost($post);
-            $comment->setUser($user);
-            $entityManager->persist($comment);
-            $entityManager->flush();
-            return $this->redirectToRoute('post_detail', ['id' => $post->getId()]);
-        }
+    // Get locale from query parameter or session, fallback to default 'fr' from config
+    $locale = $request->query->get('locale', $request->getSession()->get('_locale', 'fr'));
+    $request->setLocale($locale);
+    $request->getSession()->set('_locale', $locale); // Persist locale in session
+
+    $post->incrementViews();
+    $entityManager->flush();
+   
+    $comment = new Comment();
+    $commentForm = $this->createForm(CommentType::class, $comment);
+    $commentForm->handleRequest($request);
+
+    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+        $comment->setPost($post);
+        $comment->setUser($user);
+        $entityManager->persist($comment);
+        $entityManager->flush();
 
         $editForms = [];
         foreach ($post->getComments() as $comment) {
-        $editForms[$comment->getId()] = $this->createForm(CommentType::class, $comment)->createView();
+            $editForms[$comment->getId()] = $this->createForm(CommentType::class, $comment)->createView();
         }
 
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse([
+                'status' => true,
+                'message' => 'Comment added successfully!',
+                'commentHtml' => $this->renderView('home/_comment.html.twig', [
+                    'comment' => $comment,
+                    'editForms' => $editForms,
+                    'post' => $post,
+                ]),
+            ]);
+        }
 
-        return $this->render('home/poste.html.twig', [
-            'post' => $post,
-            'commentForm' => $commentForm->createView(),
-            'editForms' => $editForms,
+        return $this->redirectToRoute('post_detail', [
+            'id' => $post->getId(),
+            'locale' => $locale,
         ]);
     }
+
+    $editForms = [];
+    foreach ($post->getComments() as $comment) {
+        $editForms[$comment->getId()] = $this->createForm(CommentType::class, $comment)->createView();
+    }
+
+    return $this->render('home/poste.html.twig', [
+        'post' => $post,
+        'commentForm' => $commentForm->createView(),
+        'editForms' => $editForms,
+    ]);
+}
+
 #[Route('/comment/delete/{id}', name: 'delete_comment', methods: ['POST'])]
 public function delete(int $id, Request $request, CommentRepository $commentRepository, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
@@ -81,13 +136,13 @@ public function delete(int $id, Request $request, CommentRepository $commentRepo
 #[Route('/comment/edit/{id}', name: 'edit_comment', methods: ['POST'])]
 public function editInline( Comment $comment, Request $request, EntityManagerInterface $entityManager,Security $security): Response
     {
-        // Ensure user is logged in
+        
         $user = $security->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException('You must be logged in to edit comments.');
         }
 
-        // Ensure user is the owner of the comment
+        
         if ($comment->getUser() !== $user) {
             throw $this->createAccessDeniedException('You do not have permission to edit this comment.');
         }

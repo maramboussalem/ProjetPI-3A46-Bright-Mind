@@ -1,65 +1,140 @@
 {% extends 'admin/base_back.html.twig' %}
 
-{% block title %}Reclamation index{% endblock %}
+{% block title %}Reclamation Index{% endblock %}
 
 {% block body %}
-    <h1>Reclamation index</h1>
+    <div class="container-fluid">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h1 class="h3 mb-0">Reclamation Management</h1>
+            </div>
+            <div class="card-body">
+                {# Search Form #}
+                <form method="GET" action="{{ path('app_reclamation_index') }}" class="mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label for="utilisateurId" class="form-label">Email</label>
+                            <input type="text" name="utilisateurId" id="utilisateurId" class="form-control" placeholder="Search by Email" value="{{ app.request.get('utilisateurId') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dateCreation" class="form-label">Creation Date</label>
+                            <input type="date" name="dateCreation" id="dateCreation" class="form-control" value="{{ app.request.get('dateCreation') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dateConsultation" class="form-label">Consultation Date</label>
+                            <input type="date" name="dateConsultation" id="dateConsultation" class="form-control" value="{{ app.request.get('dateConsultation') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="statut" class="form-label">Status</label>
+                            <select name="statut" id="statut" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="en cours" {% if app.request.get('statut') == 'en cours' %}selected{% endif %}>En cours</option>
+                                <option value="terminé" {% if app.request.get('statut') == 'terminé' %}selected{% endif %}>Terminé</option>
+                                <option value="résolu" {% if app.request.get('statut') == 'résolu' %}selected{% endif %}>Résolu</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                            <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary w-100 mt-2">Reset</a>
+                        </div>
+                    </div>
+                </form>
+                
+ <div class="d-flex justify-content-between mt-4">
+    <a href="{{ path('app_reclamation_new') }}" class="btn btn-success">Create New</a>
+    <a href="{{ path('app_reclamation_statistics') }}" class="btn btn-primary">View Statistics</a>
+</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Adresse mail</th>
-                <th>Sujet</th>
-                <th>Description</th>
-                <th>Statut</th>
-                <th>Date_creation</th>
-                <th>Reponse</th>
-                <th>Nom de Patient</th>  {# New column for Patient Name #}
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for reclamation in reclamations %}
-            <tr>
-                <td>{{ reclamation.id }}</td>
-                <td>{{ reclamation.utilisateurId }}</td>
-                <td>{{ reclamation.sujet }}</td>
-                <td>{{ reclamation.description }}</td>
-                <td>{{ reclamation.statut }}</td> {# Display enum as string #}
-                <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    {{ reclamation.reponse is not null ? reclamation.reponse : 'No response' }}
-                </td>
-                <td>
-                    {% if reclamation.consultation %}
-                        {{ reclamation.consultation.nomPatient }} {# Assuming 'nomPatient' is the field you want to display #}
-                    {% else %}
-                        No consultation
-                    {% endif %}
-                </td>
+                {# Table #}
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table">
+                            <tr>
+                                {# <th>
+                                    {# <a href="{{ path('app_reclamation_index', {'sortBy': 'r.id', 'sortDirection': sortDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                        ID
+                                    </a> 
+                                </th> #}
+                                <th>
+                                    <a href="{{ path('app_reclamation_index', {'sortBy': 'r.utilisateurId', 'sortDirection': sortDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                        Email
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="{{ path('app_reclamation_index', {'sortBy': 'r.sujet', 'sortDirection': sortDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                        Subject
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="{{ path('app_reclamation_index', {'sortBy': 'r.description', 'sortDirection': sortDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                        Description
+                                    </a>
+                                </th>
+                                <th>Status</th>
+                                <th>
+                                    <a href="{{ path('app_reclamation_index', {'sortBy': 'r.dateCreation', 'sortDirection': sortDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                        Creation Date
+                                    </a>
+                                </th>
+                                <th>Consultation Date</th>
+                                <th>Response</th>
+                                <th>Patient Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for reclamation in reclamations %}
+                            <tr>
+                                {# <td>{{ reclamation.id }}</td> #}
+                                <td>{{ reclamation.utilisateurId }}</td>
+                                <td>{{ reclamation.sujet }}</td>
+                                <td>{{ reclamation.description }}</td>
+                                <td>
+                                    <span class="badge {% if reclamation.statut == 'résolu' %}bg-success{% elseif reclamation.statut == 'terminé' %}bg-warning{% else %}bg-info{% endif %}">
+                                        {{ reclamation.statut }}
+                                    </span>
+                                </td>
+                                <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>{{ reclamation.consultation.dateConsultation ? reclamation.consultation.dateConsultation|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>{{ reclamation.reponse is not null ? reclamation.reponse : 'No response' }}</td>
+                                <td>
+                                    {% if reclamation.consultation %}
+                                        {{ reclamation.consultation.nomPatient }}
+                                    {% else %}
+                                        No consultation
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-sm btn-info">Show</a>
+                                        <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ path('app_reclamation_delete', {'id': reclamation.id}) }}" method="POST" class="d-inline-block">
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="10" class="text-center">No reclamations found</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                <td>
-                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}">show</a>
-                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}">edit</a>
-                    <a href="{{ path('app_reclamation_respond', {'id': reclamation.id}) }}">reponse</a>
-
-                    {# Delete button (only for admins) #}
-                    
-                        <form method="post" action="{{ path('app_reclamation_delete', {'id': reclamation.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.id) }}">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">No records found</td> {# Adjusted colspan #}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_reclamation_new') }}">Create new</a>
+                {# Pagination #}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% for pageNum in 1..totalPages %}
+                            <li class="page-item {% if pageNum == currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_reclamation_index', {'page': pageNum, 'sortBy': sortBy, 'sortDirection': sortDirection}) }}">
+                                    {{ pageNum }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
 {% endblock %}
