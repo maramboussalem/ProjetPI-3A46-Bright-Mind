@@ -1,0 +1,208 @@
+{% extends 'admin/base_back.html.twig' %}
+
+{% block title %}Reclamation Statistics{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="card shadow-lg border-0 animate-fade-in">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0">Reclamation Statistics</h4>
+            </div>
+            <div class="card-body">
+                <!-- Total Reclamations Section -->
+                <div class="row mb-4 animate-slide-in-left">
+                    <div class="col-12 text-center">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Reclamations</h5>
+                                <p class="card-text display-4 text-primary font-weight-bold">
+                                    {{ subjectCounts|reduce((total, count) => total + count, 0) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart and Summary Section -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <canvas id="reclamationChart" class="animate-slide-in-left"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light mb-3 animate-slide-in-right">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    {% for subject, count in subjectCounts %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center animate-pop-in">
+                                            {{ subject }}
+                                            <span class="badge bg-primary rounded-pill">{{ count }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center py-3 animate-fade-in">
+                <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary">
+                    ← Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById('reclamationChart').getContext('2d');
+            var reclamationChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ subjectCounts|keys|json_encode()|raw }},
+                    datasets: [{
+                        label: 'Number of Reclamations',
+                        data: {{ subjectCounts|map((val) => val)|json_encode()|raw }},
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuad'
+                    }
+                }
+            });
+        });
+    </script>
+
+    <style>
+        /* Container and Card Styling */
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            border-radius: 10px;
+        }
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        canvas {
+            min-height: 400px;
+        }
+        .list-group-item {
+            font-size: 0.9rem;
+        }
+        .badge {
+            font-size: 0.9rem;
+        }
+
+        /* Total Reclamations Styling */
+        .display-4 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Animation Classes */
+        .animate-fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .animate-slide-in-left {
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .animate-slide-in-right {
+            animation: slideInRight 1s ease-in-out;
+        }
+
+        .animate-pop-in {
+            animation: popIn 0.5s ease-in-out;
+        }
+
+        /* Delay for List Items */
+        .list-group-item {
+            animation-delay: calc(var(--index) * 0.2s);
+        }
+    </style>
+{% endblock %}

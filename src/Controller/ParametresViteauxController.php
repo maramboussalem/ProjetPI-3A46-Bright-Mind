@@ -22,6 +22,16 @@ final class ParametresViteauxController extends AbstractController
         ]);
     }
 
+   
+    #[Route('/PV', name: 'app_parametres_viteaux_indexM', methods: ['GET'])]
+    public function indexM(ParametresViteauxRepository $parametresViteauxRepository): Response
+    {
+        return $this->render('parametres_viteaux/indexM.html.twig', [
+            'parametres_viteauxes' => $parametresViteauxRepository->findAll(),
+        ]);
+    }
+
+
     #[Route('/new', name: 'app_parametres_viteaux_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

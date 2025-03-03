@@ -1,0 +1,5 @@
+reclamation_show:
+  path: /reclamation/{id}
+  controller: App\Controller\ReclamationController::show
+  requirements:
+    id: \d+  # Ensuring that the ID is an integer

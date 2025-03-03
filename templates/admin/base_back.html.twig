@@ -324,6 +324,11 @@
                 <i class="bi bi-capsule"></i><span>Service</span>
             </a>
         </li>
+       <li>
+            <a href="{{path('app_disponibilite_index')}}">
+                <i class="bi bi-capsule"></i><span>Disponiblite</span>
+            </a>
+        </li>
     </ul>
 </li>
 <li class="nav-item">
@@ -382,6 +387,14 @@
   
 
   {% block js %}
+  
+  <link rel="stylesheet" href="{{ asset('node_modules/leaflet/dist/leaflet.css') }}" />
+<script src="{{ asset('node_modules/leaflet/dist/leaflet.js') }}"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
   <script src="{{ asset('back/assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
   <script src="{{ asset('back/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('back/assets/vendor/chart.js/chart.umd.js') }}"></script>

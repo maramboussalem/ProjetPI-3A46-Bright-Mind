@@ -5,12 +5,10 @@
 {% block title %} Profile {% endblock %}
 
 {% block body %}
-    
    <style>
      .container {
          padding-top: 120px;
      }
-     
    </style>
     <div class="container">
        
@@ -40,7 +38,10 @@
                     {% if utilisateur.role == 'medecin' %}
                         <tr><th>Spécialité</th><td>{{ utilisateur.specialite }}</td></tr>
                         <tr><th>Hôpital</th><td>{{ utilisateur.hopital }}</td></tr>
-                        <tr><th>Disponibilité</th><td>{{ utilisateur.disponibilite }}</td></tr>
+                        <tr><th>Hôpital</th><td>{{ utilisateur.hopital }}</td></tr>
+                           <a href="{{ path('app_medcin') }}" class="icon-button">
+                           <i class="fas fa-arrow-left"></i> Accéder au tableau de bord
+                           </a>
                     {% endif %}
                 
                 </tbody>

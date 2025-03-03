@@ -1,0 +1,4 @@
+calendar:
+    # Configuration pour FullCalendar
+    default_view: 'dayGridMonth'
+    first_day: 1

@@ -25,7 +25,6 @@ use Endroid\QrCode\Writer\PngWriter;
 #[Route('/utilisateur')]
 final class UtilisateurController extends AbstractController
 {
-    
     #[Route(name: 'app_utilisateur_index', methods: ['GET'])]
     public function index(Request $request, UtilisateurRepository $utilisateurRepository)
     {
@@ -69,7 +68,6 @@ final class UtilisateurController extends AbstractController
             } elseif ($role === 'medecin') {
                 $utilisateur->setSpecialite($form->get('specialite')->getData());
                 $utilisateur->setHopital($form->get('hopital')->getData());
-                $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
             }
         /** @var UploadedFile $file */
         $file = $form->get('file')->getData();
@@ -91,7 +89,6 @@ final class UtilisateurController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
 
     #[Route('/utilisateur/{id}', name: 'app_utilisateur_show')]
     public function show(Utilisateur $utilisateur): Response
@@ -101,7 +98,6 @@ final class UtilisateurController extends AbstractController
         ]);
     }
     
-
     #[Route('/{id}/edit', name: 'app_utilisateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Utilisateur $utilisateur, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, SessionInterface $session): Response
     {
@@ -147,9 +143,20 @@ final class UtilisateurController extends AbstractController
             } elseif ($role === 'medecin') {
                 $utilisateur->setSpecialite($form->get('specialite')->getData());
                 $utilisateur->setHopital($form->get('hopital')->getData());
-                $utilisateur->setDisponibilite($form->get('disponibilite')->getData());
             }
     
+            /** @var UploadedFile $file */
+        $file = $form->get('file')->getData();
+
+        if ($file) {
+            $fileName = uniqid() . '.' . $file->guessExtension();
+            $file->move(
+                $this->getParameter('user_directory'), 
+                $fileName
+            );
+            $utilisateur->setimgUrl('user/img/' . $fileName);
+        }
+        
             $entityManager->flush();
 
             return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
@@ -168,7 +175,6 @@ final class UtilisateurController extends AbstractController
         $entityManager->remove($utilisateur);
         $entityManager->flush();
     }
-
     return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -307,7 +313,6 @@ public function generateUserQRCode(Utilisateur $utilisateur, ConnectionHistoryRe
     } elseif ($utilisateur->getRole() === 'medecin') {
         $userInfoText .= "Spécialité: " . $utilisateur->getSpecialite() . "\n";
         $userInfoText .= "Hôpital: " . $utilisateur->getHopital() . "\n";
-        $userInfoText .= "Disponibilité: " . $utilisateur->getDisponibilite() . "\n";
     }
     $historique = $historyRepository->findBy(
         ['utilisateur' => $utilisateur],

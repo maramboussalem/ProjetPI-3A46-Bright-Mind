@@ -11,18 +11,86 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Repository\ConsultationRepository;
 
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController
 {
-    #[Route(name: 'app_reclamation_index', methods: ['GET'])]
-    public function index(ReclamationRepository $reclamationRepository): Response
-    {
-        return $this->render('reclamation/index.html.twig', [
-            'reclamations' => $reclamationRepository->findAll(),
-        ]);
+    #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
+public function index(Request $request, ReclamationRepository $reclamationRepository): Response
+{
+    // Pagination parameters
+    $page = $request->query->getInt('page', 1); // Default to page 1 if no page is provided
+    $limit = 10; // Number of records per page
+    $offset = ($page - 1) * $limit;
+
+    // Sorting parameters
+    $sortBy = $request->query->get('sortBy', 'r.dateCreation'); // Default sort by creation date
+    $sortDirection = $request->query->get('sortDirection', 'DESC'); // Default sort direction
+
+    $queryBuilder = $reclamationRepository->createQueryBuilder('r');
+
+    // Apply filters based on user input
+    if ($utilisateurId = $request->query->get('utilisateurId')) {
+        $queryBuilder->andWhere('r.utilisateurId = :utilisateurId')
+            ->setParameter('utilisateurId', $utilisateurId);
     }
 
+    if ($dateCreation = $request->query->get('dateCreation')) {
+        $dateCreation = \DateTime::createFromFormat('Y-m-d', $dateCreation);
+        if ($dateCreation) {
+            $queryBuilder->andWhere('r.dateCreation >= :startDate')
+                ->andWhere('r.dateCreation < :endDate')
+                ->setParameter('startDate', $dateCreation->format('Y-m-d 00:00:00'))
+                ->setParameter('endDate', $dateCreation->format('Y-m-d 23:59:59'));
+        }
+    }
+
+    if ($dateConsultation = $request->query->get('dateConsultation')) {
+        $dateConsultation = \DateTime::createFromFormat('Y-m-d', $dateConsultation);
+        if ($dateConsultation) {
+            $queryBuilder->leftJoin('r.consultation', 'c')
+                ->andWhere('c.dateConsultation >= :startConsultationDate')
+                ->andWhere('c.dateConsultation < :endConsultationDate')
+                ->setParameter('startConsultationDate', $dateConsultation->format('Y-m-d 00:00:00'))
+                ->setParameter('endConsultationDate', $dateConsultation->format('Y-m-d 23:59:59'));
+        }
+    }
+
+    if ($statut = $request->query->get('statut')) {
+        $queryBuilder->andWhere('r.statut = :statut')
+            ->setParameter('statut', $statut);
+    }
+
+    // Apply sorting
+    $queryBuilder->orderBy($sortBy, $sortDirection)
+                 ->setFirstResult($offset) // Set the starting point (offset)
+                 ->setMaxResults($limit); // Limit the number of results per page
+
+    // Get the paginated results
+    $paginator = new Paginator($queryBuilder);
+    $totalReclamations = count($paginator); // Total number of records
+    $reclamations = $paginator->getQuery()->getResult();
+
+    // Calculate the total number of pages
+    $totalPages = ceil($totalReclamations / $limit);
+
+    return $this->render('reclamation/index.html.twig', [
+        'reclamations' => $reclamations,
+        'currentPage' => $page,
+        'totalPages' => $totalPages,
+        'sortBy' => $sortBy,
+        'sortDirection' => $sortDirection,
+    ]);
+}
+    
+
+
+
+
+
+    
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
 public function new(Request $request, EntityManagerInterface $entityManager): Response
 {
@@ -126,8 +194,17 @@ public function new2(Request $request, EntityManagerInterface $entityManager, in
     }
 
 
-
-
+// MAP
+    #[Route('/map', name: 'app_map')]
+    public function showMap(): Response
+    {
+        // You can pass latitude and longitude dynamically or set it statically
+         return $this->render('map/show_map.html.twig', [
+        'latitude' => 33.8869,  // Default latitude for Tunisia
+        'longitude' => 9.5375,  // Default longitude for Tunisia
+        ]);
+    }
+    
 
     #[Route('/{id}', name: 'app_reclamation_show', methods: ['GET', 'POST'])]
     public function show(Reclamation $reclamation, Request $request, EntityManagerInterface $entityManager): Response
@@ -281,6 +358,11 @@ public function new2(Request $request, EntityManagerInterface $entityManager, in
         return new JsonResponse([
             'exists' => $consultation !== null,
         ]);
+
+
+
+
+
     }
 
 
@@ -322,5 +404,50 @@ public function new2(Request $request, EntityManagerInterface $entityManager, in
 
 
 
+
+
+
+
+
+    // STATISTIC 
+
+
+    #[Route('/reclamation/statistics', name: 'app_reclamation_statistics')]
+    public function statistics(ReclamationRepository $reclamationRepository): Response
+    {
+        $reclamations = $reclamationRepository->findAll();
+    
+        $subjectCounts = [
+            'Problème avec la consultation en ligne' => 0,
+            'Problème de communication avec le médecin' => 0,
+            'Erreur dans le diagnostic' => 0,
+            'Médicament non adapté' => 0,
+            'Autres' => 0,
+        ];
+    
+        foreach ($reclamations as $reclamation) {
+            $subject = $reclamation->getSujet();
+            if (isset($subjectCounts[$subject])) {
+                $subjectCounts[$subject]++;
+            }
+        }
+    
+        return $this->render('reclamation/statistics.html.twig', [
+            'subjectCounts' => $subjectCounts,
+        ]);
+
+
 }
 
+
+
+
+// MAP
+
+
+
+
+
+
+
+}

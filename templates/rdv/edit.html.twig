@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Rdv{% endblock %}
+
+{% block body %}
+    <h1>Edit Rdv</h1>
+
+    {{ include('rdv/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_rdv_index') }}">back to list</a>
+
+    {{ include('rdv/_delete_form.html.twig') }}
+{% endblock %}

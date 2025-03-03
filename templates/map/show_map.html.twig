@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block title %}Carte Interactive des Hôpitaux et Cliniques{% endblock %}
+
+{% block body %}
+    <h2>Carte Interactive des Hôpitaux et Cliniques en Tunisie</h2>
+    <div id="map" style="height: 600px;"></div>
+
+    <!-- Search Bar -->
+    <div style="margin: 20px 0;">
+        <input type="text" id="search-bar" placeholder="Rechercher un hôpital ou un cabinet médical..." style="width: 100%; padding: 10px; font-size: 16px;">
+    </div>
+
+    <!-- Google Maps API (integrated your API key) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB64o4nWeoWDaJA84D8JZMSD_-KC4G2KoM&callback=initMap" async defer></script>
+
+    <script>
+        var map;
+        var hospitalsAndClinics = [
+            { name: "Hopital Charles Nicolle", lat: 36.8613, lng: 10.1797, address: "Tunis, Tunisia" },
+            { name: "Hopital Aziza Othmana", lat: 36.8181, lng: 10.1658, address: "Tunis, Tunisia" },
+            { name: "Hopital La Rabta", lat: 36.8036, lng: 10.1707, address: "Tunis, Tunisia" },
+            { name: "Hopital Habib Bourguiba", lat: 34.7408, lng: 10.7600, address: "Sfax, Tunisia" },
+            { name: "Hopital Mongi Slim", lat: 36.8534, lng: 10.1799, address: "Tunis, Tunisia" },
+            { name: "Hopital de Tunis", lat: 36.8072, lng: 10.1835, address: "Tunis, Tunisia" },
+            { name: "Clinique El Manar", lat: 36.8564, lng: 10.1585, address: "Tunis, Tunisia" },
+            { name: "Clinique Pasteur", lat: 36.8322, lng: 10.1602, address: "Tunis, Tunisia" },
+            { name: "Clinique La Soukra", lat: 36.87046, lng: 10.283417, address: "La Soukra, Ariana, Tunisia" },
+            { name: "Hopital militaire de Tunis", lat: 36.8500, lng: 10.1667, address: "Tunis, Tunisia" },
+        ];
+
+        var markers = [];
+
+        // Initialize Google Map
+        function initMap() {
+            var latitude = {{ latitude ?? 33.8869 }};
+            var longitude = {{ longitude ?? 9.5375 }};
+
+            // Create map centered on Tunisia
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 6,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            // Add markers for each hospital/clinic
+            hospitalsAndClinics.forEach(function(hospital) {
+                var marker = new google.maps.Marker({
+                    position: { lat: hospital.lat, lng: hospital.lng },
+                    map: map,
+                    title: hospital.name
+                });
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: hospital.name + "<br>" + hospital.address
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+
+                markers.push({ marker: marker, hospital: hospital });
+            });
+
+            // Add hospital list to the side
+            updateHospitalList(hospitalsAndClinics);
+
+            // Handle clicks on the hospital list items
+            document.getElementById('hospital-list').addEventListener('click', function(e) {
+                if (e.target.classList.contains('hospital-link')) {
+                    var lat = parseFloat(e.target.getAttribute('data-lat'));
+                    var lng = parseFloat(e.target.getAttribute('data-lng'));
+                    var address = e.target.getAttribute('data-address');
+
+                    // Center map on the clicked hospital
+                    map.setCenter(new google.maps.LatLng(lat, lng));
+                    map.setZoom(12);
+
+                    // Optional: Open InfoWindow on the clicked hospital
+                    var marker = new google.maps.Marker({
+                        position: { lat: lat, lng: lng },
+                        map: map,
+                        title: e.target.innerText
+                    });
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: e.target.innerText + "<br>" + address
+                    });
+                    infowindow.open(map, marker);
+                }
+            });
+        }
+
+        // Update hospital list based on filtered data
+        function updateHospitalList(hospitals) {
+            var hospitalListHtml = '';
+            hospitals.forEach(function(hospital) {
+                hospitalListHtml += `<li><a href="#" class="hospital-link" data-lat="${hospital.lat}" data-lng="${hospital.lng}" data-address="${hospital.address}"><strong>${hospital.name}</strong> - ${hospital.address}</a></li>`;
+            });
+            document.getElementById('hospital-list').innerHTML = hospitalListHtml;
+        }
+
+        // Handle search bar input
+        document.getElementById('search-bar').addEventListener('input', function() {
+            var searchTerm = this.value.toLowerCase();
+            var filteredHospitals = hospitalsAndClinics.filter(function(hospital) {
+                return hospital.name.toLowerCase().includes(searchTerm) || hospital.address.toLowerCase().includes(searchTerm);
+            });
+
+            // Update list and markers
+            updateHospitalList(filteredHospitals);
+
+            // Hide all markers initially
+            markers.forEach(function(item) {
+                item.marker.setMap(null);
+            });
+
+            // Show markers for filtered hospitals
+            filteredHospitals.forEach(function(hospital) {
+                markers.forEach(function(item) {
+                    if (item.hospital.name === hospital.name) {
+                        item.marker.setMap(map);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- List of Hospitals and Clinics -->
+    <h3>Liste des Hôpitaux et Cliniques</h3>
+    <ul id="hospital-list">
+        <!-- Hospital list items will be dynamically added here -->
+    </ul>
+{% endblock %}

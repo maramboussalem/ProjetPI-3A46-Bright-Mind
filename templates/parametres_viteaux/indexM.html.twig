@@ -1,0 +1,151 @@
+{% extends 'medcin/base_backMedcin.html.twig' %}
+
+{% block title %}Liste des Paramètres Vitaux{% endblock %}
+
+{% block body %}
+    <h1>Liste des Paramètres Vitaux</h1>
+
+    <!-- Filter Section -->
+    <div class="filter-container mb-3">
+        <div class="row">
+            <div class="col-md-2">
+                <input type="text" id="filterName" class="form-control" placeholder="Filtrer par Nom" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterFc" class="form-control" placeholder="Filtrer par Fc" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterFr" class="form-control" placeholder="Filtrer par Fr" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterEcg" class="form-control" placeholder="Filtrer par Ecg" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterTAS" class="form-control" placeholder="Filtrer par TAS" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterTAD" class="form-control" placeholder="Filtrer par TAD" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <input type="number" id="filterAge" class="form-control" placeholder="Filtrer par Âge" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterSpo2" class="form-control" placeholder="Filtrer par Spo2" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="filterGsc" class="form-control" placeholder="Filtrer par Gsc" />
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" onclick="applyFilter()">Filtrer</button>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Fc</th>
+                <th>Fr</th>
+                <th>Ecg</th>
+                <th>TAS</th>
+                <th>TAD</th>
+                <th>Âge</th>
+                <th>Spo2</th>
+                <th>Gsc</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+        {% for parametres_viteaux in parametres_viteauxes %}
+            <tr>
+                <td>{{ parametres_viteaux.id }}</td>
+                <td>{{ parametres_viteaux.name }}</td>
+                <td>{{ parametres_viteaux.fc }}</td>
+                <td>{{ parametres_viteaux.fr }}</td>
+                <td>{{ parametres_viteaux.ecg }}</td>
+                <td>{{ parametres_viteaux.TAS }}</td>
+                <td>{{ parametres_viteaux.TAD }}</td>
+                <td>{{ parametres_viteaux.age }}</td>
+                <td>{{ parametres_viteaux.spo2 }}</td>
+                <td>{{ parametres_viteaux.gsc }}</td>
+                <td>
+                    <a href="{{ path('app_parametres_viteaux_show', {'id': parametres_viteaux.id}) }}" class="btn btn-info">Afficher</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11" class="text-center">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function applyFilter() {
+            const filterName = document.getElementById('filterName').value.toLowerCase();
+            const filterFc = document.getElementById('filterFc').value;
+            const filterFr = document.getElementById('filterFr').value;
+            const filterEcg = document.getElementById('filterEcg').value;
+            const filterTAS = document.getElementById('filterTAS').value;
+            const filterTAD = document.getElementById('filterTAD').value;
+            const filterAge = document.getElementById('filterAge').value;
+            const filterSpo2 = document.getElementById('filterSpo2').value;
+            const filterGsc = document.getElementById('filterGsc').value;
+
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const name = row.cells[1].innerText.toLowerCase();
+                const fc = row.cells[2].innerText;
+                const fr = row.cells[3].innerText;
+                const ecg = row.cells[4].innerText;
+                const TAS = row.cells[5].innerText;
+                const TAD = row.cells[6].innerText;
+                const age = row.cells[7].innerText;
+                const spo2 = row.cells[8].innerText;
+                const gsc = row.cells[9].innerText;
+
+                let matches = true;
+
+                if (filterName && !name.includes(filterName)) {
+                    matches = false;
+                }
+                if (filterFc && fc !== filterFc) {
+                    matches = false;
+                }
+                if (filterFr && fr !== filterFr) {
+                    matches = false;
+                }
+                if (filterEcg && ecg !== filterEcg) {
+                    matches = false;
+                }
+                if (filterTAS && TAS !== filterTAS) {
+                    matches = false;
+                }
+                if (filterTAD && TAD !== filterTAD) {
+                    matches = false;
+                }
+                if (filterAge && age !== filterAge) {
+                    matches = false;
+                }
+                if (filterSpo2 && spo2 !== filterSpo2) {
+                    matches = false;
+                }
+                if (filterGsc && gsc !== filterGsc) {
+                    matches = false;
+                }
+
+                if (matches) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+{% endblock %}
