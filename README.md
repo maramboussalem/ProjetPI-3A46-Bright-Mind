@@ -55,8 +55,9 @@ Les personnes suivantes ont contribué à ce projet en ajoutant des fonctionnali
 [Youssef Agrebaoui](https://github.com/YoussefAG1337) - Gestion des Compagnes de Sensibilization
 [Yasmine Sabbagh](https://github.com/yasminesabbagh) - Gestion Des Services Medicaux
 [Taha Belhadj Essghaier](https://github.com/TahaBelhadjEssghaier) - Gestion De Diagnostic Médical
+[Ranine Talbi](https://github.com/ranine1talbi) - Gestion De Stock
 
 ## Acknowledgments 
-Ce projet a été réalisé sous la direction de Mr Mohamed Ali CHARFEDDINE à l'université Esprit School of Engineering
+Ce projet a été réalisé sous la direction de Rim DOUSS à l'université Esprit School of Engineering
 
 
